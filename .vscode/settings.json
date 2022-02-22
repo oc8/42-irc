@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"cglicenses.json": "jsonc",
+		"iostream": "cpp"
+	}
+}

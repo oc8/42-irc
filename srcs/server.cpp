@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+// #include <socket>
 
 using std::cout;
 using std::endl;
@@ -15,5 +16,9 @@ int main(int argc, char *argv[])
 	string password = argv[2];
 	cout << port << endl;
 	cout << password << endl;
+   // struct sockaddr_in address;
+	// address.sin_family = AF_INET;
+   // address.sin_addr.s_addr = INADDR_ANY;
+   // address.sin_port = htons( PORT );
 	return 0;
 }
