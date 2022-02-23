@@ -17,15 +17,21 @@ all:			$(NAME)
 $(OBJS_DIR):
 				$(MKDIR) $@
 
-$(NAME):		$(OBJS_DIR) $(OBJS)
+$(NAME):		print $(OBJS_DIR) $(OBJS)
 				$(CXXC) $(CXXFLAGS) $(OBJS) -o $(NAME)
+				printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
 
 $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(MKDIR) $(dir $@)
 				$(CXXC) $(CXXFLAGS) -o $@ -c $<
+				printf "$(ERASE)└─[$(ACTION)$<$(ARROW)]"
 
-clean:
+print:
+				printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n"
+
+clean:		print
 				$(RM) $(OBJS_DIR)
+				printf "$(ERASE)└─> $(FINISH)clean$(ARROW)\n$(END)"
 
 fclean:		clean
 				$(RM) $(NAME)
@@ -33,7 +39,7 @@ fclean:		clean
 re:				fclean all
 
 .PHONY: 		clean fclean all re
-.SILENT:		clean fclean all re $(OBJS) $(NAME) $(OBJS_DIR)
+.SILENT:		clean fclean all re $(OBJS) $(NAME) $(OBJS_DIR) print
 
 ERASE		= \033[2K\r
 GREY		= \033[30m
@@ -48,3 +54,8 @@ END		= \033[0m
 BOLD		= \033[1m
 UNDER		= \033[4m
 SUR		= \033[7m
+
+TITLE		= $(GREEN)$(BOLD)
+ARROW		= $(GREY)$(BOLD)
+ACTION	= $(YELLOW)
+FINISH	= $(BLUE)$(BOLD)
