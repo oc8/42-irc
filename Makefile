@@ -1,6 +1,7 @@
 NAME			= ircserv
 
-LST_SRCS		= server.cpp
+LST_SRCS		= server.cpp \
+					# client.cpp
 SRCS_DIR		= srcs
 OBJS_DIR		= objs
 SRCS			= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
@@ -26,6 +27,10 @@ $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(CXXC) $(CXXFLAGS) -o $@ -c $<
 				printf "$(ERASE)└─[$(ACTION)$<$(ARROW)]"
 
+client:			$(OBJS_DIR)/client.o
+				$(CXXC) $(CXXFLAGS) $(OBJS_DIR)/client.o -o client
+				printf "$(ERASE)└─> $(FINISH)generate client$(ARROW)\n$(END)"
+
 print:
 				printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n"
 
@@ -39,7 +44,7 @@ fclean:		clean
 re:				fclean all
 
 .PHONY: 		clean fclean all re
-.SILENT:		clean fclean all re $(OBJS) $(NAME) $(OBJS_DIR) print
+.SILENT:		clean fclean all re $(OBJS) $(NAME) $(OBJS_DIR) print client
 
 ERASE		= \033[2K\r
 GREY		= \033[30m
