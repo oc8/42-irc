@@ -1,6 +1,7 @@
 NAME			= ircserv
 
-LST_SRCS		= server.cpp
+LST_SRCS		= main.cpp \
+server.cpp
 SRCS_DIR		= srcs
 OBJS_DIR		= objs
 SRCS			= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
@@ -25,6 +26,11 @@ $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(MKDIR) $(dir $@)
 				$(CXXC) $(CXXFLAGS) -o $@ -c $<
 				printf "$(ERASE)└─[$(ACTION)$<$(ARROW)]"
+
+client:
+				printf "$(BOLD)$(ARROW)┌──<$(TITLE)client$(ARROW)>\n"
+				@$(CXXC) $(CXXFLAGS) -o client -c srcs/client.cpp
+				@printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
 
 print:
 				printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n"

@@ -1,6 +1,8 @@
 {
 	"files.associations": {
 		"cglicenses.json": "jsonc",
-		"iostream": "cpp"
+		"*.tpl": "html",
+		"iostream": "cpp",
+		"ostream": "cpp"
 	}
 }
