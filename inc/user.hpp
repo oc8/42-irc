@@ -2,6 +2,9 @@
 # define USER_HPP
 
 #include <iostream>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <string.h>
 
 class user {
 	public:
@@ -17,6 +20,7 @@ class user {
 		//		--> GETTER/SETTERS <--
 
 		std::string getUserName() { return userName; }
+		int getSD() { return sd; }
 
 
 		//		--> MEMBER FUCNTIONS <--
@@ -28,6 +32,7 @@ class user {
 		user operator=(const user & src);
 		
 	protected:
+		int				sd;
 		std::string		userName;
 		std::string		nickName;
 		bool			operat;

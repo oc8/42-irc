@@ -3,11 +3,14 @@
 
 #include <iostream>
 #include <map>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include "user.hpp"
 
 class channel {
 	public:
 		typedef std::map<std::string, user>		list;
+		typedef list::iterator					user_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 		
@@ -23,9 +26,10 @@ class channel {
 
 		//		--> MEMBER FUCNTIONS <--
 
-		bool add_ser(user newUser) { return users.insert(std::make_pair(newUser.getUserName(), newUser)).second; }
-		bool del_user(user kicked) { return users.erase(kicked.getUserName()); }
-		void sendMessage(std::string message) {}
+		bool add_user(user newUser);
+		bool del_user(user kicked);
+		void sendMessage(const char *message);
+		bool setTopic(user us, std::string topic);
 
 
 		//		--> OPERATORS <--
@@ -38,6 +42,7 @@ class channel {
 		int				max_user;
 		std::string		name;
 		list			users;
+		list			operators;
 		std::string		password;
 		std::string		mode;
 		std::string		topic;
