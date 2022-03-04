@@ -6,15 +6,15 @@
 #include <sys/socket.h>
 #include <string.h>
 
-class user {
+class User {
 	public:
 		// typedef T											value_type;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 		
-		user(void) {}
-		user(const user & src) {}
-		~user() {};
+		User(void) {}
+		User(const User & src) {}
+		~User() {};
 
 
 		//		--> GETTER/SETTERS <--
@@ -29,12 +29,13 @@ class user {
 
 		//		--> OPERATORS <--
 
-		user operator=(const user & src);
+		User operator=(const User & src);
 		
 	protected:
 		int				sd;
 		std::string		userName;
 		std::string		nickName;
+		Channel			*cur_chan;
 		bool			operat;
 		bool			visible;
 		bool			notif_serv;

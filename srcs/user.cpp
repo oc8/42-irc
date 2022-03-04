@@ -2,6 +2,6 @@
 #include "user.hpp"
 
 
-std::string user::getUserName() { return userName; }
+std::string User::getUserName() { return userName; }
 
-int user::getSD() { return sd; }
+int User::getSD() { return sd; }

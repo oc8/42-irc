@@ -7,16 +7,16 @@
 #include <sys/socket.h>
 #include "user.hpp"
 
-class channel {
+class Channel {
 	public:
-		typedef std::map<std::string, user>		list;
+		typedef std::map<std::string, User>		list;
 		typedef list::iterator					user_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 		
-		channel(void) : n_user(0), users(list()) {}
-		channel(const channel & src) {}
-		~channel() {};
+		Channel(void) : n_user(0) {}
+		Channel(const Channel & src) {}
+		~Channel() {};
 
 
 		//		--> GETTER/SETTERS <--
@@ -26,15 +26,15 @@ class channel {
 
 		//		--> MEMBER FUCNTIONS <--
 
-		bool add_user(user newUser);
-		bool del_user(user kicked);
+		bool add_user(User newUser);
+		bool del_user(User kicked);
 		void sendMessage(const char *message);
-		bool setTopic(user us, std::string topic);
+		bool setTopic(User us, std::string topic);
 
 
 		//		--> OPERATORS <--
 		
-		channel operator=(const channel & src);
+		Channel operator=(const Channel & src);
 
 
 	protected:
