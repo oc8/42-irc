@@ -9,27 +9,37 @@
 
 class Channel {
 	public:
-		typedef std::map<std::string, User>		list;
+		typedef User*							usr_ptr;
+		typedef User*							usr_ref;
+		typedef std::map<std::string, usr_ptr>	list;
 		typedef list::iterator					user_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 		
-		Channel(void) : n_user(0) {}
+		Channel(void) {}
+		Channel(std::string name) : name(name) {}
+		Channel(std::string name, std::string psw) : name(name), psw(psw) {}
 		Channel(const Channel & src) {}
 		~Channel() {};
 
 
 		//		--> GETTER/SETTERS <--
 
-		std::string getName() { return name; }
+		std::string getName();
+		size_t getNbUser();
+		size_t getNbOper();
+		size_t getNbTot();
+
+		bool setName(usr_ptr usr, std::string newName);
 
 
 		//		--> MEMBER FUCNTIONS <--
 
-		bool add_user(User newUser);
-		bool del_user(User kicked);
+		bool add_user(usr_ptr newUser, list &rank);
+		bool del_user(usr_ptr kicked, list &rank);
 		void sendMessage(const char *message);
-		bool setTopic(User us, std::string topic);
+		bool is_operator(usr_ptr usr);
+		// bool setTopic(User us, std::string topic);
 
 
 		//		--> OPERATORS <--
@@ -38,12 +48,11 @@ class Channel {
 
 
 	protected:
-		int				n_user;
-		int				max_user;
 		std::string		name;
 		list			users;
 		list			operators;
-		std::string		password;
+		// int				max_user;
+		std::string		psw;
 		std::string		mode;
 		std::string		topic;
 		bool			topic_modif_ope;
