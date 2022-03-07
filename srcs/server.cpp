@@ -66,7 +66,12 @@ int main(int argc , char *argv[])
     fd_set readfds;  
          
     //a message 
-    const char *message = "Salut!\n";  
+    // const char *message = "Salut!\n";  
+    // const char *message = ":localhost 001 tdayde :Welcome!\n";  
+    // const char *message = ":localhost 001 :Welcome!\n";  
+    // const char *message = " 001 :Welcome!\n";  
+    // const char *message = ":Welcome!\n";  
+    const char *message = "001 :Welcome\n";  
      
     //initialise all client_socket[] to 0 so not checked 
     for (i = 0; i < max_clients; i++)  
@@ -212,8 +217,11 @@ int main(int argc , char *argv[])
                     //set the string terminating NULL byte on the end 
                     //of the data read 
                     buffer[valread] = '\0';
-                    printf("buffer = %s", buffer);
-                    // send(sd , buffer , strlen(buffer) , 0 );  
+                    printf("buffer = %s\n", buffer);
+
+                    // char str[] =  ":localhost 001 tdayde :Welcome!\n";
+                    // printf("%s", str);
+                    // send(sd , str , strlen(str) , 0 );  
                 }  
             }  
         }  

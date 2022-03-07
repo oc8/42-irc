@@ -31,6 +31,10 @@ class Channel {
 		size_t getNbTot();
 
 		bool setName(usr_ptr usr, std::string newName);
+		bool setPsw(usr_ptr usr, std::string newName);
+		bool setMode(usr_ptr usr, std::string newMode);
+		bool setTopic(usr_ptr usr, std::string newMode);
+		bool setAvailability(usr_ptr usr, bool availability);
 
 
 		//		--> MEMBER FUCNTIONS <--
@@ -39,6 +43,7 @@ class Channel {
 		bool del_user(usr_ptr kicked, list &rank);
 		void sendMessage(const char *message);
 		bool is_operator(usr_ptr usr);
+		bool invitation(usr_ptr inviter, usr_ptr usr);
 		// bool setTopic(User us, std::string topic);
 
 

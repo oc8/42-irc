@@ -33,9 +33,8 @@ class User {
 		
 	protected:
 		int				sd;
-		std::string		userName;
 		std::string		nickName;
-		Channel			*cur_chan;
+		std::string		userName;
 		bool			operat;
 		bool			visible;
 		bool			notif_serv;
