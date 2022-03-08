@@ -11,10 +11,6 @@
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
 
-#define TRUE 1
-#define FALSE 0
-#define PORT 8888
-
 using std::cout;
 using std::cerr;
 using std::endl;

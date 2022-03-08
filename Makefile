@@ -1,7 +1,8 @@
 NAME			= ircserv
 
 LST_SRCS		= main.cpp \
-server.cpp
+server.cpp \
+pars.cpp
 SRCS_DIR		= srcs
 OBJS_DIR		= objs
 SRCS			= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
@@ -20,24 +21,24 @@ $(OBJS_DIR):
 
 $(NAME):		print $(OBJS_DIR) $(OBJS)
 				$(CXXC) $(CXXFLAGS) $(OBJS) -o $(NAME)
-				printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
+				@printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
 
 $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(MKDIR) $(dir $@)
 				$(CXXC) $(CXXFLAGS) -o $@ -c $<
-				printf "$(ERASE)└─[$(ACTION)$<$(ARROW)]"
+				@printf "$(ERASE)$(ARROW)└─[$(ACTION)$<$(ARROW)]"
 
 client:
-				printf "$(BOLD)$(ARROW)┌──<$(TITLE)client$(ARROW)>\n"
+				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)client$(ARROW)>\n"
 				@$(CXXC) $(CXXFLAGS) -o client -c srcs/client.cpp
 				@printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
 
 print:
-				printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n"
+				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n$(END)"
 
 clean:		print
 				$(RM) $(OBJS_DIR)
-				printf "$(ERASE)└─> $(FINISH)clean$(ARROW)\n$(END)"
+				@printf "$(ERASE)$(ARROW)└─> $(FINISH)clean$(ARROW)\n$(END)"
 
 fclean:		clean
 				$(RM) $(NAME)
