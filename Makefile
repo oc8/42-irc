@@ -21,7 +21,7 @@ $(OBJS_DIR):
 
 $(NAME):		print $(OBJS_DIR) $(OBJS)
 				$(CXXC) $(CXXFLAGS) $(OBJS) -o $(NAME)
-				@printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
+				@printf "$(ERASE)$(ARROW)└─> $(FINISH)generate$(ARROW)\n$(END)"
 
 $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(MKDIR) $(dir $@)

@@ -46,6 +46,9 @@ string parsing(char *buffer) {
 	else if (cmd.compare("kick")) {
 
 	}
+	else if (cmd.compare("msg")) {
+
+	}
 	else if (cmd.compare("help")) {
 
 	}

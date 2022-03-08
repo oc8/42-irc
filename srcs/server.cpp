@@ -69,7 +69,7 @@ void Server::read()
 	}
 	int activity, valread, sd, max_sd, i;
 	fd_set readfds;
-	char message[] = "ECHO Daemon v1.0 \r\n";
+	char message[] = ":localhost 001 ircserv :Welcome! \r\n";
 	char buffer[1025];
 	while (42)
 	{
@@ -113,11 +113,10 @@ void Server::read()
 			}
 
 			// inform user of socket number - used in send and receive commands
-			cout << "New connection , socket fd is " << new_socket << ", ip is : " << inet_ntoa(address.sin_addr) << ", port : " << ntohs(address.sin_port) << endl;
+			cout << "New connection, socket fd is " << new_socket << ", ip is : " << inet_ntoa(address.sin_addr) << ", port : " << ntohs(address.sin_port) << endl;
 
 			// send new connection greeting message
-			if (::send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message)))
-			{
+			if (::send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message))) {
 				perror("send");
 			}
 
