@@ -21,10 +21,6 @@ string parsing(char *buffer) {
 		cmd.erase(0, 1);
 		for (size_t i = 0; i < cmd.length(); i++)
 			cmd[i] = std::tolower(cmd[i]);
-		// std::for_each(cmd.begin(), cmd.end(), [](char & c){c = std::tolower(c);});
-		// boost::to_lower(cmd);
-		// 	std::transform(cmd.begin(), cmd.end(), cmd.begin(),
-		//  [](unsigned char c){ return std::tolower(c); });
 		cout << cmd << endl;
 		if (cmd.compare("join")) {
 
