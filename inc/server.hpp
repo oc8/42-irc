@@ -1,9 +1,5 @@
 #include <iostream>
 #include <string>
-#include <stdio.h>
-#include <string.h> //strlen
-#include <stdlib.h>
-#include <errno.h>
 #include <unistd.h>	  //close
 #include <arpa/inet.h> //close
 #include <sys/types.h>
