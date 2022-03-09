@@ -28,15 +28,6 @@ $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(CXXC) $(CXXFLAGS) -o $@ -c $<
 				@printf "$(ERASE)$(ARROW)└─[$(ACTION)$<$(ARROW)]"
 
-client:
-				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)client$(ARROW)>\n"
-				@$(CXXC) $(CXXFLAGS) -o client -c srcs/client.cpp
-				@printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
-
-client:			$(OBJS_DIR)/client.o
-				$(CXXC) $(CXXFLAGS) $(OBJS_DIR)/client.o -o client
-				printf "$(ERASE)└─> $(FINISH)generate client$(ARROW)\n$(END)"
-
 print:
 				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n$(END)"
 

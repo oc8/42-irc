@@ -1,5 +1,4 @@
 #include "server.hpp"
-#include <vector>
 
 Server::Server(int port, string password)
 {
@@ -151,8 +150,9 @@ void Server::read()
                     // set the string terminating NULL byte on the end
                     // of the data read
                     buffer[valread] = '\0';
+                    printf("%s", buffer);
                     // send(sd, buffer, strlen(buffer), 0);
-                    this->parsing(buffer);
+                    // this->parsing(buffer);
                 }
             }
         }

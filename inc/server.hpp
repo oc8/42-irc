@@ -10,6 +10,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
+#include "user.hpp"
+#include "channel.hpp"
+#include <vector>
 
 using std::cout;
 using std::cerr;
@@ -17,25 +20,38 @@ using std::endl;
 using std::string;
 
 class Server {
-public:
-	Server(int port, string password);
-	virtual ~Server();
+	public:
+		
+		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
-	void socket();
-	void setsockopt();
-	void bind();
-	void listen();
-	void accept();
-	void read();
+		Server(int port, string password);
+		virtual ~Server();
 
-	void parsing(char* buffer);
 
-private:
-	int port;
-	string password;
-	int opt;
-	int master_socket;
-	int addrlen;
-	int new_socket;
-	struct sockaddr_in address;
+		//		--> MEMBER FUCNTIONS <--
+
+		void socket();
+		void setsockopt();
+		void bind();
+		void listen();
+		void accept();
+		void read();
+		void parsing(char* buffer);
+
+
+		//		--> COMMANDS <--
+
+		void pass_cmd(User user, std::string pass);
+
+
+	private:
+		int port;
+		string password;
+		int opt;
+		int master_socket;
+		int addrlen;
+		int new_socket;
+		struct sockaddr_in address;
+		std::vector<User> users;
+		std::vector<Channel> channels;
 };

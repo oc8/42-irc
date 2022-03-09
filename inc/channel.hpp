@@ -16,11 +16,11 @@ class Channel {
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 		
-		Channel(void) {}
-		Channel(std::string name) : name(name) {}
-		Channel(std::string name, std::string psw) : name(name), psw(psw) {}
-		Channel(const Channel & src) {}
-		~Channel() {};
+		Channel(void);
+		Channel(std::string name);
+		Channel(std::string name, std::string psw);
+		Channel(const Channel & src);
+		virtual ~Channel();
 
 
 		//		--> GETTER/SETTERS <--

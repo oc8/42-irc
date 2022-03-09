@@ -1,5 +1,4 @@
 #include "server.hpp"
-#include <vector>
 
 std::vector<string> split(string str, string delimiter) {
 	size_t pos = 0;
