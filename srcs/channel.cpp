@@ -6,7 +6,7 @@
 Channel::Channel() {}
 Channel::Channel(std::string name) : name(name) {}
 Channel::Channel(std::string name, std::string psw) : name(name), psw(psw) {}
-Channel::Channel(const Channel & src) {}
+Channel::Channel(const Channel& src) { *this = src; }
 Channel::~Channel() {}
 
 

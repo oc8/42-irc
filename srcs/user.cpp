@@ -4,11 +4,13 @@
 
 //		--> CONSTRUCTORS/DESTRUCTORS <--
 
-User::User() {};
+User::User() {}
+
+User::User(int sd): sd(sd) {}
 
 User::User(const User & src) { *this = src; }
 
-User::~User() {};
+User::~User() {}
 
 
 //		--> GETTERS <--

@@ -15,6 +15,10 @@
 #include "user.hpp"
 #include "channel.hpp"
 #include <vector>
+#include <map>
+
+#include "user.hpp"
+#include "channel.hpp"
 
 using std::cout;
 using std::cerr;
@@ -23,7 +27,7 @@ using std::string;
 
 class Server {
 	public:
-		
+
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
 		Server(int port, string password);
@@ -38,7 +42,7 @@ class Server {
 		void listen();
 		void accept();
 		void read();
-		void parsing(std::string buffer);
+		void parsing(string buffer, User &user);
 
 
 		//		--> COMMANDS <--

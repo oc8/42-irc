@@ -18,8 +18,9 @@ class User {
 		// typedef T											value_type;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
-		
+
 		User();
+		User(int sd);
 		User(const User & src);
 		virtual ~User();
 
@@ -37,9 +38,10 @@ class User {
 		void set_pass(bool is_ok);
 		void set_nickname(std::string new_nickname);
 		void set_username(std::string new_username);
+		void setSD(int sd) { this->sd = sd; };
 
 
-		//		--> MEMBER FUCNTIONS <--
+		//		--> MEMBER FUNCTIONS <--
 
 		void check_if_connected();
 
@@ -47,7 +49,7 @@ class User {
 		//		--> OPERATORS <--
 
 		User operator=(const User & src);
-		
+
 	protected:
 		int				sd;
 		std::string		nickname;

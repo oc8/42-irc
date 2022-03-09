@@ -3,6 +3,8 @@ NAME			= ircserv
 LST_SRCS		= main.cpp \
 server.cpp \
 pars.cpp \
+channel.cpp \
+user.cpp \
 utils.cpp
 SRCS_DIR		= srcs
 OBJS_DIR		= objs
@@ -26,8 +28,8 @@ $(NAME):		print $(OBJS_DIR) $(OBJS)
 
 $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(MKDIR) $(dir $@)
-				$(CXXC) $(CXXFLAGS) -o $@ -c $<
 				@printf "$(ERASE)$(ARROW)└─[$(ACTION)$<$(ARROW)]"
+				$(CXXC) $(CXXFLAGS) -o $@ -c $<
 
 print:
 				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n$(END)"
