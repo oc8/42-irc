@@ -5,7 +5,7 @@
 #include <map>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include "user.hpp"
+#include "User.hpp"
 
 class Channel {
 	public:
@@ -15,7 +15,7 @@ class Channel {
 		typedef list::iterator					user_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
-		
+
 		Channel(void);
 		Channel(std::string name);
 		Channel(std::string name, std::string psw);

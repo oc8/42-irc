@@ -1,4 +1,4 @@
-#include "server.hpp"
+#include "Server.hpp"
 
 void Server::pass_cmd(User &user, std::vector<string> cmds) {
 	if (cmds.size() != 2)

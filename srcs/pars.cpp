@@ -1,4 +1,4 @@
-#include "server.hpp"
+#include "Server.hpp"
 
 std::vector<string> split(string str, string delimiter);
 
@@ -9,10 +9,8 @@ void Server::parsing(string buffer, User &user) {
 		cmd[i] = std::tolower(cmd[i]);
 	cout << cmd << endl;
 	if (cmd.compare("nick")) {
-
 	}
 	else if (cmd.compare("user")) {
-
 	}
 	else if (cmd.compare("pass")) {
 		pass_cmd(user, cmds);
@@ -22,37 +20,26 @@ void Server::parsing(string buffer, User &user) {
 		send(user.get_sd(), response.c_str(), response.size(), 0);
 	}
 	else if (cmd.compare("join")) {
-
 	}
 	else if (cmd.compare("part")) {
-
 	}
 	else if (cmd.compare("mode")) {
-
 	}
 	else if (cmd.compare("topic")) {
-
 	}
 	else if (cmd.compare("names")) {
-
 	}
 	else if (cmd.compare("list")) {
-
 	}
 	else if (cmd.compare("invite")) {
-
 	}
 	else if (cmd.compare("kick")) {
-
 	}
 	else if (cmd.compare("privmsg")) {
-
 	}
 	else if (cmd.compare("help")) {
-
 	}
 	else if (cmd.compare("quit")) {
-
 	}
 	// else {
 	// 	"Invalid command";
