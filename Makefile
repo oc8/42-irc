@@ -33,6 +33,10 @@ client:
 				@$(CXXC) $(CXXFLAGS) -o client -c srcs/client.cpp
 				@printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
 
+client:			$(OBJS_DIR)/client.o
+				$(CXXC) $(CXXFLAGS) $(OBJS_DIR)/client.o -o client
+				printf "$(ERASE)└─> $(FINISH)generate client$(ARROW)\n$(END)"
+
 print:
 				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n$(END)"
 
@@ -46,7 +50,7 @@ fclean:		clean
 re:				fclean all
 
 .PHONY: 		clean fclean all re
-.SILENT:		clean fclean all re $(OBJS) $(NAME) $(OBJS_DIR) print
+.SILENT:		clean fclean all re $(OBJS) $(NAME) $(OBJS_DIR) print client
 
 ERASE		= \033[2K\r
 GREY		= \033[30m
