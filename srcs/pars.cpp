@@ -14,7 +14,7 @@ std::vector<string> split(string str, string delimiter) {
 	return tokens;
 }
 
-string parsing(char *buffer) {
+string Server::parsing(char *buffer) {
 	std::vector<string> cmds = ::split(buffer, "");
 	string cmd = cmds[0];
 	// if (cmd[0] == '/') {

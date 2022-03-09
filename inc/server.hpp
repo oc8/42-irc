@@ -28,6 +28,8 @@ public:
 	void accept();
 	void read();
 
+	string parsing(char* buffer);
+
 private:
 	int port;
 	string password;
