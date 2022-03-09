@@ -1,0 +1,28 @@
+{
+	// Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+	// Pointez pour afficher la description des attributs existants.
+	// Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "ircserv",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/ircserv",
+			"args": ["8888", ""],
+			"stopAtEntry": false,
+			"cwd": "${fileDirname}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "lldb"
+		},
+		{
+			"name": "ircserv",
+			"type": "cppdbg",
+			"request": "attach",
+			"program": "${workspaceFolder}/ircserv",
+			"processId": "${command:pickProcess}",
+			"MIMode": "lldb"
+		}
+	]
+}

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <stdio.h>
@@ -36,7 +38,7 @@ class Server {
 		void listen();
 		void accept();
 		void read();
-		void parsing(char* buffer);
+		void parsing(std::string buffer);
 
 
 		//		--> COMMANDS <--
