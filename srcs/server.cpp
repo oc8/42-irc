@@ -1,6 +1,7 @@
-#include "server.hpp"
+#include "Server.hpp"
 
-Server::Server(int port, string password) {
+Server::Server(int port, string password)
+{
     this->port = port;
     this->password = password;
     this->address.sin_family = AF_INET;
@@ -12,51 +13,63 @@ Server::Server(int port, string password) {
 
 Server::~Server() {}
 
-void Server::socket() {
-    if ((this->master_socket = ::socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+void Server::socket()
+{
+    if ((this->master_socket = ::socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    {
         cerr << "socket failed" << endl;
         exit(EXIT_FAILURE);
     }
 }
 
-void Server::setsockopt() {
-    if (::setsockopt(this->master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&this->opt, sizeof(this->opt)) < 0) {
+void Server::setsockopt()
+{
+    if (::setsockopt(this->master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&this->opt, sizeof(this->opt)) < 0)
+    {
         cerr << "setsockopt" << endl;
         exit(EXIT_FAILURE);
     }
 }
 
-void Server::bind() {
-    if (::bind(this->master_socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
+void Server::bind()
+{
+    if (::bind(this->master_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
+    {
         cerr << "bind failed" << endl;
         exit(EXIT_FAILURE);
     }
     cout << "Listener on port " << this->port << endl;
 }
 
-void Server::listen() {
-    if (::listen(this->master_socket, 3) < 0) {
+void Server::listen()
+{
+    if (::listen(this->master_socket, 3) < 0)
+    {
         cerr << "listen" << endl;
         exit(EXIT_FAILURE);
     }
 }
 
-void Server::accept() {
+void Server::accept()
+{
     this->addrlen = sizeof(this->address);
-    if ((this->new_socket = ::accept(this->master_socket, (struct sockaddr *)&this->address, (socklen_t *)&this->addrlen)) < 0) {
+    if ((this->new_socket = ::accept(this->master_socket, (struct sockaddr *)&this->address, (socklen_t *)&this->addrlen)) < 0)
+    {
         cerr << "accept" << endl;
         exit(EXIT_FAILURE);
     }
 }
 
-void Server::read() {
+void Server::read()
+{
     std::vector<User> clients;
     int activity, valread, sd, max_sd;
     unsigned long i;
     fd_set readfds;
     char message[] = ":localhost 001 ircserv :Welcome! \r\n";
     char buffer[1025];
-    while (42) {
+    while (42)
+    {
         // clear the socket set
         FD_ZERO(&readfds);
 
@@ -65,7 +78,8 @@ void Server::read() {
         max_sd = master_socket;
 
         // add child sockets to set
-        for (i = 0; i < clients.size(); i++) {
+        for (i = 0; i < clients.size(); i++)
+        {
             // socket descriptor
             sd = clients[i].get_sd();
 
@@ -82,14 +96,17 @@ void Server::read() {
         // so wait indefinitely
         activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
 
-        if ((activity < 0) && (errno != EINTR)) {
+        if ((activity < 0) && (errno != EINTR))
+        {
             cout << "select error" << endl;
         }
 
         // If something happened on the master socket ,
         // then its an incoming connection
-        if (FD_ISSET(master_socket, &readfds)) {
-            if ((new_socket = ::accept(master_socket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0) {
+        if (FD_ISSET(master_socket, &readfds))
+        {
+            if ((new_socket = ::accept(master_socket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+            {
                 cerr << "accept" << endl;
                 exit(EXIT_FAILURE);
             }
@@ -98,7 +115,8 @@ void Server::read() {
             cout << "New connection, socket fd is: " << new_socket << ", ip is: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
             // send new connection greeting message
-            if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message))) {
+            if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message)))
+            {
                 cerr << "send" << endl;
                 exit(EXIT_FAILURE);
             }
@@ -108,12 +126,15 @@ void Server::read() {
         }
 
         // else its some IO operation on some other socket
-        for (i = 0; i < clients.size(); i++) {
+        for (i = 0; i < clients.size(); i++)
+        {
             sd = clients[i].get_sd();
-            if (FD_ISSET(sd, &readfds)) {
+            if (FD_ISSET(sd, &readfds))
+            {
                 // Check if it was for closing , and also read the
                 // incoming message
-                if ((valread = ::read(sd, buffer, 1024)) == 0) {
+                if ((valread = ::read(sd, buffer, 1024)) == 0)
+                {
                     // Somebody disconnected , get his details and print
                     getpeername(sd, (struct sockaddr *)&address,
                                 (socklen_t *)&addrlen);
@@ -124,7 +145,8 @@ void Server::read() {
                     clients.erase(clients.begin() + i);
                 }
                 // Echo back the message that came in
-                else {
+                else
+                {
                     // set the string terminating NULL byte on the end
                     // of the data read
                     buffer[valread] = '\0';

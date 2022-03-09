@@ -12,13 +12,13 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
-#include "user.hpp"
-#include "channel.hpp"
+#include "User.hpp"
+#include "Channel.hpp"
 #include <vector>
 #include <map>
 
-#include "user.hpp"
-#include "channel.hpp"
+#include "User.hpp"
+#include "Channel.hpp"
 
 using std::cout;
 using std::cerr;

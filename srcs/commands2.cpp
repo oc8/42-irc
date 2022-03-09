@@ -1,4 +1,4 @@
-#include "server.hpp"
+#include "Server.hpp"
 
 void Server::pass_cmd(User user, std::string pass) {
 	if (user.is_logged()) {
@@ -7,7 +7,7 @@ void Server::pass_cmd(User user, std::string pass) {
 	}
 	if (pass == password) {
 		user.set_pass(true);
-		
+
 	}
 	else
 		user.set_pass(false);
