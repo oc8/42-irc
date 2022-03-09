@@ -113,11 +113,10 @@ void Server::read()
             }
 
             // inform user of socket number - used in send and receive commands
-            cout << "New connection, socket fd is " << new_socket << ", ip is : " << inet_ntoa(address.sin_addr) << ", port : " << ntohs(address.sin_port) << endl;
+            cout << "New connection, socket fd is: " << new_socket << ", ip is: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
             // send new connection greeting message
-            if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message)))
-            {
+            if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message))) {
                 cerr << "send" << endl;
                 exit(EXIT_FAILURE);
             }
@@ -152,8 +151,8 @@ void Server::read()
                     // set the string terminating NULL byte on the end
                     // of the data read
                     buffer[valread] = '\0';
-                    send(sd, buffer, strlen(buffer), 0);
-                    cout << "Message sent successfully " << buffer << endl;
+                    // send(sd, buffer, strlen(buffer), 0);
+                    this->parsing(buffer);
                 }
             }
         }

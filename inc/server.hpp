@@ -28,7 +28,7 @@ public:
 	void accept();
 	void read();
 
-	string parsing(char* buffer);
+	void parsing(char* buffer);
 
 private:
 	int port;

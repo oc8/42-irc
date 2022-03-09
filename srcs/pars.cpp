@@ -1,6 +1,4 @@
 #include "server.hpp"
-#include <algorithm>
-#include <cctype>
 #include <vector>
 
 std::vector<string> split(string str, string delimiter) {
@@ -14,11 +12,9 @@ std::vector<string> split(string str, string delimiter) {
 	return tokens;
 }
 
-string Server::parsing(char *buffer) {
+void Server::parsing(char *buffer) {
 	std::vector<string> cmds = ::split(buffer, "");
 	string cmd = cmds[0];
-	// if (cmd[0] == '/') {
-	// 	cmd.erase(0, 1);
 	for (size_t i = 0; i < cmd.length(); i++)
 		cmd[i] = std::tolower(cmd[i]);
 	cout << cmd << endl;
@@ -46,7 +42,7 @@ string Server::parsing(char *buffer) {
 	else if (cmd.compare("kick")) {
 
 	}
-	else if (cmd.compare("msg")) {
+	else if (cmd.compare("privmsg")) {
 
 	}
 	else if (cmd.compare("help")) {
@@ -58,9 +54,4 @@ string Server::parsing(char *buffer) {
 	// 	else {
 	// 		return "Invalid command";
 	// 	}
-	// 	return "";
-	// // }
-	// else {
-	return buffer;
-	// }
 }
