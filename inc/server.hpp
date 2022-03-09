@@ -43,11 +43,13 @@ class Server {
 		void accept();
 		void read();
 		void parsing(string buffer, User &user);
+		void return_msg(User &user, std::string message);
+		void error_msg(User &user, std::string message);
 
 
 		//		--> COMMANDS <--
 
-		void pass_cmd(User user, std::string pass);
+		void pass_cmd(User &user, std::vector<string> cmds);
 
 
 	private:

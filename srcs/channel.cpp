@@ -85,7 +85,7 @@ bool Channel::invitation(usr_ptr inviter, usr_ptr usr) {
 
 //		--> OPERATORS <--
 
-Channel Channel::operator=(const Channel & src) {
+Channel &Channel::operator=(const Channel & src) {
 	psw = src.psw;
 	mode = src.mode;
 	topic_modif_ope = src.topic_modif_ope;

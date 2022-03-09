@@ -15,7 +15,7 @@ void Server::parsing(string buffer, User &user) {
 
 	}
 	else if (cmd.compare("pass")) {
-
+		pass_cmd(user, cmds);
 	}
 	else if (!user.is_logged()) {
 		string response = "ERROR: You are not connected to the server.\r\n";

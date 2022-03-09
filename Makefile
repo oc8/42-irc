@@ -5,13 +5,14 @@ server.cpp \
 pars.cpp \
 channel.cpp \
 user.cpp \
+commands2.cpp \
 utils.cpp
 SRCS_DIR		= srcs
 OBJS_DIR		= objs
 SRCS			= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
 OBJS			= $(LST_SRCS:%.cpp=$(OBJS_DIR)/%.o)
 CXXC			= clang++
-FLAGS			= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
+FLAGS			= -Wall -Wextra -Werror -std=c++98 -pedantic-errors -fsanitize=address -g
 CXXFLAGS		= $(FLAGS) -Iinc
 RM				= rm -rf
 MKDIR			= mkdir -p

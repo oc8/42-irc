@@ -43,12 +43,13 @@ class User {
 
 		//		--> MEMBER FUNCTIONS <--
 
+		void init_user();
 		void check_if_connected();
 
 
 		//		--> OPERATORS <--
 
-		User operator=(const User & src);
+		User &operator=(const User & src);
 
 	protected:
 		int				sd;

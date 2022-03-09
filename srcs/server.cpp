@@ -104,7 +104,11 @@ void Server::read() {
             }
             cout << "Welcome message sent successfully" << endl;
             // add new socket to array of sockets
-            clients.push_back(User(new_socket));
+            std::cout << "test1" << std::endl;
+            User newUser(new_socket);
+            clients.push_back(newUser);
+            // clients.push_back(User(new_socket));
+            std::cout << "test2" << std::endl;
         }
 
         // else its some IO operation on some other socket
@@ -130,8 +134,18 @@ void Server::read() {
                     buffer[valread] = '\0';
                     // send(sd, buffer, strlen(buffer), 0);
                     this->parsing(buffer, clients[i]);
+                    std::cout << "test" << std::endl;
                 }
             }
         }
     }
+}
+
+void Server::return_msg(User &user, std::string message) {
+    send(user.get_sd(), message.c_str(), strlen(message.c_str()), 0);
+}
+
+void Server::error_msg(User &user, std::string message) {
+    std::string error = "ERROR : " + message; 
+    send(user.get_sd(), error.c_str(), strlen(error.c_str()), 0);
 }

@@ -49,7 +49,7 @@ class Channel {
 
 		//		--> OPERATORS <--
 		
-		Channel operator=(const Channel & src);
+		Channel &operator=(const Channel & src);
 
 
 	protected:
