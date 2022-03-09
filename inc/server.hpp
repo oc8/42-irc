@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <stdio.h>
@@ -28,7 +30,7 @@ public:
 	void accept();
 	void read();
 
-	void parsing(char* buffer);
+	void parsing(string buffer);
 
 private:
 	int port;

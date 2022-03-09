@@ -2,7 +2,8 @@ NAME			= ircserv
 
 LST_SRCS		= main.cpp \
 server.cpp \
-pars.cpp
+pars.cpp \
+utils.cpp
 SRCS_DIR		= srcs
 OBJS_DIR		= objs
 SRCS			= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))

@@ -1,19 +1,10 @@
 #include "server.hpp"
 #include <vector>
 
-std::vector<string> split(string str, string delimiter) {
-	size_t pos = 0;
-	std::vector<string> tokens;
-	while ((pos = str.find(delimiter)) != std::string::npos) {
-		if (pos > 0)
-			tokens.push_back(str.substr(0, pos));
-		str.erase(0, pos + delimiter.length());
-	}
-	return tokens;
-}
+std::vector<string> split(string str, string delimiter);
 
-void Server::parsing(char *buffer) {
-	std::vector<string> cmds = ::split(buffer, "");
+void Server::parsing(string buffer) {
+	std::vector<string> cmds = ::split(buffer, " ");
 	string cmd = cmds[0];
 	for (size_t i = 0; i < cmd.length(); i++)
 		cmd[i] = std::tolower(cmd[i]);
@@ -51,7 +42,7 @@ void Server::parsing(char *buffer) {
 	else if (cmd.compare("quit")) {
 
 	}
-	// 	else {
-	// 		return "Invalid command";
-	// 	}
+	// else {
+	// 	"Invalid command";
+	// }
 }
