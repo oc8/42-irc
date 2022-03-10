@@ -7,8 +7,9 @@ void Server::parsing(string buffer, User &user) {
 	string cmd = cmds[0];
 	for (size_t i = 0; i < cmd.length(); i++)
 		cmd[i] = std::tolower(cmd[i]);
-	cmd.erase(cmd.size() - 1);
-	// cout << cmd << endl;
+	if (cmd[cmd.size() - 1] == '\n')
+		cmd.erase(cmd.size() - 1);
+	cout << cmd << endl;
 	if (!cmd.compare("nick")) {
 	}
 	else if (!cmd.compare("user")) {
