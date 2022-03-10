@@ -60,6 +60,8 @@ void Server::accept()
     }
 }
 
+std::vector<string> split(string str, string delimiter);
+
 void Server::read()
 {
     std::vector<User> clients;
@@ -68,8 +70,7 @@ void Server::read()
     fd_set readfds;
     // char message[] = ":localhost 001 ircserv :Welcome! \r\n";
     char buffer[1025];
-    while (42)
-    {
+    while (42) {
         // clear the socket set
         FD_ZERO(&readfds);
 
@@ -155,8 +156,11 @@ void Server::read()
                     // of the data read
                     buffer[valread] = '\0';
                     // send(sd, buffer, strlen(buffer), 0);
-                    cout << "buffer = " << buffer << endl;
-                    this->parsing(buffer, clients[i]);
+                    cout << "buffer: |" << buffer << "|" << endl << endl;
+                    std::vector<string> lines = ::split(buffer, "\n");
+                    for (size_t j = 0; j < lines.size(); ++j){
+                        cout << "line: |" << lines[j] << "|" << endl;
+                        this->parsing(lines[j], clients[i]);}
                 }
             }
         }
