@@ -2,13 +2,18 @@ NAME			= ircserv
 
 LST_SRCS		= main.cpp \
 server.cpp \
-pars.cpp
+pars.cpp \
+channel.cpp \
+user.cpp \
+commands2.cpp \
+utils.cpp
 SRCS_DIR		= srcs
 OBJS_DIR		= objs
 SRCS			= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
 OBJS			= $(LST_SRCS:%.cpp=$(OBJS_DIR)/%.o)
 CXXC			= clang++
 FLAGS			= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
+FLAGS			= -fsanitize=address -fsanitize=undefined -Wall -Wextra -Werror -std=c++98 -pedantic-errors -g
 CXXFLAGS		= $(FLAGS) -Iinc
 RM				= rm -rf
 MKDIR			= mkdir -p
@@ -25,17 +30,8 @@ $(NAME):		print $(OBJS_DIR) $(OBJS)
 
 $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(MKDIR) $(dir $@)
-				$(CXXC) $(CXXFLAGS) -o $@ -c $<
 				@printf "$(ERASE)$(ARROW)└─[$(ACTION)$<$(ARROW)]"
-
-client:
-				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)client$(ARROW)>\n"
-				@$(CXXC) $(CXXFLAGS) -o client -c srcs/client.cpp
-				@printf "$(ERASE)└─> $(FINISH)generate$(ARROW)\n$(END)"
-
-client:			$(OBJS_DIR)/client.o
-				$(CXXC) $(CXXFLAGS) $(OBJS_DIR)/client.o -o client
-				printf "$(ERASE)└─> $(FINISH)generate client$(ARROW)\n$(END)"
+				$(CXXC) $(CXXFLAGS) -o $@ -c $<
 
 print:
 				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n$(END)"

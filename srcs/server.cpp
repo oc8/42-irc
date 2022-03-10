@@ -1,5 +1,4 @@
-#include "server.hpp"
-#include <vector>
+#include "Server.hpp"
 
 Server::Server(int port, string password)
 {
@@ -63,7 +62,7 @@ void Server::accept()
 
 void Server::read()
 {
-    std::vector<int> client_socket;
+    std::vector<User> clients;
     int activity, valread, sd, max_sd;
     unsigned long i;
     fd_set readfds;
@@ -79,10 +78,10 @@ void Server::read()
         max_sd = master_socket;
 
         // add child sockets to set
-        for (i = 0; i < client_socket.size(); i++)
+        for (i = 0; i < clients.size(); i++)
         {
             // socket descriptor
-            sd = client_socket[i];
+            sd = clients[i].get_sd();
 
             // if valid socket descriptor then add to read list
             if (sd > 0)
@@ -100,6 +99,7 @@ void Server::read()
         if ((activity < 0) && (errno != EINTR))
         {
             cout << "select error" << endl;
+            // exit(EXIT_FAILURE);
         }
 
         // If something happened on the master socket ,
@@ -116,20 +116,22 @@ void Server::read()
             cout << "New connection, socket fd is: " << new_socket << ", ip is: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
             // send new connection greeting message
-            if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message))) {
+            if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message)))
+            {
                 cerr << "send" << endl;
                 exit(EXIT_FAILURE);
             }
             cout << "Welcome message sent successfully" << endl;
             // add new socket to array of sockets
-            client_socket.push_back(new_socket);
+            clients.push_back(User(new_socket));
+            // for (i = 0; i < clients.size(); i++)
+            //     cout << "sd " << i << ": " << clients[i].get_sd() << endl;
         }
 
         // else its some IO operation on some other socket
-        for (i = 0; i < client_socket.size(); i++)
+        for (i = 0; i < clients.size(); i++)
         {
-            sd = client_socket[i];
-
+            sd = clients[i].get_sd();
             if (FD_ISSET(sd, &readfds))
             {
                 // Check if it was for closing , and also read the
@@ -139,11 +141,11 @@ void Server::read()
                     // Somebody disconnected , get his details and print
                     getpeername(sd, (struct sockaddr *)&address,
                                 (socklen_t *)&addrlen);
-                    cout << "Host disconnected, ip " << inet_ntoa(address.sin_addr) << ", port " << ntohs(address.sin_port) << endl;
+                    cout << "Host disconnected, ip: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
                     // Close the socket and mark as 0 in list for reuse
                     close(sd);
-                    client_socket[i] = 0;
+                    clients.erase(clients.begin() + i);
                 }
                 // Echo back the message that came in
                 else
@@ -152,9 +154,21 @@ void Server::read()
                     // of the data read
                     buffer[valread] = '\0';
                     // send(sd, buffer, strlen(buffer), 0);
-                    this->parsing(buffer);
+                    this->parsing(buffer, clients[i]);
                 }
             }
         }
     }
+}
+
+void Server::return_msg(User &user, std::string message)
+{
+    message += "\r\n";
+    send(user.get_sd(), message.c_str(), message.size(), 0);
+}
+
+void Server::error_msg(User &user, std::string message)
+{
+    std::string error = "ERROR: " + message + "\r\n";
+    send(user.get_sd(), error.c_str(), error.size(), 0);
 }

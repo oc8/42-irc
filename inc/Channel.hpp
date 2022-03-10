@@ -5,7 +5,7 @@
 #include <map>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include "user.hpp"
+#include "User.hpp"
 
 class Channel {
 	public:
@@ -15,12 +15,12 @@ class Channel {
 		typedef list::iterator					user_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
-		
-		Channel(void) {}
-		Channel(std::string name) : name(name) {}
-		Channel(std::string name, std::string psw) : name(name), psw(psw) {}
-		Channel(const Channel & src) {}
-		~Channel() {};
+
+		Channel(void);
+		Channel(std::string name);
+		Channel(std::string name, std::string psw);
+		Channel(const Channel & src);
+		virtual ~Channel();
 
 
 		//		--> GETTER/SETTERS <--
@@ -49,7 +49,7 @@ class Channel {
 
 		//		--> OPERATORS <--
 		
-		Channel operator=(const Channel & src);
+		Channel &operator=(const Channel & src);
 
 
 	protected:

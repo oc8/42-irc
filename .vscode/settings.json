@@ -1,19 +1,7 @@
 {
 	"files.associations": {
 		"cglicenses.json": "jsonc",
-<<<<<<< HEAD
 		"*.tpl": "html",
-		"iostream": "cpp",
-		"ostream": "cpp",
-		"atomic": "cpp",
-		"bit": "cpp",
-		"cctype": "cpp",
-		"clocale": "cpp",
-		"cmath": "cpp",
-		"compare": "cpp",
-		"concepts": "cpp",
-=======
-		"iostream": "cpp",
 		"__bit_reference": "cpp",
 		"__config": "cpp",
 		"__debug": "cpp",
@@ -39,7 +27,6 @@
 		"cmath": "cpp",
 		"complex": "cpp",
 		"cstdarg": "cpp",
->>>>>>> chanel&user
 		"cstddef": "cpp",
 		"cstdint": "cpp",
 		"cstdio": "cpp",
@@ -47,27 +34,16 @@
 		"cstring": "cpp",
 		"ctime": "cpp",
 		"cwchar": "cpp",
-<<<<<<< HEAD
-		"exception": "cpp",
-=======
 		"cwctype": "cpp",
-		"deque": "cpp",
 		"exception": "cpp",
 		"functional": "cpp",
->>>>>>> chanel&user
 		"initializer_list": "cpp",
 		"ios": "cpp",
 		"iosfwd": "cpp",
+		"iostream": "cpp",
 		"istream": "cpp",
 		"iterator": "cpp",
 		"limits": "cpp",
-<<<<<<< HEAD
-		"memory": "cpp",
-		"new": "cpp",
-		"stdexcept": "cpp",
-		"streambuf": "cpp",
-		"string": "cpp",
-=======
 		"locale": "cpp",
 		"map": "cpp",
 		"memory": "cpp",
@@ -81,35 +57,13 @@
 		"streambuf": "cpp",
 		"string": "cpp",
 		"string_view": "cpp",
->>>>>>> chanel&user
 		"system_error": "cpp",
 		"tuple": "cpp",
 		"type_traits": "cpp",
 		"typeinfo": "cpp",
-<<<<<<< HEAD
-		"utility": "cpp",
-		"xfacet": "cpp",
-		"xiosbase": "cpp",
-		"xlocale": "cpp",
-		"xlocinfo": "cpp",
-		"xlocnum": "cpp",
-		"xmemory": "cpp",
-		"xstddef": "cpp",
-		"xstring": "cpp",
-		"xtr1common": "cpp",
-		"xutility": "cpp",
-		"algorithm": "cpp",
-		"vector": "cpp"
-=======
 		"unordered_map": "cpp",
 		"utility": "cpp",
 		"vector": "cpp",
-		"*.tcc": "cpp",
-		"clocale": "cpp",
-		"memory_resource": "cpp",
-		"numeric": "cpp",
-		"random": "cpp",
-		"fstream": "cpp"
->>>>>>> chanel&user
+		"*.tcc": "cpp"
 	}
 }
