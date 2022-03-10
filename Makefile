@@ -12,7 +12,7 @@ OBJS_DIR		= objs
 SRCS			= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
 OBJS			= $(LST_SRCS:%.cpp=$(OBJS_DIR)/%.o)
 CXXC			= clang++
-# FLAGS			= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
+FLAGS			= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
 FLAGS			= -fsanitize=address -fsanitize=undefined -Wall -Wextra -Werror -std=c++98 -pedantic-errors -g
 CXXFLAGS		= $(FLAGS) -Iinc
 RM				= rm -rf

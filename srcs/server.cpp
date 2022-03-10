@@ -99,6 +99,7 @@ void Server::read()
         if ((activity < 0) && (errno != EINTR))
         {
             cout << "select error" << endl;
+            // exit(EXIT_FAILURE);
         }
 
         // If something happened on the master socket ,
@@ -122,11 +123,9 @@ void Server::read()
             }
             cout << "Welcome message sent successfully" << endl;
             // add new socket to array of sockets
-            std::cout << "test1" << std::endl;
-            User newUser(new_socket);
-            clients.push_back(newUser);
-            // clients.push_back(User(new_socket));
-            std::cout << "test2" << std::endl;
+            clients.push_back(User(new_socket));
+            // for (i = 0; i < clients.size(); i++)
+            //     cout << "sd " << i << ": " << clients[i].get_sd() << endl;
         }
 
         // else its some IO operation on some other socket
@@ -142,7 +141,7 @@ void Server::read()
                     // Somebody disconnected , get his details and print
                     getpeername(sd, (struct sockaddr *)&address,
                                 (socklen_t *)&addrlen);
-                    cout << "Host disconnected, ip " << inet_ntoa(address.sin_addr) << ", port " << ntohs(address.sin_port) << endl;
+                    cout << "Host disconnected, ip: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
                     // Close the socket and mark as 0 in list for reuse
                     close(sd);
@@ -156,18 +155,20 @@ void Server::read()
                     buffer[valread] = '\0';
                     // send(sd, buffer, strlen(buffer), 0);
                     this->parsing(buffer, clients[i]);
-                    std::cout << "test" << std::endl;
                 }
             }
         }
     }
 }
 
-void Server::return_msg(User &user, std::string message) {
-    send(user.get_sd(), message.c_str(), strlen(message.c_str()), 0);
+void Server::return_msg(User &user, std::string message)
+{
+    message += "\r\n";
+    send(user.get_sd(), message.c_str(), message.size(), 0);
 }
 
-void Server::error_msg(User &user, std::string message) {
-    std::string error = "ERROR : " + message; 
-    send(user.get_sd(), error.c_str(), strlen(error.c_str()), 0);
+void Server::error_msg(User &user, std::string message)
+{
+    std::string error = "ERROR: " + message + "\r\n";
+    send(user.get_sd(), error.c_str(), error.size(), 0);
 }

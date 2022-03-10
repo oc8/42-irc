@@ -7,9 +7,8 @@ User::User() { init_user(); }
 
 User::User(int sd): sd(sd) { init_user(); }
 
-User::User(const User & src) { 
-	std::cout << "constructor cpy" << std::endl;
-	*this = src; 
+User::User(const User & src) {
+	*this = src;
 }
 
 User::~User() {}
@@ -60,7 +59,6 @@ void User::init_user() {
 	visible = false;
 	notif_serv = true;
 	wallops = true;
-	std::cout << "test4" << std::endl;
 }
 void User::check_if_connected() {
 	if (connexion.pass && connexion.nick && connexion.user)
@@ -71,6 +69,6 @@ void User::check_if_connected() {
 
 User &User::operator=(const User & src) {
 	visible = src.visible;
-	std::cout << "operator=" << std::endl;
+	sd = src.sd;
 	return *this;
 }

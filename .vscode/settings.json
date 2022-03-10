@@ -1,5 +1,7 @@
 {
 	"files.associations": {
+		"cglicenses.json": "jsonc",
+		"*.tpl": "html",
 		"__bit_reference": "cpp",
 		"__config": "cpp",
 		"__debug": "cpp",
@@ -61,6 +63,7 @@
 		"typeinfo": "cpp",
 		"unordered_map": "cpp",
 		"utility": "cpp",
-		"vector": "cpp"
+		"vector": "cpp",
+		"*.tcc": "cpp"
 	}
 }
