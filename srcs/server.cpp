@@ -154,6 +154,7 @@ void Server::read()
                     // of the data read
                     buffer[valread] = '\0';
                     // send(sd, buffer, strlen(buffer), 0);
+                    cout << buffer << endl;
                     this->parsing(buffer, clients[i]);
                 }
             }
