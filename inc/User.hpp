@@ -16,6 +16,8 @@ typedef struct connexion {
 class User {
 	public:
 		// typedef T											value_type;
+		typedef User*		usr_ptr;
+		typedef User&		usr_ref;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
@@ -37,7 +39,8 @@ class User {
 
 		void set_pass(bool is_ok);
 		void set_nickname(std::string new_nickname);
-		void set_username(std::string new_username);
+		void set_username(std::string new_username, std::string new_host,
+			std::string new_servername, std::string new_realname);
 		void setSD(int sd) { this->sd = sd; };
 
 
@@ -60,6 +63,9 @@ class User {
 		bool			notif_serv;
 		bool			wallops;
 		connexion_t		connexion;
+		std::string		host;
+		std::string		server_name;
+		std::string		real_name;
 };
 
 

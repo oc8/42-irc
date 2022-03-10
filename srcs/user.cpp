@@ -1,6 +1,7 @@
 #include <iostream>
 #include "User.hpp"
 
+
 //		--> CONSTRUCTORS/DESTRUCTORS <--
 
 User::User() { init_user(); }
@@ -8,10 +9,12 @@ User::User() { init_user(); }
 User::User(int sd): sd(sd) { init_user(); }
 
 User::User(const User & src) {
+	init_user();
 	*this = src;
 }
 
 User::~User() {}
+
 
 //		--> GETTERS <--
 
@@ -23,9 +26,8 @@ int User::get_sd() { return sd; }
 
 bool User::is_logged() { return connexion.connected; }
 
+
 //		--> SETTERS <--
-
-
 
 void User::set_pass(bool is_ok) {
 	if (is_ok) {
@@ -35,16 +37,19 @@ void User::set_pass(bool is_ok) {
 	else
 		connexion.pass = false;
 }
-void User::set_nickname(std::string new_nickname)
-{
+void User::set_nickname(std::string new_nickname) {
 	nickname = new_nickname;
 	connexion.nick = true;
 	check_if_connected();
 }
-void User::set_username(std::string new_username)
+void User::set_username(std::string new_username, std::string new_host,
+	std::string new_servername, std::string new_realname)
 {
 	username = new_username;
 	connexion.user = true;
+	host = new_host;
+	server_name = new_servername;
+	real_name = new_realname;
 	check_if_connected();
 }
 
@@ -64,6 +69,7 @@ void User::check_if_connected() {
 	if (connexion.pass && connexion.nick && connexion.user)
 		connexion.connected = true;
 }
+
 
 //		--> OPERATORS <--
 

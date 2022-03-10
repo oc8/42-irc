@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Channel.hpp"
 
+
 //		--> CONSTRUCTORS/DESTRUCTORS <--
 
 Channel::Channel() {}
@@ -9,12 +10,14 @@ Channel::Channel(std::string name, std::string psw) : name(name), psw(psw) {}
 Channel::Channel(const Channel &src) { *this = src; }
 Channel::~Channel() {}
 
+
 //		--> GETTERS <--
 
 std::string Channel::getName() { return name; }
 size_t Channel::getNbUser() { return users.size(); }
 size_t Channel::getNbOper() { return operators.size(); }
 size_t Channel::getNbTot() { return users.size() + operators.size(); }
+
 
 //		--> SETTERS <--
 
@@ -64,25 +67,30 @@ bool Channel::setAvailability(usr_ptr usr, bool availability)
     return false;
 }
 
+
 //		--> MEMBER FUCNTIONS <--
 
 void Channel::sendMessage(const char *message)
 {
-    for (user_it it = users.begin(); it != users.end(); it++)
-        send((*(it->second)).get_sd(), message, strlen(message), 0);
+    for (user_ptr_it it = users.begin(); it != users.end(); it++)
+        send((*it)->get_sd(), message, strlen(message), 0);
 }
-bool Channel::add_user(usr_ptr newUser, list &rank)
+void Channel::add_user(usr_ptr newUser, list &rank)
 {
-    return rank.insert(std::make_pair((*newUser).get_nickname(), newUser)).second;
+    rank.push_back(newUser);
 }
-bool Channel::del_user(usr_ptr kicked, list &rank)
+void Channel::del_user(usr_ptr kicked, list &rank)
 {
-    return rank.erase((*kicked).get_nickname());
+    user_ptr_it kick_it;
+    for (kick_it = rank.begin(); kick_it != rank.end(); kick_it++)
+        if (*kick_it == kicked)
+            break;
+    rank.erase(kick_it);
 }
 bool Channel::is_operator(usr_ptr usr)
 {
-    for (user_it it = operators.begin(); it != operators.end(); it++)
-        if (usr == (it->second))
+    for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
+        if (*it == usr)
             return true;
     return false;
 }
@@ -93,6 +101,7 @@ bool Channel::invitation(usr_ptr inviter, usr_ptr usr)
     add_user(usr, users);
     return true;
 }
+
 
 //		--> OPERATORS <--
 

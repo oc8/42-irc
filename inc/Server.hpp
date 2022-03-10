@@ -27,6 +27,9 @@ using std::string;
 
 class Server {
 	public:
+		typedef User*						usr_ptr;
+		typedef User&						usr_ref;
+		typedef std::vector<User>::iterator	usr_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
@@ -50,6 +53,8 @@ class Server {
 		//		--> COMMANDS <--
 
 		void pass_cmd(User &user, std::vector<string> cmds);
+		void nick_cmd(User &user, std::vector<string> cmds);
+		void user_cmd(User &user, std::vector<string> cmds);
 
 
 	private:

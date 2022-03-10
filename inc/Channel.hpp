@@ -3,16 +3,17 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include "User.hpp"
 
 class Channel {
 	public:
-		typedef User*							usr_ptr;
-		typedef User*							usr_ref;
-		typedef std::map<std::string, usr_ptr>	list;
-		typedef list::iterator					user_it;
+		typedef User*					usr_ptr;
+		typedef User&					usr_ref;
+		typedef std::vector<usr_ptr>	list;
+		typedef list::iterator			user_ptr_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
@@ -39,8 +40,8 @@ class Channel {
 
 		//		--> MEMBER FUCNTIONS <--
 
-		bool add_user(usr_ptr newUser, list &rank);
-		bool del_user(usr_ptr kicked, list &rank);
+		void add_user(usr_ptr newUser, list &rank);
+		void del_user(usr_ptr kicked, list &rank);
 		void sendMessage(const char *message);
 		bool is_operator(usr_ptr usr);
 		bool invitation(usr_ptr inviter, usr_ptr usr);
