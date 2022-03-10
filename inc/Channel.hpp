@@ -57,7 +57,7 @@ class Channel {
 		std::string		name;
 		list			users;
 		list			operators;
-		// int				max_user;
+		int				max_user;
 		std::string		psw;
 		std::string		mode;
 		std::string		topic;

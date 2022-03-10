@@ -66,7 +66,7 @@ void Server::read()
     int activity, valread, sd, max_sd;
     unsigned long i;
     fd_set readfds;
-    char message[] = ":localhost 001 ircserv :Welcome! \r\n";
+    // char message[] = ":localhost 001 ircserv :Welcome! \r\n";
     char buffer[1025];
     while (42)
     {
@@ -116,12 +116,13 @@ void Server::read()
             cout << "New connection, socket fd is: " << new_socket << ", ip is: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
             // send new connection greeting message
+            char message[] = "To connect ircserv, please enter the password, your nickname and username\n";
             if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message)))
             {
                 cerr << "send" << endl;
                 exit(EXIT_FAILURE);
             }
-            cout << "Welcome message sent successfully" << endl;
+            cout << "Hello message sent successfully" << endl;
             // add new socket to array of sockets
             clients.push_back(User(new_socket));
             // for (i = 0; i < clients.size(); i++)
@@ -154,7 +155,7 @@ void Server::read()
                     // of the data read
                     buffer[valread] = '\0';
                     // send(sd, buffer, strlen(buffer), 0);
-                    cout << buffer << endl;
+                    cout << "buffer = " << buffer << endl;
                     this->parsing(buffer, clients[i]);
                 }
             }

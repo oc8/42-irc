@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <iostream>
 
 using std::string;
 
@@ -13,7 +14,6 @@ std::vector<string> split(string str, string delimiter) {
 			tokens.push_back(str.substr(0, pos));
 		str.erase(0, pos + delimiter.length());
 	}
-	if (tokens.size() == 0)
-		tokens.push_back(str);
+	tokens.push_back(str);
 	return tokens;
 }
