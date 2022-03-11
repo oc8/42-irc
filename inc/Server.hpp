@@ -64,6 +64,7 @@ class Server {
 		int master_socket;
 		int addrlen;
 		int new_socket;
+		// std::map<string, void (*pf)(User&, std::vector<std::string>)> cmds;
 		struct sockaddr_in address;
 		std::vector<User> users;
 		std::vector<Channel> channels;

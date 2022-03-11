@@ -60,6 +60,7 @@ void Server::accept()
     }
 }
 
+string erase_str_in_str(string str, string erase);
 std::vector<string> split(string str, string delimiter);
 
 void Server::read()
@@ -156,11 +157,10 @@ void Server::read()
                     // of the data read
                     buffer[valread] = '\0';
                     // send(sd, buffer, strlen(buffer), 0);
-                    cout << "buffer: |" << buffer << "|" << endl << endl;
-                    std::vector<string> lines = ::split(buffer, "\n");
-                    for (size_t j = 0; j < lines.size(); ++j){
-                        cout << "line: |" << lines[j] << "|" << endl;
-                        this->parsing(lines[j], clients[i]);}
+                    string buf = erase_str_in_str(buffer, "\r");
+                    std::vector<string> lines = ::split(buf, "\n");
+                    for (size_t j = 0; j < lines.size(); ++j)
+                        this->parsing(lines[j], clients[i]);
                 }
             }
         }

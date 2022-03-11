@@ -14,6 +14,7 @@ void Server::parsing(string buffer, User &user)
 	if (cmd[cmd.size() - 1] == '\n')
 		cmd.erase(cmd.size() - 1);
 	// cout << cmd << endl;
+	
 	if (!cmd.compare("pass"))
 		return pass_cmd(user, cmds);
 	else if (!cmd.compare("nick"))
