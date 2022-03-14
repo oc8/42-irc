@@ -4,7 +4,7 @@ std::vector<string> split(string str, string delimiter);
 
 void Server::parsing(string buffer, User &user)
 {
-	// std::cout << "line = " << buffer << std::endl;
+	std::cout << "line = " << buffer << std::endl;
 	std::vector<string> cmds = ::split(buffer, " ");
 	// for (size_t i = 0; i < cmds.size(); i++)
 	// 	std::cout << "cmds[" << i << "] = " << cmds[i] << std::endl;
@@ -25,7 +25,8 @@ void Server::parsing(string buffer, User &user)
 	else if (!cmd.compare("cap"))
 		return ;
 	else if (!user.is_logged())
-		return error_msg(user, "You are not connected to the server.");
+		// return error_msg(user, "You are not connected to the server.");
+		return send_msg(user, ":localhost 451 * :You have not registered");
 	else if (!cmd.compare("join"))
 		return join_cmd(user, cmds);
 	else if (!cmd.compare("part"))
@@ -50,14 +51,15 @@ void Server::parsing(string buffer, User &user)
 	{
 	}
 	else if (!cmd.compare("privmsg"))
-	{
-	}
+		privmsg_cmd(user, cmds);
 	else if (!cmd.compare("help"))
 	{
 	}
 	else if (!cmd.compare("quit"))
 	{
 	}
+	else if (!cmd.compare("ping"))
+		ping_cmd(user, cmds);
 	else
 	{
 		return error_msg(user, "Invalid command");

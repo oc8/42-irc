@@ -80,13 +80,24 @@ bool Channel::setAvailability(usr_ptr usr, bool availability)
 void Channel::init_chan() {
 	topic_modif_ope = true;
 	avail_invit = false;
+	exterior_msg = false;
 }
 
-void Channel::sendMessage(const char *message)
+void Channel::chan_msg(usr_ref user, std::string message)
 {
+	if (!is_user(&user) && !is_operator(&user) && !exterior_msg)
+		send_msg(user, ": localhost 404 " + user.get_nickname() + " " + name + " :Cannot send to nick/channel");
 	for (user_ptr_it it = users.begin(); it != users.end(); it++)
-		send((*it)->get_sd(), message, strlen(message), 0);
+		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
+		send_msg(*(*it), message);
+	for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
+		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
+		send_msg(*(*it), message);
 }
+void Channel::send_msg(User &user, std::string message) {
+    send(user.get_sd(), (message + "\n").c_str(), message.size() + 1, 0);
+}
+
 void Channel::add_user(usr_ptr newUser)
 {
 	users.push_back(newUser);
@@ -110,6 +121,13 @@ void Channel::del_ope(usr_ptr kicked)
 		if (*kick_it == kicked)
 			break;
 	operators.erase(kick_it);
+}
+bool Channel::is_user(usr_ptr usr)
+{
+	for (user_ptr_it it = users.begin(); it != users.end(); it++)
+		if (*it == usr)
+			return true;
+	return false;
 }
 bool Channel::is_operator(usr_ptr usr)
 {
@@ -150,10 +168,16 @@ void Channel::deban_user(std::string nick) {
 //		--> OPERATORS <--
 
 Channel &Channel::operator=(const Channel & src) {
+	name = src.name;
+	users = src.users;
+	operators = src.operators;
+	max_user = src.max_user;
 	psw = src.psw;
 	mode = src.mode;
-	topic_modif_ope = src.topic_modif_ope;
 	topic = src.topic;
+	topic_modif_ope = src.topic_modif_ope;
 	avail_invit = src.avail_invit;
+	exterior_msg = src.exterior_msg;
+	banned = src.banned;
 	return *this;
 }

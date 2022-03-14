@@ -52,7 +52,9 @@ class Channel {
 		void del_user(usr_ptr kicked);
 		void add_ope(usr_ptr newOpe);
 		void del_ope(usr_ptr kickedOpe);
-		void sendMessage(const char *message);
+		void chan_msg(usr_ref user, std::string message);
+		void send_msg(User &user, std::string message);
+		bool is_user(usr_ptr usr);
 		bool is_operator(usr_ptr usr);
 		bool invitation(usr_ptr inviter, usr_ptr usr);
 		std::string nameUsers();
@@ -65,7 +67,6 @@ class Channel {
 		
 		Channel &operator=(const Channel & src);
 
-
 	protected:
 		std::string		name;
 		list			users;
@@ -76,6 +77,7 @@ class Channel {
 		std::string		topic;
 		bool			topic_modif_ope;
 		bool			avail_invit;
+		bool			exterior_msg;
 		ban_list		banned;
 };
 

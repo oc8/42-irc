@@ -1,29 +1,73 @@
 #include "Server.hpp"
 
+std::vector<string> split(string str, string delimiter);
+
 void Server::pass_cmd(User &user, std::vector<string> cmds) {
 	if (user.is_logged())
-		return error_msg(user, "You are already connected and cannot handshake again");
+		return send_msg(user, ":localhost 462 " + user.get_nickname() + " :You are already connected and cannot handshake again");
 	if (cmds.size() != 2)
-		return error_msg(user, "Wrong nember of args (PASS <password>)");
+		return send_msg(user, ":localhost 461 " + user.get_nickname() + " :Not enough parameters");
 	user.set_pass(cmds[1], password);
 }
 
 void Server::nick_cmd(User &user, std::vector<string> cmds) {
-	if (cmds.size() != 2)
-		return error_msg(user, "Wrong nember of args (NICK <nickname>)");
+	if (cmds.size() == 1)
+		return send_msg(user, ":localhost 431 " + user.get_nickname() + " :No nickname given");
 	for (usr_it it = users.begin(); it != users.end(); it++) {
 		if (it->get_nickname() == cmds[1])
-			return error_msg(user, "Nickname is already in use");
+			return send_msg(user, ":localhost 433 * " + cmds[1] + " :Nickname is already in use.");
 	}
 	user.set_nickname(cmds[1]);
 }
 
 void Server::user_cmd(User &user, std::vector<string> cmds) {
 	if (user.is_logged())
-		return error_msg(user, "You are already connected and cannot handshake again");
-	if (cmds.size() != 5)
-		return error_msg(user, "Wrong nember of args (USER <username> <host> <server name> <real name>)");
+		return send_msg(user, ":localhost 462 " + user.get_nickname() + " :You are already connected and cannot handshake again");
+	if (cmds.size() < 5)
+		return send_msg(user, ":localhost 461 " + user.get_nickname() + " :Not enough parameters");
 	user.set_username(cmds[1], cmds[2], cmds[3], cmds[4]);
+}
+
+void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
+	std::vector<std::string> targets = split(cmds[1], ",");
+	std::string message;
+	for (std::vector<std::string>::iterator it = cmds.begin() + 2; it != cmds.end(); it++) {
+		message += *it;
+		if (it + 1 != cmds.end())
+			message += " ";
+	}
+	std::cout << "message = \"" << message << "\"" << std::endl;
+	if (message.empty())
+		 return send_msg(user, ":localhost 412 " + user.get_nickname() + " :No text to send");
+	if (message[0] != ':')
+		message = (":" + message);
+	// for (std::vector<std::string>::iterator it = targets.begin() + 2; it != targets.end(); it++) {
+	for (size_t i = 0; i < targets.size(); i++) {
+		if (targets[i][0] == '#' || targets[i][0] == '&') {
+			chan_ptr chan = chan_exist(targets[i]);
+			if (chan == NULL)
+				send_msg(user, ": localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
+			else
+				(*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+					+ "@" + user.get_host() + " PRIVMSG " + chan->getName()+ " " + message);
+		}
+		else {
+			usr_ptr usr = user_exist(targets[i]);
+			if (usr == NULL)
+				// return_msg(user, targets[i] + " :No such nick/channel", 401);
+				send_msg(user, ": localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
+			else {
+				send_msg(*usr, ":" + user.get_nickname() + "!~" + user.get_username() 
+					+ "@" + user.get_host() + " PRIVMSG " + (*usr).get_nickname() + " " + message);
+			}
+		}
+	}
+}
+
+void Server::ping_cmd(User &user, std::vector<string> cmds) {
+	if (cmds.size() != 2)
+		return send_msg(user, ":localhost 461 " + user.get_nickname() + " PING :Not enougt parameters");
+	send_msg(user, ":localhost PONG localhost :" + cmds[1] + "\n");
 }
 
 void Server::join_cmd(User &user, std::vector<string> cmds) {
@@ -31,11 +75,11 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 		// std::cout << "exist nick = " << it->get_nickname() << "nick = " << cmds[1] << std::endl;
 		if (it->getName() == cmds[1]) {
 			it->add_user(&user);
-			 return return_msg(user,  "Welcome to " + cmds[1] + "\n Topic : " + it->getTopic() + "\n Users : " + it->nameUsers() );
+			 return return_msg(user,  "Welcome to " + cmds[1] + "\n Topic : " + it->getTopic() + "\n Users : " + it->nameUsers() , 300);
 		}
 	}
 	channels.push_back(Channel(cmds[1], &user));
-	return_msg(user,  "Welcome to " + cmds[1] );
+	return_msg(user,  "Welcome to " + cmds[1] + "\n" , 300);
 
 	// if (user.is_logged())
 	// 	return error_msg(user, "You are already connected and cannot handshake again");
@@ -44,3 +88,6 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 	// user.set_username(cmds[1], cmds[2], cmds[3], cmds[4]);
 }
 
+// void Server::bot(User &user, std::vector<string> cmds) {
+// 	if 
+// }

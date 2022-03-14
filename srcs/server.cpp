@@ -117,7 +117,7 @@ void Server::read()
             cout << "New connection, socket fd is: " << new_socket << ", ip is: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
             // send new connection greeting message
-            char message[] = ":localhost 300 ircserv :To connect ircserv, please enter the password, your nickname and username\n";
+            char message[] = ":localhost 300 * :To connect ircserv, please enter the password, your nickname and username\n";
             if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message)))
             {
                 cerr << "send" << endl;
@@ -167,14 +167,34 @@ void Server::read()
     }
 }
 
-void Server::return_msg(User &user, std::string message)
+void Server::return_msg(User &user, std::string message, int ret_nbr)
 {
-    message += "\r\n";
-    send(user.get_sd(), message.c_str(), message.size(), 0);
+    // message += "\r\n";
+    // std::string ret = ":localhost " + std::to_string(ret_nbr) + " " + user.get_nickname() + " " + message + "\r\n";
+    std::string ret = ":localhost " + std::to_string(ret_nbr) + " " + user.get_nickname() + " " + message;
+    send(user.get_sd(), ret.c_str(), ret.size(), 0);
 }
 
 void Server::error_msg(User &user, std::string message)
 {
     std::string error = "ERROR: " + message + "\r\n";
     send(user.get_sd(), error.c_str(), error.size(), 0);
+}
+
+void Server::send_msg(User &user, std::string message) {
+    send(user.get_sd(), (message + "\n").c_str(), message.size() + 1, 0);
+}
+
+Channel *Server::chan_exist(std::string chanName) {
+	for (chan_it it = channels.begin(); it != channels.end(); it++)
+		if (it->getName() == chanName)
+			return &(*it);
+	return NULL;
+}
+
+User *Server::user_exist(std::string userName) {
+	for (usr_it it = users.begin(); it != users.end(); it++)
+		if (it->get_nickname() == userName)
+			return &(*it);
+	return NULL;
 }

@@ -17,11 +17,13 @@ User::~User() {}
 //		--> GETTERS <--
 
 std::string User::get_username() { return username; }
-
-std::string User::get_nickname() { return nickname; }
-
+std::string User::get_nickname() { 
+	if (nickname.empty())
+		return "*";
+	return nickname;
+}
+std::string User::get_host() { return host; }
 int User::get_sd() { return sd; }
-
 bool User::is_logged() { return connexion.connected; }
 
 
