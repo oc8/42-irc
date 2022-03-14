@@ -5,12 +5,12 @@
 //		--> CONSTRUCTORS/DESTRUCTORS <--
 
 Channel::Channel() {init_chan();}
-Channel::Channel(std::string name) : name(name) {init_chan();}
-Channel::Channel(std::string name, usr_ptr ope) : name(name) { 
+Channel::Channel(std::string name) : _name(name) {init_chan();}
+Channel::Channel(std::string name, usr_ptr ope) : _name(name) { 
 	init_chan();
 	operators.push_back(ope);
 }
-Channel::Channel(std::string name, std::string psw) : name(name), psw(psw) {init_chan();}
+Channel::Channel(std::string name, std::string psw) : _name(name), psw(psw) {init_chan();}
 Channel::Channel(const Channel &src) { 
 	init_chan();
 	*this = src;
@@ -20,11 +20,14 @@ Channel::~Channel() {}
 
 //		--> GETTERS <--
 
-std::string Channel::getName() { return name; }
+std::string Channel::getName() { return _name; }
 std::string Channel::getTopic() { return topic; }
+std::vector<User*> Channel::getUsers() {return users;}
+std::vector<User*> Channel::getOpe() {return operators;}
 size_t Channel::getNbUser() { return users.size(); }
 size_t Channel::getNbOper() { return operators.size(); }
 size_t Channel::getNbTot() { return users.size() + operators.size(); }
+bool Channel::getAvail_invit() {return avail_invit;}
 
 
 //		--> SETTERS <--
@@ -33,7 +36,7 @@ bool Channel::setName(usr_ptr usr, std::string newName)
 {
 	if (is_operator(usr))
 	{
-		name = newName;
+		_name = newName;
 		return true;
 	}
 	return false;
@@ -128,15 +131,27 @@ bool Channel::invitation(usr_ptr inviter, usr_ptr usr)
 }
 std::string Channel::nameUsers() {
 	std::string ret;
-	for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
+	for (user_ptr_it it = users.begin(); it != users.end(); it++)
 		ret += (*it)->get_nickname() += ", ";
 	return ret;
+}
+
+bool Channel::is_in_channel(User &user){
+	for (user_ptr_it user_it = users.begin(); user_it != users.end(); ++user_it)
+	{
+		if ((*user_it)->get_username() == user.get_username())
+			return true;
+	}
+	return false;
 }
 
 
 //		--> OPERATORS <--
 
 Channel &Channel::operator=(const Channel & src) {
+	_name = src._name;
+	operators = src.operators;
+	users = src.operators;
 	psw = src.psw;
 	mode = src.mode;
 	topic_modif_ope = src.topic_modif_ope;

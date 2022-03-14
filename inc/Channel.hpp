@@ -31,9 +31,12 @@ class Channel {
 
 		std::string getName();
 		std::string getTopic();
+		list getUsers();
+		list getOpe();
 		size_t getNbUser();
 		size_t getNbOper();
 		size_t getNbTot();
+		bool getAvail_invit();
 
 		bool setName(usr_ptr usr, std::string newName);
 		bool setPsw(usr_ptr usr, std::string newName);
@@ -53,6 +56,7 @@ class Channel {
 		bool is_operator(usr_ptr usr);
 		bool invitation(usr_ptr inviter, usr_ptr usr);
 		std::string nameUsers();
+		bool is_in_channel(User &user);
 		// bool setTopic(User us, std::string topic);
 
 
@@ -62,16 +66,16 @@ class Channel {
 
 
 	protected:
-		std::string		name;
-		list			users;
-		list			operators;
-		int				max_user;
-		std::string		psw;
-		std::string		mode;
-		std::string		topic;
-		bool			topic_modif_ope;
-		bool			avail_invit;
-		list			banned;
+		std::string					_name;
+		list						users;
+		list						operators;
+		int							max_user;
+		std::string					psw;
+		std::string					mode;
+		std::string					topic;
+		bool						topic_modif_ope;
+		bool						avail_invit;
+		list						banned;
 };
 
 

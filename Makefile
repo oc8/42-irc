@@ -6,6 +6,7 @@ pars.cpp \
 channel.cpp \
 user.cpp \
 commands2.cpp \
+command.cpp \
 utils.cpp
 SRCS_DIR		= srcs
 OBJS_DIR		= objs

@@ -82,5 +82,7 @@ void User::check_if_connected() {
 
 User &User::operator=(const User & src) {
 	sd = src.sd;
+	nickname = src.nickname;
+	username = src.username;
 	return *this;
 }
