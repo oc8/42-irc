@@ -117,7 +117,7 @@ void Server::read()
             cout << "New connection, socket fd is: " << new_socket << ", ip is: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
             // send new connection greeting message
-            char message[] = "To connect ircserv, please enter the password, your nickname and username\n";
+            char message[] = ":localhost 300 ircserv :To connect ircserv, please enter the password, your nickname and username\n";
             if (send(new_socket, message, strlen(message), 0) != static_cast<ssize_t>(strlen(message)))
             {
                 cerr << "send" << endl;
@@ -126,7 +126,7 @@ void Server::read()
             cout << "Hello message sent successfully" << endl;
             // add new socket to array of sockets
             users.push_back(User(new_socket));
-            std::cout << "user.size = " << users.size() << std::endl;
+            // std::cout << "user.size = " << users.size() << std::endl;
             // for (i = 0; i < users.size(); i++)
             //     cout << "sd " << i << ": " << users[i].get_sd() << endl;
         }

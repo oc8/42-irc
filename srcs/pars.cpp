@@ -4,6 +4,7 @@ std::vector<string> split(string str, string delimiter);
 
 void Server::parsing(string buffer, User &user)
 {
+	// std::cout << "line = " << buffer << std::endl;
 	std::vector<string> cmds = ::split(buffer, " ");
 	// for (size_t i = 0; i < cmds.size(); i++)
 	// 	std::cout << "cmds[" << i << "] = " << cmds[i] << std::endl;
@@ -21,6 +22,8 @@ void Server::parsing(string buffer, User &user)
 		return nick_cmd(user, cmds);
 	else if (!cmd.compare("user"))
 		return user_cmd(user, cmds);
+	else if (!cmd.compare("cap"))
+		return ;
 	else if (!user.is_logged())
 		return error_msg(user, "You are not connected to the server.");
 	else if (!cmd.compare("join"))

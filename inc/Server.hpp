@@ -51,6 +51,7 @@ class Server {
 		void parsing(string buffer, User &user);
 		void return_msg(User &user, std::string message);
 		void error_msg(User &user, std::string message);
+		// void bot()
 
 
 		//		--> COMMANDS <--

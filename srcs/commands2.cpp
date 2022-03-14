@@ -11,9 +11,7 @@ void Server::pass_cmd(User &user, std::vector<string> cmds) {
 void Server::nick_cmd(User &user, std::vector<string> cmds) {
 	if (cmds.size() != 2)
 		return error_msg(user, "Wrong nember of args (NICK <nickname>)");
-	// std::cout <<  << std::endl;
 	for (usr_it it = users.begin(); it != users.end(); it++) {
-		std::cout << "exist nick = " << it->get_nickname() << "nick = " << cmds[1] << std::endl;
 		if (it->get_nickname() == cmds[1])
 			return error_msg(user, "Nickname is already in use");
 	}

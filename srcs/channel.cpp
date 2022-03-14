@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Channel.hpp"
 
 
@@ -131,6 +130,20 @@ std::string Channel::nameUsers() {
 	for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
 		ret += (*it)->get_nickname() += ", ";
 	return ret;
+}
+void Channel::ban_user(std::string nick) {
+	ban_it it;
+	for (it = banned.begin(); it != banned.end() && nick != *it ; it++)
+		;
+	if (it == banned.end())
+		banned.push_back(nick);
+}
+void Channel::deban_user(std::string nick) {
+	for (ban_it it = banned.begin(); it != banned.end(); it++)
+		if (*it == nick) {
+			banned.erase(it);
+			return;
+		}
 }
 
 

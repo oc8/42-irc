@@ -4,18 +4,21 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <list>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include "User.hpp"
 
 class Channel {
 	public:
-		typedef User*					usr_ptr;
-		typedef User&					usr_ref;
-		// typedef User*					usr_ptr;
-		// typedef User&					usr_ref;
-		typedef std::vector<usr_ptr>	list;
-		typedef list::iterator			user_ptr_it;
+		typedef User*								usr_ptr;
+		typedef User&								usr_ref;
+		// typedef User*								usr_ptr;
+		// typedef User&								usr_ref;
+		typedef std::vector<usr_ptr>				list;
+		typedef list::iterator						user_ptr_it;
+		typedef std::list<std::string>				ban_list;
+		typedef std::list<std::string>::iterator	ban_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
@@ -53,6 +56,8 @@ class Channel {
 		bool is_operator(usr_ptr usr);
 		bool invitation(usr_ptr inviter, usr_ptr usr);
 		std::string nameUsers();
+		void ban_user(std::string nick);
+		void deban_user(std::string nick);
 		// bool setTopic(User us, std::string topic);
 
 
@@ -71,7 +76,7 @@ class Channel {
 		std::string		topic;
 		bool			topic_modif_ope;
 		bool			avail_invit;
-		list			banned;
+		ban_list		banned;
 };
 
 
