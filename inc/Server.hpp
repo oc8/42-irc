@@ -27,6 +27,12 @@ using std::string;
 
 class Server {
 	public:
+		typedef User*							usr_ptr;
+		typedef User&							usr_ref;
+		typedef Channel*						chan_ptr;
+		typedef Channel&						chan_ref;
+		typedef std::vector<User>::iterator		usr_it;
+		typedef std::vector<Channel>::iterator	chan_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
@@ -50,6 +56,9 @@ class Server {
 		//		--> COMMANDS <--
 
 		void pass_cmd(User &user, std::vector<string> cmds);
+		void nick_cmd(User &user, std::vector<string> cmds);
+		void user_cmd(User &user, std::vector<string> cmds);
+		void join_cmd(User &user, std::vector<string> cmds);
 
 
 	private:
@@ -59,6 +68,7 @@ class Server {
 		int master_socket;
 		int addrlen;
 		int new_socket;
+		// std::map<string, void (*pf)(User&, std::vector<std::string>)> cmds;
 		struct sockaddr_in address;
 		std::vector<User> users;
 		std::vector<Channel> channels;
