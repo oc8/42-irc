@@ -12,6 +12,8 @@ class Channel {
 	public:
 		typedef User*					usr_ptr;
 		typedef User&					usr_ref;
+		// typedef User*					usr_ptr;
+		// typedef User&					usr_ref;
 		typedef std::vector<usr_ptr>	list;
 		typedef list::iterator			user_ptr_it;
 
@@ -19,6 +21,7 @@ class Channel {
 
 		Channel(void);
 		Channel(std::string name);
+		Channel(std::string name, usr_ptr ope);
 		Channel(std::string name, std::string psw);
 		Channel(const Channel & src);
 		virtual ~Channel();
@@ -27,6 +30,7 @@ class Channel {
 		//		--> GETTER/SETTERS <--
 
 		std::string getName();
+		std::string getTopic();
 		size_t getNbUser();
 		size_t getNbOper();
 		size_t getNbTot();
@@ -40,11 +44,15 @@ class Channel {
 
 		//		--> MEMBER FUCNTIONS <--
 
-		void add_user(usr_ptr newUser, list &rank);
-		void del_user(usr_ptr kicked, list &rank);
+		void init_chan();
+		void add_user(usr_ptr newUser);
+		void del_user(usr_ptr kicked);
+		void add_ope(usr_ptr newOpe);
+		void del_ope(usr_ptr kickedOpe);
 		void sendMessage(const char *message);
 		bool is_operator(usr_ptr usr);
 		bool invitation(usr_ptr inviter, usr_ptr usr);
+		std::string nameUsers();
 		// bool setTopic(User us, std::string topic);
 
 

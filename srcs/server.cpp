@@ -65,7 +65,6 @@ std::vector<string> split(string str, string delimiter);
 
 void Server::read()
 {
-    std::vector<User> clients;
     int activity, valread, sd, max_sd;
     unsigned long i;
     fd_set readfds;
@@ -80,10 +79,10 @@ void Server::read()
         max_sd = master_socket;
 
         // add child sockets to set
-        for (i = 0; i < clients.size(); i++)
+        for (i = 0; i < users.size(); i++)
         {
             // socket descriptor
-            sd = clients[i].get_sd();
+            sd = users[i].get_sd();
 
             // if valid socket descriptor then add to read list
             if (sd > 0)
@@ -126,15 +125,16 @@ void Server::read()
             }
             cout << "Hello message sent successfully" << endl;
             // add new socket to array of sockets
-            clients.push_back(User(new_socket));
-            // for (i = 0; i < clients.size(); i++)
-            //     cout << "sd " << i << ": " << clients[i].get_sd() << endl;
+            users.push_back(User(new_socket));
+            std::cout << "user.size = " << users.size() << std::endl;
+            // for (i = 0; i < users.size(); i++)
+            //     cout << "sd " << i << ": " << users[i].get_sd() << endl;
         }
 
         // else its some IO operation on some other socket
-        for (i = 0; i < clients.size(); i++)
+        for (i = 0; i < users.size(); i++)
         {
-            sd = clients[i].get_sd();
+            sd = users[i].get_sd();
             if (FD_ISSET(sd, &readfds))
             {
                 // Check if it was for closing , and also read the
@@ -148,7 +148,7 @@ void Server::read()
 
                     // Close the socket and mark as 0 in list for reuse
                     close(sd);
-                    clients.erase(clients.begin() + i);
+                    users.erase(users.begin() + i);
                 }
                 // Echo back the message that came in
                 else
@@ -160,7 +160,7 @@ void Server::read()
                     string buf = erase_str_in_str(buffer, "\r");
                     std::vector<string> lines = ::split(buf, "\n");
                     for (size_t j = 0; j < lines.size(); ++j)
-                        this->parsing(lines[j], clients[i]);
+                        this->parsing(lines[j], users[i]);
                 }
             }
         }

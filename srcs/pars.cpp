@@ -24,8 +24,7 @@ void Server::parsing(string buffer, User &user)
 	else if (!user.is_logged())
 		return error_msg(user, "You are not connected to the server.");
 	else if (!cmd.compare("join"))
-	{
-	}
+		return join_cmd(user, cmds);
 	else if (!cmd.compare("part"))
 	{
 	}
