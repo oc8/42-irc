@@ -16,7 +16,7 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 	size_t num_chan = 0;
 
 	if (cmds.size() < 2)
-		return(error_msg(user, "JOIN :Not enough parameters\n"));
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " JOIN :Not enough parameters\n"));
 	for (std::vector<string>::iterator chan_name_it = chan_name.begin(); chan_name_it != chan_name.end(); ++chan_name_it)
 	{
 		bool exist = false;
@@ -29,14 +29,14 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 					exist  = true;
 					if (it->is_banned(user))
 					{
-						error_msg(user, *chan_name_it + " :Cannot join channel (+b)\n");
+						send_msg(user, ":localhost 474" + user.get_nickname() + *chan_name_it " :Cannot join channel (+b)\n")
 						break ;
 					}
 					if (it->is_in_channel(user))
 						break ;
 					if (!it->good_pswd(cmds, num_chan))
 					{
-						error_msg(user, *chan_name_it + " :Cannot join channel (+k)\n");
+						send_msg(user, ":localhost 475" + user.get_nickname() + *chan_name_it " :Cannot join channel (+k)\n")
 						break ;
 					}
 					if (it->getAvail_invit() == false)
@@ -47,7 +47,7 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 						join_msg(user, *it, *this);
 					}
 					else
-						error_msg(user, *chan_name_it + " :Cannot join channel (+i)\n");
+						send_msg(user, ":localhost 473" + user.get_nickname() + *chan_name_it " :Cannot join channel (+i)\n")
 				}
 			}
 			if (exist == false)
@@ -58,7 +58,7 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 			}
 		}
 		else
-			send_msg(user, *chan_name_it + " :No such channel\n");
+			send_msg(user, ":localhost 403" + user.get_nickname() + *chan_name_it + " :No such channel\n");
 		num_chan++;
 	}
 }
