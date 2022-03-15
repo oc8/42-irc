@@ -49,8 +49,12 @@ class Server {
 		void accept();
 		void read();
 		void parsing(string buffer, User &user);
-		void return_msg(User &user, std::string message);
+		void return_msg(User &user, std::string message, int ret_nbr);
+		void send_msg(User &user, std::string message);
 		void error_msg(User &user, std::string message);
+		chan_ptr chan_exist(std::string chanName);
+		usr_ptr user_exist(std::string userName);
+		void bot(User &user, std::vector<string> cmds);
 
 
 		//		--> COMMANDS <--
@@ -59,6 +63,8 @@ class Server {
 		void nick_cmd(User &user, std::vector<string> cmds);
 		void user_cmd(User &user, std::vector<string> cmds);
 		void join_cmd(User &user, std::vector<string> cmds);
+		void privmsg_cmd(User &user, std::vector<string> cmds);
+		void ping_cmd(User &user, std::vector<string> cmds);
 
 
 	private:

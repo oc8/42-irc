@@ -30,6 +30,7 @@ class User {
 
 		std::string get_username() ;
 		std::string get_nickname() ;
+		std::string get_host() ;
 		int get_sd() ;
 		bool is_logged() ;
 

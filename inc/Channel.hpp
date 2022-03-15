@@ -4,18 +4,21 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <list>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include "User.hpp"
 
 class Channel {
 	public:
-		typedef User*					usr_ptr;
-		typedef User&					usr_ref;
-		// typedef User*					usr_ptr;
-		// typedef User&					usr_ref;
-		typedef std::vector<usr_ptr>	list;
-		typedef list::iterator			user_ptr_it;
+		typedef User*								usr_ptr;
+		typedef User&								usr_ref;
+		// typedef User*								usr_ptr;
+		// typedef User&								usr_ref;
+		typedef std::vector<usr_ptr>				list;
+		typedef list::iterator						user_ptr_it;
+		typedef std::list<std::string>				ban_list;
+		typedef std::list<std::string>::iterator	ban_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
@@ -52,11 +55,15 @@ class Channel {
 		void del_user(usr_ptr kicked);
 		void add_ope(usr_ptr newOpe);
 		void del_ope(usr_ptr kickedOpe);
-		void sendMessage(const char *message);
+		void chan_msg(usr_ref user, std::string message);
+		void send_msg(User &user, std::string message);
+		bool is_user(usr_ptr usr);
 		bool is_operator(usr_ptr usr);
 		bool invitation(usr_ptr inviter, usr_ptr usr);
 		std::string nameUsers();
 		bool is_in_channel(User &user);
+		void ban_user(std::string nick);
+		void deban_user(std::string nick);
 		// bool setTopic(User us, std::string topic);
 
 
@@ -64,18 +71,18 @@ class Channel {
 		
 		Channel &operator=(const Channel & src);
 
-
 	protected:
-		std::string					_name;
-		list						users;
-		list						operators;
-		int							max_user;
-		std::string					psw;
-		std::string					mode;
-		std::string					topic;
-		bool						topic_modif_ope;
-		bool						avail_invit;
-		list						banned;
+		std::string		name;
+		list			users;
+		list			operators;
+		int				max_user;
+		std::string		psw;
+		std::string		mode;
+		std::string		topic;
+		bool			topic_modif_ope;
+		bool			avail_invit;
+		bool			exterior_msg;
+		ban_list		banned;
 };
 
 
