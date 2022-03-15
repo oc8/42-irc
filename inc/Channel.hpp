@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <map>
-// #include <vector>
+#include <vector>
 #include <list>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -63,8 +63,10 @@ class Channel {
 		std::string nameUsers();
 		std::string nameOpe();
 		bool is_in_channel(User &user);
+		bool is_banned(User &user);
 		void ban_user(std::string nick);
 		void deban_user(std::string nick);
+		bool good_pswd(std::vector<std::string> cmds, size_t i);
 		// bool setTopic(User us, std::string topic);
 
 

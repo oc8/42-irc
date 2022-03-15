@@ -1,5 +1,6 @@
 #include "Channel.hpp"
 
+std::vector<std::string> split(std::string str, std::string delimiter);
 
 //		--> CONSTRUCTORS/DESTRUCTORS <--
 
@@ -176,11 +177,36 @@ void Channel::deban_user(std::string nick) {
 }
 
 bool Channel::is_in_channel(User &user){
+	for (user_ptr_it user_it = operators.begin(); user_it != operators.end(); ++user_it)
+	{
+		if ((*user_it)->get_nickname() == user.get_nickname())
+			return true;
+	}
 	for (user_ptr_it user_it = users.begin(); user_it != users.end(); ++user_it)
 	{
 		if ((*user_it)->get_nickname() == user.get_nickname())
 			return true;
 	}
+	return false;
+}
+
+bool Channel::is_banned(User &user){
+	for (ban_it it = banned.begin(); it != banned.end(); ++it)
+		if (user.get_nickname() == *it)
+			return true;
+	return false;
+}
+
+bool Channel::good_pswd(std::vector<std::string> cmds, size_t i){
+	if (cmds.size() >= 3)
+	{
+		std::vector<std::string> all_pswd = split(cmds[2], ",");
+		if (all_pswd.size() >= i && !psw.empty())
+			if (psw == all_pswd[i])
+				return true;
+	}
+	else if (psw.empty())
+		return true;
 	return false;
 }
 
