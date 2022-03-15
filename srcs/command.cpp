@@ -16,14 +16,12 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 			{
 				exist  = true;
 				if (it->is_in_channel(user))
-				{
-					error_msg(user, "you're already in channel\n");
 					break ;
-				}
 				if (it->getAvail_invit() == false)
 				{
 					it->add_user(&user);
-					return_msg(user,  "Welcome to " + *chan_name_it + "\n Topic : " + it->getTopic() + "\n Users : " + it->nameUsers() );
+					send_msg(user, it->nameOpe());
+					send_msg(user, it->nameUsers());
 				}
 				else
 					error_msg(user, *chan_name_it + " :Cannot join channel (+i)\n");
@@ -32,7 +30,7 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 		if (exist == false)
 		{
 			channels.push_back(Channel(*chan_name_it, &user));
-			return_msg(user,  "Welcome to " + *chan_name_it);
+			// return_msg(user,  "Welcome to " + *chan_name_it);
 		}
 	}
 }

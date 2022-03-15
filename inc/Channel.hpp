@@ -61,6 +61,7 @@ class Channel {
 		bool is_operator(usr_ptr usr);
 		bool invitation(usr_ptr inviter, usr_ptr usr);
 		std::string nameUsers();
+		std::string nameOpe();
 		bool is_in_channel(User &user);
 		void ban_user(std::string nick);
 		void deban_user(std::string nick);
