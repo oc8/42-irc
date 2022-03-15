@@ -66,7 +66,7 @@ std::vector<string> split(string str, string delimiter);
 void Server::read()
 {
     int activity, valread, sd, max_sd;
-    unsigned long i;
+    // unsigned long i;
     fd_set readfds;
     // char message[] = ":localhost 001 ircserv :Welcome! \r\n";
     char buffer[1025];
@@ -79,10 +79,12 @@ void Server::read()
         max_sd = master_socket;
 
         // add child sockets to set
-        for (i = 0; i < users.size(); i++)
+        // for (i = 0; i < users.size(); i++)
+        for (usr_it it = users.begin(); it != users.end(); it++)
         {
             // socket descriptor
-            sd = users[i].get_sd();
+            // sd = users[i].get_sd();
+            sd = it->get_sd();
 
             // if valid socket descriptor then add to read list
             if (sd > 0)
@@ -132,9 +134,11 @@ void Server::read()
         }
 
         // else its some IO operation on some other socket
-        for (i = 0; i < users.size(); i++)
+        // for (i = 0; i < users.size(); i++)
+        for (usr_it it = users.begin(); it != users.end(); it++)
         {
-            sd = users[i].get_sd();
+            // sd = users[i].get_sd();
+            sd = it->get_sd();
             if (FD_ISSET(sd, &readfds))
             {
                 // Check if it was for closing , and also read the
@@ -148,7 +152,8 @@ void Server::read()
 
                     // Close the socket and mark as 0 in list for reuse
                     close(sd);
-                    users.erase(users.begin() + i);
+                    // users.erase(users.begin() + i);
+                    users.erase(it);
                 }
                 // Echo back the message that came in
                 else
@@ -160,7 +165,8 @@ void Server::read()
                     string buf = erase_str_in_str(buffer, "\r");
                     std::vector<string> lines = ::split(buf, "\n");
                     for (size_t j = 0; j < lines.size(); ++j)
-                        this->parsing(lines[j], users[i]);
+                        // this->parsing(lines[j], users[i]);
+                        parsing(lines[j], *it);
                 }
             }
         }

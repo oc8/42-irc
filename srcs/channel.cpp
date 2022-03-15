@@ -22,8 +22,8 @@ Channel::~Channel() {}
 
 std::string Channel::getName() { return name; }
 std::string Channel::getTopic() { return topic; }
-std::vector<User*> Channel::getUsers() {return users;}
-std::vector<User*> Channel::getOpe() {return operators;}
+std::list<User*> Channel::getUsers() {return users;}
+std::list<User*> Channel::getOpe() {return operators;}
 size_t Channel::getNbUser() { return users.size(); }
 size_t Channel::getNbOper() { return operators.size(); }
 size_t Channel::getNbTot() { return users.size() + operators.size(); }

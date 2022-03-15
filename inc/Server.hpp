@@ -15,6 +15,7 @@
 #include "User.hpp"
 #include "Channel.hpp"
 #include <vector>
+#include <list>
 #include <map>
 
 #include "User.hpp"
@@ -31,8 +32,8 @@ class Server {
 		typedef User&							usr_ref;
 		typedef Channel*						chan_ptr;
 		typedef Channel&						chan_ref;
-		typedef std::vector<User>::iterator		usr_it;
-		typedef std::vector<Channel>::iterator	chan_it;
+		typedef std::list<User>::iterator		usr_it;
+		typedef std::list<Channel>::iterator	chan_it;
 
 		//		--> CONSTRUCTORS/DESTRUCTORS <--
 
@@ -76,6 +77,6 @@ class Server {
 		int new_socket;
 		// std::map<string, void (*pf)(User&, std::vector<std::string>)> cmds;
 		struct sockaddr_in address;
-		std::vector<User> users;
-		std::vector<Channel> channels;
+		std::list<User> users;
+		std::list<Channel> channels;
 };
