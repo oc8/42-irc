@@ -8,7 +8,6 @@ Channel::Channel(std::string name) : name(name) {init_chan();}
 Channel::Channel(std::string name, usr_ptr ope) : name(name) { 
 	init_chan();
 	operators.push_back(ope);
-	std::cout << "[" << nameUsers() << "]" << std::endl;
 }
 Channel::Channel(std::string name, std::string psw) : name(name), psw(psw) {init_chan();}
 Channel::Channel(const Channel &src) { 
@@ -104,7 +103,7 @@ void Channel::send_msg(User &user, std::string message) {
 
 void Channel::add_user(usr_ptr newUser)
 {
-	users.push_back(newUser);
+	users.push_back(newUser);	
 }
 void Channel::add_ope(usr_ptr newUser)
 {

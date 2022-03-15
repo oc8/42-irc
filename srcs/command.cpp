@@ -12,6 +12,7 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 		bool exist = false;
 		for (chan_it it = channels.begin(); it != channels.end(); it++)
 		{
+			std::cout << "[" << it->nameUsers() << "]" << std::endl;
 			if (it->getName() == *chan_name_it)
 			{
 				exist  = true;
@@ -29,7 +30,8 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 		}
 		if (exist == false)
 		{
-			channels.push_back(Channel(*chan_name_it, &user));
+			channels.push_back(Channel(*chan_name_it));
+			channels.back().add_ope(&user);
 			// return_msg(user,  "Welcome to " + *chan_name_it);
 		}
 	}
