@@ -61,5 +61,5 @@ void Server::parsing(string buffer, User &user)
 	else if (!cmd.compare("ping"))
 		ping_cmd(user, cmds);
 	else
-		return error_msg(user, "Invalid command");
+		return send_msg(user, ":localhost 421 * :Unknown command");
 }

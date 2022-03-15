@@ -153,7 +153,7 @@ void Server::read()
                     // Close the socket and mark as 0 in list for reuse
                     close(sd);
                     // users.erase(users.begin() + i);
-                    users.erase(it);
+                    it = users.erase(it);
                 }
                 // Echo back the message that came in
                 else

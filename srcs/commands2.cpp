@@ -46,7 +46,7 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 		if (targets[i][0] == '#' || targets[i][0] == '&') {
 			chan_ptr chan = chan_exist(targets[i]);
 			if (chan == NULL)
-				send_msg(user, ": localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
+				send_msg(user, ":localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
 			else
 				(*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
 					+ "@" + user.get_host() + " PRIVMSG " + chan->getName()+ " " + message);
@@ -55,7 +55,7 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 			usr_ptr usr = user_exist(targets[i]);
 			if (usr == NULL)
 				// return_msg(user, targets[i] + " :No such nick/channel", 401);
-				send_msg(user, ": localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
+				send_msg(user, ":localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
 			else {
 				send_msg(*usr, ":" + user.get_nickname() + "!~" + user.get_username() 
 					+ "@" + user.get_host() + " PRIVMSG " + (*usr).get_nickname() + " " + message);

@@ -2,6 +2,15 @@
 
 std::vector<string> split(string str, string delimiter);
 
+
+void join_msg(User &user, Channel &chan, Server &serv) {
+	serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+		+ "@" + user.get_host() + " JOIN " + chan.getName());
+	serv.send_msg(user, ":localhost MODE " + chan.getName() + " +Cnst");
+	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
+	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
+}
+
 void Server::join_cmd(User &user, std::vector<string> cmds) {
 	std::vector<string> chan_name = split(cmds[1], ",");
 	size_t num_chan = 0;
@@ -33,8 +42,9 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 					if (it->getAvail_invit() == false)
 					{
 						it->add_user(&user);
-						send_msg(user, it->nameOpe());
-						send_msg(user, it->nameUsers());
+						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+							+ "@" + user.get_host() + " JOIN " + it->getName());
+						join_msg(user, *it, *this);
 					}
 					else
 						error_msg(user, *chan_name_it + " :Cannot join channel (+i)\n");
@@ -44,6 +54,7 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 			{
 				channels.push_back(Channel(*chan_name_it));
 				channels.back().add_ope(&user);
+				join_msg(user, channels.back(), *this);
 			}
 		}
 		else
@@ -51,3 +62,4 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 		num_chan++;
 	}
 }
+
