@@ -26,6 +26,8 @@ using std::cerr;
 using std::endl;
 using std::string;
 
+typedef void (*pf)(void);
+
 class Server {
 	public:
 		typedef User*							usr_ptr;
@@ -67,7 +69,6 @@ class Server {
 		void privmsg_cmd(User &user, std::vector<string> cmds);
 		void ping_cmd(User &user, std::vector<string> cmds);
 
-
 	private:
 		int port;
 		string password;
@@ -75,7 +76,7 @@ class Server {
 		int master_socket;
 		int addrlen;
 		int new_socket;
-		// std::map<string, void (*pf)(User&, std::vector<std::string>)> cmds;
+		// std::map<string, pf> cmds;
 		struct sockaddr_in address;
 		std::list<User> users;
 		std::list<Channel> channels;
