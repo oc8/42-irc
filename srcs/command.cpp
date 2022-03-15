@@ -5,10 +5,8 @@ std::vector<string> split(string str, string delimiter);
 void Server::join_cmd(User &user, std::vector<string> cmds) {
 	std::vector<string> chan_name = split(cmds[1], ",");
 
-	if (cmds.size() > 3)
-		return(error_msg(user, "Too many arguments\n"));
-	else if (cmds.size() < 2)
-		return(error_msg(user, "Too few arguments\n"));
+	if (cmds.size() < 2)
+		return(error_msg(user, "JOIN :Not enough parameters\n"));
 	for (std::vector<string>::iterator chan_name_it = chan_name.begin(); chan_name_it != chan_name.end(); ++chan_name_it)
 	{
 		bool exist = false;

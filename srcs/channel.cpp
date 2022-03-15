@@ -152,10 +152,12 @@ Channel &Channel::operator=(const Channel & src) {
 	_name = src._name;
 	operators = src.operators;
 	users = src.operators;
+	max_user = src.max_user;
 	psw = src.psw;
 	mode = src.mode;
-	topic_modif_ope = src.topic_modif_ope;
 	topic = src.topic;
+	topic_modif_ope = src.topic_modif_ope;
 	avail_invit = src.avail_invit;
+	banned = src.banned;
 	return *this;
 }
