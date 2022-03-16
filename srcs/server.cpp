@@ -191,20 +191,6 @@ void Server::read()
     }
 }
 
-// void Server::return_msg(User &user, std::string message, int ret_nbr)
-// {
-//     // message += "\r\n";
-//     // std::string ret = ":localhost " + std::to_string(ret_nbr) + " " + user.get_nickname() + " " + message + "\r\n";
-//     std::string ret = ":localhost " + std::to_string(ret_nbr) + " " + user.get_nickname() + " " + message;
-//     send(user.get_sd(), ret.c_str(), ret.size(), 0);
-// }
-
-// void Server::error_msg(User &user, std::string message)
-// {
-//     std::string error = "ERROR: " + message + "\r\n";
-//     send(user.get_sd(), error.c_str(), error.size(), 0);
-// }
-
 void Server::send_msg(User &user, std::string message) {
     send(user.get_sd(), (message + "\n").c_str(), message.size() + 1, 0);
 }

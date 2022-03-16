@@ -21,5 +21,5 @@ void Server::parsing(string buffer, User &user)
 		if (cmd == current)
 			return (this->*cmds[i].second)(user, split);
 	}
-	return send_msg(user, ":localhost 421 * :Unknown command");
+	return send_msg(user, ":localhost 421 " + user.get_nickname() + " :Unknown command");
 }

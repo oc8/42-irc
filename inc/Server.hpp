@@ -57,9 +57,7 @@ class Server {
 		void accept();
 		void read();
 		void parsing(string buffer, User &user);
-		void return_msg(User &user, std::string message, int ret_nbr);
 		void send_msg(User &user, std::string message);
-		void error_msg(User &user, std::string message);
 		chan_it chan_exist(std::string chanName);
 		usr_ptr user_exist(std::string userName);
 		void erase_user_in_chans(User &user);
