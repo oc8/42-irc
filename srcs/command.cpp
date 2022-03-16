@@ -63,3 +63,6 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 	}
 }
 
+// void Server::kick_cmd(User &user, std::vector<string> cmds) {}
+
+// void Server::names_cmd(User &user, std::vector<string> cmds) {}

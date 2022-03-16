@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#define pair pair<string, pf>
 
 Server::Server(int port, string password)
 {
@@ -9,6 +10,14 @@ Server::Server(int port, string password)
     this->address.sin_port = htons(this->port);
     this->addrlen = sizeof(address);
     this->opt = 1;
+    cmds.push_back(pair("pass", &Server::pass_cmd));
+    cmds.push_back(pair("nick", &Server::nick_cmd));
+    cmds.push_back(pair("user", &Server::user_cmd));
+    cmds.push_back(pair("join", &Server::join_cmd));
+    cmds.push_back(pair("privmsg", &Server::privmsg_cmd));
+    cmds.push_back(pair("ping", &Server::ping_cmd));
+    // cmds.push_back(pair("kick", &Server::kick_cmd));
+    // cmds.push_back(pair("names", &Server::names_cmd));
 }
 
 Server::~Server() {}
