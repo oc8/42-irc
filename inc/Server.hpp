@@ -16,11 +16,6 @@
 #include "Channel.hpp"
 #include <vector>
 #include <list>
-#include <map>
-
-#include "User.hpp"
-#include "Channel.hpp"
-#include "Bot.hpp"
 
 using std::cout;
 using std::cerr;
@@ -28,8 +23,11 @@ using std::endl;
 using std::string;
 using std::vector;
 using std::list;
-using std::map;
 using std::pair;
+
+#include "User.hpp"
+#include "Channel.hpp"
+#include "Bot.hpp"
 
 class Server;
 typedef void (Server::*pf)(User &user, std::vector<string> cmds);
@@ -62,7 +60,7 @@ class Server {
 		chan_it chan_exist(std::string chanName);
 		usr_ptr user_exist(std::string userName);
 		void erase_user_in_chans(User &user);
-		
+
 
 		//		--> COMMANDS <--
 
