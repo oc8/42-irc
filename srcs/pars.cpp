@@ -16,7 +16,7 @@ void Server::parsing(string buffer, User &user)
 		cmd.erase(cmd.size() - 1);
 	for (size_t i = 0; i < cmds.size(); i++) {
 		string &current = cmds[i].first;
-		if (!user.is_logged() && current != "pass" && current != "user" && current != "nick")
+		if (!user.is_logged() && current != "pass" && current != "user" && current != "nick" && current != "cap")
 			return send_msg(user, ":localhost 451 * :You have not registered");
 		if (cmd == current)
 			return (this->*cmds[i].second)(user, split);

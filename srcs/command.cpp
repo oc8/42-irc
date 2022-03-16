@@ -63,6 +63,9 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 	}
 }
 
-// void Server::kick_cmd(User &user, std::vector<string> cmds) {}
+void Server::kick_cmd(User &user, std::vector<string> cmds) {
+	if (cmds.size() < 3)
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " KICK :Not enough parameters\n"));
+}
 
 // void Server::names_cmd(User &user, std::vector<string> cmds) {}

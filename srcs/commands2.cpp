@@ -48,8 +48,11 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 			if (chan == channels.end())
 				send_msg(user, ":localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
 			else
-				chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+			{
+				(*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 					+ "@" + user.get_host() + " PRIVMSG " + chan->getName()+ " " + message);
+				
+			}
 		}
 		else {
 			usr_ptr usr = user_exist(targets[i]);
@@ -57,7 +60,7 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 				// return_msg(user, targets[i] + " :No such nick/channel", 401);
 				send_msg(user, ":localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
 			else {
-				send_msg(*usr, ":" + user.get_nickname() + "!~" + user.get_username() 
+				send_msg(*usr, ":" + user.get_nickname() + "!~" + user.get_username()
 					+ "@" + user.get_host() + " PRIVMSG " + (*usr).get_nickname() + " " + message);
 			}
 		}
@@ -79,16 +82,16 @@ void Server::part_cmd(User &user, std::vector<string> cmds) {
 		if (chan == channels.end())
 			send_msg(user, ":localhost 403 " + user.get_nickname() + " " + targets[i] + " :No such channel");
 		else {
-			chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+			chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 				+ "@" + user.get_host() + " PART " + chan->getName());
 			chan->del_user(&user);
 			chan->del_ope(&user);
 			if ((*chan).is_empty())
             	channels.erase(chan);
-			// (*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+			// (*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 			// 	+ "@" + user.get_host() + " PRIVMSG " + chan->getName()+ " " + message);
 		}
-		
+
 	}
 
 	std::string message;
@@ -101,5 +104,5 @@ void Server::part_cmd(User &user, std::vector<string> cmds) {
 }
 
 // void Server::bot(User &user, std::vector<string> cmds) {
-// 	if 
+// 	if
 // }

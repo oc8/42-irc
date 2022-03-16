@@ -16,9 +16,8 @@ Server::Server(int port, string password)
     cmds.push_back(pair("join", &Server::join_cmd));
     cmds.push_back(pair("privmsg", &Server::privmsg_cmd));
     cmds.push_back(pair("ping", &Server::ping_cmd));
-    // cmds.push_back(pair("kick", &Server::kick_cmd));
+    cmds.push_back(pair("kick", &Server::kick_cmd));
     // cmds.push_back(pair("names", &Server::names_cmd));
-}
 
 Server::~Server() {}
 

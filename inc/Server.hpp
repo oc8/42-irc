@@ -20,6 +20,7 @@
 
 #include "User.hpp"
 #include "Channel.hpp"
+#include "Bot.hpp"
 
 using std::cout;
 using std::cerr;
@@ -61,8 +62,7 @@ class Server {
 		chan_it chan_exist(std::string chanName);
 		usr_ptr user_exist(std::string userName);
 		void erase_user_in_chans(User &user);
-		void bot(User &user, std::vector<string> cmds);
-
+		
 
 		//		--> COMMANDS <--
 
@@ -72,7 +72,7 @@ class Server {
 		void join_cmd(User &user, std::vector<string> cmds);
 		void privmsg_cmd(User &user, std::vector<string> cmds);
 		void ping_cmd(User &user, std::vector<string> cmds);
-		// void kick_cmd(User &user, std::vector<string> cmds);
+		void kick_cmd(User &user, std::vector<string> cmds);
 		// void names_cmd(User &user, std::vector<string> cmds);
 		void part_cmd(User &user, std::vector<string> cmds);
 
@@ -83,9 +83,9 @@ class Server {
 		int master_socket;
 		int addrlen;
 		int new_socket;
-		// std::map<string, pf> cmds;
 		std::vector<std::pair<string, pf> > cmds;
 		struct sockaddr_in address;
 		std::list<User> users;
 		std::list<Channel> channels;
+		// Bot botch("Botch");
 };
