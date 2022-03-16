@@ -4,7 +4,7 @@ std::vector<string> split(string str, string delimiter);
 
 
 void join_msg(User &user, Channel &chan, Server &serv) {
-	serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+	serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 		+ "@" + user.get_host() + " JOIN " + chan.getName());
 	serv.send_msg(user, ":localhost MODE " + chan.getName() + " +Cnst");
 	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
@@ -29,25 +29,25 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 					exist  = true;
 					if (it->is_banned(user))
 					{
-						send_msg(user, ":localhost 474" + user.get_nickname() + *chan_name_it " :Cannot join channel (+b)\n")
+						send_msg(user, ":localhost 474" + user.get_nickname() + *chan_name_it + " :Cannot join channel (+b)\n");
 						break ;
 					}
 					if (it->is_in_channel(user))
 						break ;
 					if (!it->good_pswd(cmds, num_chan))
 					{
-						send_msg(user, ":localhost 475" + user.get_nickname() + *chan_name_it " :Cannot join channel (+k)\n")
+						send_msg(user, ":localhost 475" + user.get_nickname() + *chan_name_it + " :Cannot join channel (+k)\n");
 						break ;
 					}
 					if (it->getAvail_invit() == false)
 					{
 						it->add_user(&user);
-						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 							+ "@" + user.get_host() + " JOIN " + it->getName());
 						join_msg(user, *it, *this);
 					}
 					else
-						send_msg(user, ":localhost 473" + user.get_nickname() + *chan_name_it " :Cannot join channel (+i)\n")
+						send_msg(user, ":localhost 473" + user.get_nickname() + *chan_name_it + " :Cannot join channel (+i)\n");
 				}
 			}
 			if (exist == false)
