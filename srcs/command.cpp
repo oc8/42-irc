@@ -42,9 +42,9 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 					if (it->getAvail_invit() == false)
 					{
 						it->add_user(&user);
+						join_msg(user, *it, *this);
 						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 							+ "@" + user.get_host() + " JOIN " + it->getName());
-						join_msg(user, *it, *this);
 					}
 					else
 						send_msg(user, ":localhost 473" + user.get_nickname() + *chan_name_it + " :Cannot join channel (+i)\n");

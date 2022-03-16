@@ -69,6 +69,15 @@ void Server::accept()
     }
 }
 
+void Server::erase_user_in_chans(User &user) {
+    for (chan_it it = channels.begin(); it != channels.end(); it++) {
+        it->del_user(&user);
+        it->del_ope(&user);
+        if (it->is_empty())
+            it = channels.erase(it);
+    }
+}
+
 string erase_str_in_str(string str, string erase);
 std::vector<string> split(string str, string delimiter);
 
@@ -160,8 +169,8 @@ void Server::read()
                     cout << "Host disconnected, ip: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
                     // Close the socket and mark as 0 in list for reuse
+                    erase_user_in_chans(*it);
                     close(sd);
-                    // users.erase(users.begin() + i);
                     it = users.erase(it);
                 }
                 // Echo back the message that came in
@@ -190,21 +199,21 @@ void Server::read()
 //     send(user.get_sd(), ret.c_str(), ret.size(), 0);
 // }
 
-void Server::error_msg(User &user, std::string message)
-{
-    std::string error = "ERROR: " + message + "\r\n";
-    send(user.get_sd(), error.c_str(), error.size(), 0);
-}
+// void Server::error_msg(User &user, std::string message)
+// {
+//     std::string error = "ERROR: " + message + "\r\n";
+//     send(user.get_sd(), error.c_str(), error.size(), 0);
+// }
 
 void Server::send_msg(User &user, std::string message) {
     send(user.get_sd(), (message + "\n").c_str(), message.size() + 1, 0);
 }
 
-Channel *Server::chan_exist(std::string chanName) {
+Server::chan_it Server::chan_exist(std::string chanName) {
 	for (chan_it it = channels.begin(); it != channels.end(); it++)
 		if (it->getName() == chanName)
-			return &(*it);
-	return NULL;
+			return it;
+	return channels.end();
 }
 
 User *Server::user_exist(std::string userName) {

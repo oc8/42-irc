@@ -59,6 +59,7 @@ class Channel {
 		void send_msg(User &user, std::string message);
 		bool is_user(usr_ptr usr);
 		bool is_operator(usr_ptr usr);
+		bool is_empty();
 		bool invitation(usr_ptr inviter, usr_ptr usr);
 		std::string nameUsers();
 		std::string nameOpe();

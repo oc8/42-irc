@@ -60,9 +60,9 @@ class Server {
 		void return_msg(User &user, std::string message, int ret_nbr);
 		void send_msg(User &user, std::string message);
 		void error_msg(User &user, std::string message);
-
-		chan_ptr chan_exist(std::string chanName);
+		chan_it chan_exist(std::string chanName);
 		usr_ptr user_exist(std::string userName);
+		void erase_user_in_chans(User &user);
 		void bot(User &user, std::vector<string> cmds);
 
 
@@ -76,6 +76,7 @@ class Server {
 		void ping_cmd(User &user, std::vector<string> cmds);
 		// void kick_cmd(User &user, std::vector<string> cmds);
 		// void names_cmd(User &user, std::vector<string> cmds);
+		void part_cmd(User &user, std::vector<string> cmds);
 
 	private:
 		int port;

@@ -4,7 +4,7 @@ std::vector<string> split(string str, string delimiter);
 
 void Server::parsing(string buffer, User &user)
 {
-	std::cout << "line = " << buffer << std::endl;
+	std::cout << buffer << std::endl;
 	std::vector<string> split = ::split(buffer, " ");
 	// for (size_t i = 0; i < split.size(); i++)
 	// 	std::cout << "split[" << i << "] = " << split[i] << std::endl;
