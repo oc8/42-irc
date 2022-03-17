@@ -16,15 +16,21 @@
 #include "Channel.hpp"
 #include <vector>
 #include <list>
-#include <map>
-
-#include "User.hpp"
-#include "Channel.hpp"
 
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::string;
+using std::vector;
+using std::list;
+using std::pair;
+
+#include "User.hpp"
+#include "Channel.hpp"
+#include "Bot.hpp"
+
+class Server;
+typedef void (Server::*pf)(User &user, std::vector<string> cmds);
 
 class Server {
 	public:
@@ -50,12 +56,10 @@ class Server {
 		void accept();
 		void read();
 		void parsing(string buffer, User &user);
-		void return_msg(User &user, std::string message, int ret_nbr);
 		void send_msg(User &user, std::string message);
-		void error_msg(User &user, std::string message);
-		chan_ptr chan_exist(std::string chanName);
+		chan_it chan_exist(std::string chanName);
 		usr_ptr user_exist(std::string userName);
-		void bot(User &user, std::vector<string> cmds);
+		void erase_user_in_chans(User &user);
 
 
 		//		--> COMMANDS <--
@@ -66,7 +70,9 @@ class Server {
 		void join_cmd(User &user, std::vector<string> cmds);
 		void privmsg_cmd(User &user, std::vector<string> cmds);
 		void ping_cmd(User &user, std::vector<string> cmds);
-
+		void kick_cmd(User &user, std::vector<string> cmds);
+		// void names_cmd(User &user, std::vector<string> cmds);
+		void part_cmd(User &user, std::vector<string> cmds);
 
 	private:
 		int port;
@@ -75,8 +81,9 @@ class Server {
 		int master_socket;
 		int addrlen;
 		int new_socket;
-		// std::map<string, void (*pf)(User&, std::vector<std::string>)> cmds;
+		std::vector<std::pair<string, pf> > cmds;
 		struct sockaddr_in address;
 		std::list<User> users;
 		std::list<Channel> channels;
+		// Bot botch("Botch");
 };

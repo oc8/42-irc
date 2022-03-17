@@ -4,62 +4,22 @@ std::vector<string> split(string str, string delimiter);
 
 void Server::parsing(string buffer, User &user)
 {
-	std::cout << "line = " << buffer << std::endl;
-	std::vector<string> cmds = ::split(buffer, " ");
-	// for (size_t i = 0; i < cmds.size(); i++)
-	// 	std::cout << "cmds[" << i << "] = " << cmds[i] << std::endl;
-	// std::cout << "cmds.size = " << cmds.size() << std::endl;
-	string cmd = cmds[0];
+	std::cout << buffer << std::endl;
+	std::vector<string> split = ::split(buffer, " ");
+	// for (size_t i = 0; i < split.size(); i++)
+	// 	std::cout << "split[" << i << "] = " << split[i] << std::endl;
+	// std::cout << "split.size = " << split.size() << std::endl;
+	string cmd = split[0];
 	for (size_t i = 0; i < cmd.length(); i++)
 		cmd[i] = std::tolower(cmd[i]);
 	if (cmd[cmd.size() - 1] == '\n')
 		cmd.erase(cmd.size() - 1);
-	// cout << cmd << endl;
-	
-	if (!cmd.compare("pass"))
-		return pass_cmd(user, cmds);
-	else if (!cmd.compare("nick"))
-		return nick_cmd(user, cmds);
-	else if (!cmd.compare("user"))
-		return user_cmd(user, cmds);
-	else if (!cmd.compare("cap"))
-		return ;
-	else if (!user.is_logged())
-		// return error_msg(user, "You are not connected to the server.");
-		return send_msg(user, ":localhost 451 * :You have not registered");
-	else if (!cmd.compare("join"))
-		return join_cmd(user, cmds);
-	else if (!cmd.compare("part"))
-	{
+	for (size_t i = 0; i < cmds.size(); i++) {
+		string &current = cmds[i].first;
+		if (!user.is_logged() && current != "pass" && current != "user" && current != "nick" && current != "cap")
+			return send_msg(user, ":localhost 451 * :You have not registered");
+		if (cmd == current)
+			return (this->*cmds[i].second)(user, split);
 	}
-	else if (!cmd.compare("mode"))
-	{
-	}
-	else if (!cmd.compare("topic"))
-	{
-	}
-	else if (!cmd.compare("names"))
-	{
-	}
-	else if (!cmd.compare("list"))
-	{
-	}
-	else if (!cmd.compare("invite"))
-	{
-	}
-	else if (!cmd.compare("kick"))
-	{
-	}
-	else if (!cmd.compare("privmsg"))
-		privmsg_cmd(user, cmds);
-	else if (!cmd.compare("help"))
-	{
-	}
-	else if (!cmd.compare("quit"))
-	{
-	}
-	else if (!cmd.compare("ping"))
-		ping_cmd(user, cmds);
-	else
-		return send_msg(user, ":localhost 421 * :Unknown command");
+	return send_msg(user, ":localhost 421 " + user.get_nickname() + " :Unknown command");
 }

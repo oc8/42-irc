@@ -90,8 +90,8 @@ void Channel::init_chan() {
 void Channel::chan_msg(usr_ref user, std::string message)
 {
 	if (!is_user(&user) && !is_operator(&user) && !exterior_msg)
-		send_msg(user, ": localhost 404 " + user.get_nickname() + " " + name + " :Cannot send to nick/channel");
-	std::cout << "chan_msg = \"" << message << "\"" << std::endl;
+		return send_msg(user, ":localhost 404 " + user.get_nickname() + " " + name + " :Cannot send to nick/channel");
+	// std::cout << "chan_msg = \"" << message << "\"" << std::endl;
 	for (user_ptr_it it = users.begin(); it != users.end(); it++)
 		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
 		if (*it != &user)
@@ -115,19 +115,19 @@ void Channel::add_ope(usr_ptr newUser)
 }
 void Channel::del_user(usr_ptr kicked)
 {
-	user_ptr_it kick_it;
-	for (kick_it = users.begin(); kick_it != users.end(); kick_it++)
-		if (*kick_it == kicked)
+	for (user_ptr_it kick_it = users.begin(); kick_it != users.end(); kick_it++)
+		if (*kick_it == kicked) {
+			users.erase(kick_it);
 			break;
-	users.erase(kick_it);
+		}
 }
 void Channel::del_ope(usr_ptr kicked)
 {
-	user_ptr_it kick_it;
-	for (kick_it = operators.begin(); kick_it != operators.end(); kick_it++)
-		if (*kick_it == kicked)
+	for (user_ptr_it kick_it = operators.begin(); kick_it != operators.end(); kick_it++)
+		if (*kick_it == kicked) {
+			operators.erase(kick_it);
 			break;
-	operators.erase(kick_it);
+		}
 }
 bool Channel::is_user(usr_ptr usr)
 {
@@ -141,6 +141,12 @@ bool Channel::is_operator(usr_ptr usr)
 	for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
 		if (*it == usr)
 			return true;
+	return false;
+}
+bool Channel::is_empty() 
+{
+	if (getNbUser() == 0 && getNbOper() == 0)
+		return true;
 	return false;
 }
 bool Channel::invitation(usr_ptr inviter, usr_ptr usr)

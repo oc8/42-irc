@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#define pair pair<string, pf>
 
 Server::Server(int port, string password)
 {
@@ -9,6 +10,14 @@ Server::Server(int port, string password)
     this->address.sin_port = htons(this->port);
     this->addrlen = sizeof(address);
     this->opt = 1;
+    cmds.push_back(pair("pass", &Server::pass_cmd));
+    cmds.push_back(pair("nick", &Server::nick_cmd));
+    cmds.push_back(pair("user", &Server::user_cmd));
+    cmds.push_back(pair("join", &Server::join_cmd));
+    cmds.push_back(pair("privmsg", &Server::privmsg_cmd));
+    cmds.push_back(pair("ping", &Server::ping_cmd));
+    cmds.push_back(pair("kick", &Server::kick_cmd));
+    // cmds.push_back(pair("names", &Server::names_cmd));
 }
 
 Server::~Server() {}
@@ -57,6 +66,15 @@ void Server::accept()
     {
         cerr << "accept" << endl;
         exit(EXIT_FAILURE);
+    }
+}
+
+void Server::erase_user_in_chans(User &user) {
+    for (chan_it it = channels.begin(); it != channels.end(); it++) {
+        it->del_user(&user);
+        it->del_ope(&user);
+        if (it->is_empty())
+            it = channels.erase(it);
     }
 }
 
@@ -151,8 +169,8 @@ void Server::read()
                     cout << "Host disconnected, ip: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
 
                     // Close the socket and mark as 0 in list for reuse
+                    erase_user_in_chans(*it);
                     close(sd);
-                    // users.erase(users.begin() + i);
                     it = users.erase(it);
                 }
                 // Echo back the message that came in
@@ -173,29 +191,15 @@ void Server::read()
     }
 }
 
-void Server::return_msg(User &user, std::string message, int ret_nbr)
-{
-    // message += "\r\n";
-    // std::string ret = ":localhost " + std::to_string(ret_nbr) + " " + user.get_nickname() + " " + message + "\r\n";
-    std::string ret = ":localhost " + std::to_string(ret_nbr) + " " + user.get_nickname() + " " + message;
-    send(user.get_sd(), ret.c_str(), ret.size(), 0);
-}
-
-void Server::error_msg(User &user, std::string message)
-{
-    std::string error = "ERROR: " + message + "\r\n";
-    send(user.get_sd(), error.c_str(), error.size(), 0);
-}
-
 void Server::send_msg(User &user, std::string message) {
     send(user.get_sd(), (message + "\n").c_str(), message.size() + 1, 0);
 }
 
-Channel *Server::chan_exist(std::string chanName) {
+Server::chan_it Server::chan_exist(std::string chanName) {
 	for (chan_it it = channels.begin(); it != channels.end(); it++)
 		if (it->getName() == chanName)
-			return &(*it);
-	return NULL;
+			return it;
+	return channels.end();
 }
 
 User *Server::user_exist(std::string userName) {

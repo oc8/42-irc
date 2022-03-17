@@ -36,7 +36,7 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 		if (it + 1 != cmds.end())
 			message += " ";
 	}
-	std::cout << "message = \"" << message << "\"" << std::endl;
+	// std::cout << "message = \"" << message << "\"" << std::endl;
 	if (message.empty())
 		 return send_msg(user, ":localhost 412 " + user.get_nickname() + " :No text to send");
 	if (message[0] != ':')
@@ -44,12 +44,15 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 	// for (std::vector<std::string>::iterator it = targets.begin() + 2; it != targets.end(); it++) {
 	for (size_t i = 0; i < targets.size(); i++) {
 		if (targets[i][0] == '#' || targets[i][0] == '&') {
-			chan_ptr chan = chan_exist(targets[i]);
-			if (chan == NULL)
+			chan_it chan = chan_exist(targets[i]);
+			if (chan == channels.end())
 				send_msg(user, ":localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
 			else
-				(*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() 
+			{
+				(*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 					+ "@" + user.get_host() + " PRIVMSG " + chan->getName()+ " " + message);
+				
+			}
 		}
 		else {
 			usr_ptr usr = user_exist(targets[i]);
@@ -57,7 +60,7 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 				// return_msg(user, targets[i] + " :No such nick/channel", 401);
 				send_msg(user, ":localhost 401 " + user.get_nickname() + " " + targets[i] + " :No such nick/channel");
 			else {
-				send_msg(*usr, ":" + user.get_nickname() + "!~" + user.get_username() 
+				send_msg(*usr, ":" + user.get_nickname() + "!~" + user.get_username()
 					+ "@" + user.get_host() + " PRIVMSG " + (*usr).get_nickname() + " " + message);
 			}
 		}
@@ -65,11 +68,41 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 }
 
 void Server::ping_cmd(User &user, std::vector<string> cmds) {
-	if (cmds.size() != 2)
+	if (cmds.size() < 2)
 		return send_msg(user, ":localhost 461 " + user.get_nickname() + " PING :Not enougt parameters");
 	send_msg(user, ":localhost PONG localhost :" + cmds[1] + "\n");
 }
 
+void Server::part_cmd(User &user, std::vector<string> cmds) {
+	if (cmds.size() < 2)
+		return send_msg(user, ":localhost 461 " + user.get_nickname() + " PART :Not enougt parameters");
+	std::vector<std::string> targets = split(cmds[1], ",");
+	for (size_t i = 0; i < targets.size(); i++) {
+		chan_it chan = chan_exist(targets[i]);
+		if (chan == channels.end())
+			send_msg(user, ":localhost 403 " + user.get_nickname() + " " + targets[i] + " :No such channel");
+		else {
+			chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
+				+ "@" + user.get_host() + " PART " + chan->getName());
+			chan->del_user(&user);
+			chan->del_ope(&user);
+			if ((*chan).is_empty())
+            	channels.erase(chan);
+			// (*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
+			// 	+ "@" + user.get_host() + " PRIVMSG " + chan->getName()+ " " + message);
+		}
+
+	}
+
+	std::string message;
+	for (std::vector<std::string>::iterator it = cmds.begin() + 2; it != cmds.end(); it++) {
+		message += *it;
+		if (it + 1 != cmds.end())
+			message += " ";
+	}
+	// if (chan_exist()
+}
+
 // void Server::bot(User &user, std::vector<string> cmds) {
-// 	if 
+// 	if
 // }
