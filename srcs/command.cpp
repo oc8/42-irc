@@ -29,14 +29,14 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 					exist  = true;
 					if (it->is_banned(user))
 					{
-						send_msg(user, ":localhost 474" + user.get_nickname() + *chan_name_it " :Cannot join channel (+b)\n")
+						send_msg(user, ":localhost 474" + user.get_nickname() + *chan_name_it " :Cannot join channel (+b)\n");
 						break ;
 					}
 					if (it->is_in_channel(user))
 						break ;
 					if (!it->good_pswd(cmds, num_chan))
 					{
-						send_msg(user, ":localhost 475" + user.get_nickname() + *chan_name_it " :Cannot join channel (+k)\n")
+						send_msg(user, ":localhost 475" + user.get_nickname() + *chan_name_it " :Cannot join channel (+k)\n");
 						break ;
 					}
 					if (it->getAvail_invit() == false)
@@ -47,7 +47,7 @@ void Server::join_cmd(User &user, std::vector<string> cmds) {
 						join_msg(user, *it, *this);
 					}
 					else
-						send_msg(user, ":localhost 473" + user.get_nickname() + *chan_name_it " :Cannot join channel (+i)\n")
+						send_msg(user, ":localhost 473" + user.get_nickname() + *chan_name_it " :Cannot join channel (+i)\n");
 				}
 			}
 			if (exist == false)
