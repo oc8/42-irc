@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Server.hpp"
+#include "User.hpp"
+#include "Channel.hpp"
 
-class Bot {
-	public:
-		Bot(string name);
-		~Bot();
+class Bot : public User
+{
+public:
+	Bot(){};
+	Bot(std::string name);
+	~Bot();
 
-		void hello(string chan);
-		void welcome(string chan);
-
-	private:
-		string name;
+	void hello(Channel &chan);
+	void welcome(Channel &chan, User &user);
 };

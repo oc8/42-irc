@@ -12,8 +12,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
-#include "User.hpp"
-#include "Channel.hpp"
 #include <vector>
 #include <list>
 
@@ -85,5 +83,5 @@ class Server {
 		struct sockaddr_in address;
 		std::list<User> users;
 		std::list<Channel> channels;
-		// Bot botch("Botch");
+		Bot botch;
 };
