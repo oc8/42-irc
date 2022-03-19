@@ -51,8 +51,7 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 			{
 				(*chan).chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 					+ "@" + user.get_host() + " PRIVMSG " + chan->getName() + " " + message);
-				(*chan).chan_msg(botch, ":" + botch.get_nickname() + "!~" + user.get_username()
-					+ "@" + user.get_host() + " PRIVMSG " + chan->getName() + " " + botch.hello(chan->getName()));
+					
 			}
 		}
 		else {

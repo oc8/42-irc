@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-std::vector<string> split(string str, string delimiter);
+vector<string> split(string str, string delimiter);
 
 void join_msg(User &user, Channel &chan, Server &serv)
 {
@@ -10,14 +10,14 @@ void join_msg(User &user, Channel &chan, Server &serv)
 	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
 }
 
-void Server::join_cmd(User &user, std::vector<string> cmds)
+void Server::join_cmd(User &user, vector<string> cmds)
 {
-	std::vector<string> chan_name = split(cmds[1], ",");
+	vector<string> chan_name = split(cmds[1], ",");
 	size_t num_chan = 0;
 
 	if (cmds.size() < 2)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " JOIN :Not enough parameters"));
-	for (std::vector<string>::iterator chan_name_it = chan_name.begin(); chan_name_it != chan_name.end(); ++chan_name_it)
+	for (vector<string>::iterator chan_name_it = chan_name.begin(); chan_name_it != chan_name.end(); ++chan_name_it)
 	{
 		bool exist = false;
 		if ((*chan_name_it)[0] == '#' || (*chan_name_it)[0] == '&')
@@ -50,7 +50,8 @@ void Server::join_cmd(User &user, std::vector<string> cmds)
 						send_msg(user, ":localhost 473 " + user.get_nickname() + " " + *chan_name_it + " :Cannot join channel (+i)");
 				}
 			}
-			if (exist == false) {
+			if (exist == false)
+			{
 				channels.push_back(Channel(*chan_name_it));
 				channels.back().add_ope(&user);
 				join_msg(user, channels.back(), *this);
@@ -65,10 +66,43 @@ void Server::join_cmd(User &user, std::vector<string> cmds)
 	}
 }
 
-void Server::kick_cmd(User &user, std::vector<string> cmds)
+void Server::kick_cmd(User &user, vector<string> cmds)
 {
 	if (cmds.size() < 3)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " KICK :Not enough parameters\n"));
+
 }
 
-// void Server::names_cmd(User &user, std::vector<string> cmds) {}
+void Server::names_cmd(User &user, vector<string> cmds)
+{
+	if (cmds.size() < 2) {
+		for (chan_it it = channels.begin(); it != channels.end(); it++)
+		{
+			string msg = ":localhost 353 " + user.get_nickname() + " = #" + it->getName() + " :";
+			for (list<usr_ptr>::iterator it_user = it->getUsers().begin(); it_user != it->getUsers().end(); it_user++)
+				msg += (*it_user)->get_nickname() + " ";
+			for (list<usr_ptr>::iterator it_user = it->getOpe().begin(); it_user != it->getOpe().end(); it_user++)
+				msg += (*it_user)->get_nickname() + " ";
+			send_msg(user, msg);
+		}
+		return (send_msg(user, ":localhost 366 " + user.get_nickname() + " :End of /NAMES list."));
+	}
+	for (size_t i = 1; i < cmds.size(); i++)
+	{
+		chan_it it = chan_exist(cmds[i]);
+		if (it != channels.end())
+		{
+			string msg = ":localhost 353 " + user.get_nickname() + " = " + it->getName() + " :" + user.get_nickname() + " ";
+			list<User *> users = it->getUsers();
+			for (list<User *>::iterator it = users.begin(); it != users.end(); it++)
+				msg += (*it)->get_nickname() + " ";
+			users = it->getOpe();
+			for (list<User *>::iterator it = users.begin(); it != users.end(); it++)
+				msg += (*it)->get_nickname() + " ";
+			send_msg(user, msg);
+			send_msg(user, ":localhost 366 " + user.get_nickname() + " " + it->getName() + " :End of /NAMES list.");
+		}
+		else
+			send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[i] + " :No such channel");
+	}
+}

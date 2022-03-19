@@ -69,7 +69,7 @@ class Server {
 		void privmsg_cmd(User &user, std::vector<string> cmds);
 		void ping_cmd(User &user, std::vector<string> cmds);
 		void kick_cmd(User &user, std::vector<string> cmds);
-		// void names_cmd(User &user, std::vector<string> cmds);
+		void names_cmd(User &user, std::vector<string> cmds);
 		void part_cmd(User &user, std::vector<string> cmds);
 
 	private:
