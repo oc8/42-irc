@@ -7,7 +7,7 @@ void join_msg(User &user, Channel &chan, Server &serv) {
 	serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 		+ "@" + user.get_host() + " JOIN " + chan.getName());
 	serv.send_msg(user, ":localhost 331 " + chan.getName() + " :No topic is set");
-	serv.send_msg(user, ":localhost 332 " + chan.getName() + " +Cnst");
+	// serv.send_msg(user, ":localhost 332 " + chan.getName() + " +Cnst");
 	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
 	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
 }
