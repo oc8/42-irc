@@ -23,6 +23,8 @@ public:
 	void connect(string ip, int port);
 	void send(string msg);
 	void read();
+	void pars();
+	void reply();
 
 	// void hello(Channel &chan);
 	// void welcome(Channel &chan, User &user);
@@ -33,4 +35,6 @@ private:
 	struct sockaddr_in serv_addr;
 	int sock;
 	char buffer[1024];
+	string msg;
+	string nickname_user;
 };

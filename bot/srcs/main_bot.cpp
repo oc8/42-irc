@@ -21,6 +21,12 @@ int main(int argc, char const *argv[])
 	botch.send("PASS " + password);
 	botch.send("NICK " + botch.get_nickname());
 	botch.send("USER " + botch.get_nickname() + " 0 * :" + botch.get_nickname());
-	botch.read();
+	botch.send("JOIN #bot");
+	botch.send("PRIVMSG #bot:Le bot" + botch.get_nickname() + " est pret !");
+	while (42) {
+		botch.read();
+		botch.pars();
+		botch.reply();
+	}
     return 0;
 }

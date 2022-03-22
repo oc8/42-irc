@@ -1,6 +1,11 @@
 #include "Bot.hpp"
 
-Bot::Bot(std::string name) : name(name), sock(0) {}
+Bot::Bot(std::string name) : name(name), sock(0)
+{
+	for (size_t i = 0; i < 1024; i++)
+		buffer[i] = '\0';
+	msg = "";
+}
 
 Bot::~Bot() {}
 
@@ -50,18 +55,48 @@ void Bot::read()
 	cout << buffer << endl;
 }
 
-// void Bot::hello(Channel &chan) {
-// 	chan.chan_msg(*this, "Le bot " + get_nickname() + " est prêt !");
-// }
+void Bot::pars()
+{
+	string line = buffer;
+	nickname_user = "";
+	msg = "";
+	if (line.find('~') != string::npos)
+		nickname_user = line.substr(1, line.find("!") - 1);
+	if (line.find("JOIN #bot") != string::npos)
+		send("PRIVMSG #bot :Bienvenu sur mon canal " + nickname_user + ", je suis le bot " + name + " !");
+	if (line.find("PRIVMSG #bot :") != string::npos)
+	{
+		msg = line.substr(line.find("PRIVMSG #bot :") + 13);
+		for (size_t i = 0; i < msg.length(); i++)
+			msg[i] = std::tolower(msg[i]);
+	}
+}
 
-// void Bot::welcome(Channel &chan, User &user) {
-// 	// std::string chan = "";
-// 	// for (int i = 0; i < 6; i++) {
-// 	// 	chan += (char)(rand() % 26 + 'a');
-// 	// }
-// 	// return chan;
-// 	chan.chan_msg(*this, ":" + this->get_nickname() + "!~" + this->get_username() + "@" +
-// 		this->get_host() + " Salut " + user.get_nickname() + ", bienvenue sur le canal " + chan.getName() + " !");
-// }
+void Bot::reply()
+{
+	if (msg.empty())
+		return;
+	else if (msg.find("salut") != string::npos || msg.find("bonjour") != string::npos || msg.find("hello") != string::npos || msg.find("hey") != string::npos || msg.find("coucou") != string::npos)
+		send("PRIVMSG #bot :Salut " + nickname_user + " !");
+	else if (msg.find("au revoir") != string::npos || msg.find("aurevoir") != string::npos)
+		send("PRIVMSG #bot :Au revoir " + nickname_user + " !");
+	else if (msg.find("aide") != string::npos || msg.find("help") != string::npos)
+		send("PRIVMSG #bot :Je suis un bot qui ne sait rien faire, mais je suis toujours en train de faire des choses.");
+	else if (msg.find("qui es tu") != string::npos)
+		send("PRIVMSG #bot :Je suis le bot " + name + " !");
+	else if (msg.find("qui est ton createur") != string::npos)
+		send("PRIVMSG #bot :Les plus fort, les plus beau, les plus intelligents... odroz-ba tsimon tdayde !");
+	else if (msg.find("que fais tu") != string::npos || msg.find("tu fais quoi") != string::npos)
+		send("PRIVMSG #bot :Rien comme tsimon");
+	else if (msg.find("qui est ton meilleur ami") != string::npos)
+		send("PRIVMSG #bot :" + nickname_user + " !");
+	if (rand() % 10 == 0)
+	{
+		std::string chan = "";
+		for (int i = 0; i < rand() % 15; i++)
+			chan += (char)(rand() % 26 + 'a');
+		send("PRIVMSG #bot :" + chan);
+	}
+}
 
 string Bot::get_nickname() { return name; }
