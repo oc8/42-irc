@@ -68,6 +68,7 @@ class Server {
 		void nick_cmd(User &user, std::vector<string> cmds);
 		void user_cmd(User &user, std::vector<string> cmds);
 		void join_cmd(User &user, std::vector<string> cmds);
+		void mode_cmd(User &user, std::vector<string> cmds);
 		void privmsg_cmd(User &user, std::vector<string> cmds);
 		void ping_cmd(User &user, std::vector<string> cmds);
 		void kick_cmd(User &user, std::vector<string> cmds);
