@@ -44,7 +44,7 @@ void Server::join_cmd(User &user, vector<string> cmds)
 						it->add_user(&user);
 						join_msg(user, *it, *this);
 						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host() + " JOIN " + it->getName());
-						botch.welcome(*it, user);
+						// botch.welcome(*it, user);
 					}
 					else
 						send_msg(user, ":localhost 473 " + user.get_nickname() + " " + *chan_name_it + " :Cannot join channel (+i)");
@@ -56,7 +56,7 @@ void Server::join_cmd(User &user, vector<string> cmds)
 				channels.back().add_ope(&user);
 				join_msg(user, channels.back(), *this);
 				cout << "Channel " << *chan_name_it << " created" << endl;
-				botch.hello(channels.back());
+				// botch.hello(channels.back());
 				// send_msg(user, ":" + botch.get_nickname() + "!~" + botch.get_username() + "@" + user.get_host() + " " + botch.hello(*chan_name_it));
 			}
 		}

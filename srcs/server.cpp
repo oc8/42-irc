@@ -10,7 +10,7 @@ Server::Server(int port, string password)
     this->address.sin_port = htons(this->port);
     this->addrlen = sizeof(address);
     this->opt = 1;
-    botch = Bot("botch");
+    // botch = Bot("botch");
     cmds.push_back(pair("pass", &Server::pass_cmd));
     cmds.push_back(pair("nick", &Server::nick_cmd));
     cmds.push_back(pair("user", &Server::user_cmd));

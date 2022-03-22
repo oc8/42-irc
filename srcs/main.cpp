@@ -4,13 +4,13 @@ int main(int argc, char *argv[])
 {
 	if (argc != 3)
 	{
-		cout << "Port or password not found" << endl;
-		return 1;
+		cerr << "<port> <password>" << endl;
+		return argc;
 	}
 	int port = atoi(argv[1]);
 	if (port < 1)
 	{
-		cout << "Invalid port" << endl;
+		cerr << "Invalid port" << endl;
 		return 1;
 	}
 	string password = argv[2];

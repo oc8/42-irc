@@ -25,7 +25,7 @@ using std::pair;
 
 #include "User.hpp"
 #include "Channel.hpp"
-#include "Bot.hpp"
+// #include "Bot.hpp"
 
 class Server;
 typedef void (Server::*pf)(User &user, std::vector<string> cmds);
@@ -83,5 +83,5 @@ class Server {
 		struct sockaddr_in address;
 		std::list<User> users;
 		std::list<Channel> channels;
-		Bot botch;
+		// Bot botch;
 };
