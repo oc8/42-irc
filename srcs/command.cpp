@@ -2,10 +2,12 @@
 
 vector<string> split(string str, string delimiter);
 
-void join_msg(User &user, Channel &chan, Server &serv)
-{
-	serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host() + " JOIN " + chan.getName());
-	serv.send_msg(user, ":localhost MODE " + chan.getName() + " +Cnst");
+
+void join_msg(User &user, Channel &chan, Server &serv) {
+	serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
+		+ "@" + user.get_host() + " JOIN " + chan.getName());
+	serv.send_msg(user, ":localhost 331 " + chan.getName() + " :No topic is set");
+	serv.send_msg(user, ":localhost 332 " + chan.getName() + " +Cnst");
 	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
 	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
 }
@@ -106,3 +108,11 @@ void Server::names_cmd(User &user, vector<string> cmds)
 			send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[i] + " :No such channel");
 	}
 }
+void Server::mode_cmd(User &user, std::vector<string> cmds){
+	
+	if (cmds.size() < 2)
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " MODE :Not enough parameters"));
+	
+}
+
+// void Server::names_cmd(User &user, std::vector<string> cmds) {}
