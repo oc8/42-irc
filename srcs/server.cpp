@@ -121,7 +121,7 @@ void Server::read()
         if ((activity < 0) && (errno != EINTR))
         {
             cout << "select error" << endl;
-            // exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
 
         // If something happened on the master socket ,
