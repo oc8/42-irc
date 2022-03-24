@@ -6,12 +6,12 @@ std::vector<std::string> split(std::string str, std::string delimiter);
 
 Channel::Channel() {init_chan();}
 Channel::Channel(std::string name) : name(name) {init_chan();}
-Channel::Channel(std::string name, usr_ptr ope) : name(name) { 
+Channel::Channel(std::string name, usr_ptr ope) : name(name) {
 	init_chan();
 	operators.push_back(ope);
 }
 Channel::Channel(std::string name, std::string psw) : name(name), psw(psw) {init_chan();}
-Channel::Channel(const Channel &src) { 
+Channel::Channel(const Channel &src) {
 	init_chan();
 	*this = src;
 }
@@ -87,9 +87,8 @@ void Channel::init_chan() {
 	exterior_msg = false;
 }
 
-void Channel::chan_msg(usr_ref user, std::string message)
-{
-	if (!is_user(&user) && !is_operator(&user) && !exterior_msg)
+void Channel::chan_msg(usr_ref user, std::string message) {
+	if (!is_user(&user) && !is_operator(&user) && !exterior_msg && user.get_nickname() != "Botch") // "&&" or "||" ???
 		return send_msg(user, ":localhost 404 " + user.get_nickname() + " " + name + " :Cannot send to nick/channel");
 	// std::cout << "chan_msg = \"" << message << "\"" << std::endl;
 	for (user_ptr_it it = users.begin(); it != users.end(); it++)
@@ -101,13 +100,13 @@ void Channel::chan_msg(usr_ref user, std::string message)
 		if (*it != &user)
 			send_msg(*(*it), message);
 }
+
 void Channel::send_msg(User &user, std::string message) {
     send(user.get_sd(), (message + "\n").c_str(), message.size() + 1, 0);
 }
 
-void Channel::add_user(usr_ptr newUser)
-{
-	users.push_back(newUser);	
+void Channel::add_user(usr_ptr newUser) {
+	users.push_back(newUser);
 }
 void Channel::add_ope(usr_ptr newUser)
 {
@@ -143,7 +142,7 @@ bool Channel::is_operator(usr_ptr usr)
 			return true;
 	return false;
 }
-bool Channel::is_empty() 
+bool Channel::is_empty()
 {
 	if (getNbUser() == 0 && getNbOper() == 0)
 		return true;

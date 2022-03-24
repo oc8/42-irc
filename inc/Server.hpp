@@ -12,8 +12,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
-#include "User.hpp"
-#include "Channel.hpp"
 #include <vector>
 #include <list>
 
@@ -27,7 +25,7 @@ using std::pair;
 
 #include "User.hpp"
 #include "Channel.hpp"
-#include "Bot.hpp"
+// #include "Bot.hpp"
 
 class Server;
 typedef void (Server::*pf)(User &user, std::vector<string> cmds);
@@ -72,7 +70,7 @@ class Server {
 		void privmsg_cmd(User &user, std::vector<string> cmds);
 		void ping_cmd(User &user, std::vector<string> cmds);
 		void kick_cmd(User &user, std::vector<string> cmds);
-		// void names_cmd(User &user, std::vector<string> cmds);
+		void names_cmd(User &user, std::vector<string> cmds);
 		void part_cmd(User &user, std::vector<string> cmds);
 
 	private:
@@ -86,5 +84,5 @@ class Server {
 		struct sockaddr_in address;
 		std::list<User> users;
 		std::list<Channel> channels;
-		// Bot botch("Botch");
+		// Bot botch;
 };

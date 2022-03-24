@@ -10,6 +10,7 @@ Server::Server(int port, string password)
     this->address.sin_port = htons(this->port);
     this->addrlen = sizeof(address);
     this->opt = 1;
+    // botch = Bot("botch");
     cmds.push_back(pair("pass", &Server::pass_cmd));
     cmds.push_back(pair("nick", &Server::nick_cmd));
     cmds.push_back(pair("user", &Server::user_cmd));
@@ -17,7 +18,7 @@ Server::Server(int port, string password)
     cmds.push_back(pair("privmsg", &Server::privmsg_cmd));
     cmds.push_back(pair("ping", &Server::ping_cmd));
     cmds.push_back(pair("kick", &Server::kick_cmd));
-    // cmds.push_back(pair("names", &Server::names_cmd));
+    cmds.push_back(pair("names", &Server::names_cmd));
 }
 
 Server::~Server() {}
@@ -120,7 +121,7 @@ void Server::read()
         if ((activity < 0) && (errno != EINTR))
         {
             cout << "select error" << endl;
-            // exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
 
         // If something happened on the master socket ,

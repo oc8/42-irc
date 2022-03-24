@@ -1,27 +1,32 @@
-NAME			= ircserv
-
-LST_SRCS		= main.cpp \
+NAME				= ircserv
+NAME_BOT			= ircbot
+LST_SRCS			= main.cpp \
 server.cpp \
 pars.cpp \
 channel.cpp \
 user.cpp \
 commands2.cpp \
 command.cpp \
-bot.cpp \
 utils.cpp
-SRCS_DIR		= srcs
-OBJS_DIR		= objs
-SRCS			= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
-OBJS			= $(LST_SRCS:%.cpp=$(OBJS_DIR)/%.o)
-CXXC			= clang++
-FLAGS			= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
-# FLAGS			= -fsanitize=address -fsanitize=undefined -Wall -Wextra -Werror -std=c++98 -pedantic-errors -g
-CXXFLAGS		= $(FLAGS) -Iinc
-RM				= rm -rf
-MKDIR			= mkdir -p
-INC			= $(shell find ./inc -type f -name "*.hpp")
+LST_SRCS_BOT	= main_bot.cpp \
+Bot.cpp
+SRCS_DIR			= srcs
+OBJS_DIR			= objs
+SRCS				= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
+SRCS_BOT			= $(addprefix bot/$(SRCS_DIR)/,$(LST_SRCS))
+OBJS				= $(LST_SRCS:%.cpp=$(OBJS_DIR)/%.o)
+OBJS_BOT			= $(LST_SRCS_BOT:%.cpp=$(OBJS_DIR)/%.o)
+CXXC				= clang++
+FLAGS				= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
+FLAGS				= -fsanitize=address -fsanitize=undefined -Wall -Wextra -Werror -std=c++98 -pedantic-errors -g3
+CXXFLAGS			= $(FLAGS) -Iinc
+CXXFLAGS_BOT	= $(FLAGS) -Ibot/inc
+RM					= rm -rf
+MKDIR				= mkdir -p
+INC				= $(shell find ./inc -type f -name "*.hpp")
+INC_BOT			= $(shell find ./bot/inc -type f -name "*.hpp")
 
-all:			$(NAME)
+all:			$(NAME) $(NAME_BOT)
 
 $(OBJS_DIR):
 				$(MKDIR) $@
@@ -30,15 +35,28 @@ $(NAME):		print $(OBJS_DIR) $(OBJS)
 				$(CXXC) $(CXXFLAGS) $(OBJS) -o $(NAME)
 				@printf "$(ERASE)$(ARROW)└─> $(FINISH)generate$(ARROW)\n$(END)"
 
+$(NAME_BOT):print_bot $(OBJS_DIR) $(OBJS_BOT)
+				$(CXXC) $(CXXFLAGS) $(OBJS_BOT) -o $(NAME_BOT)
+				@printf "$(ERASE)$(ARROW)└─> $(FINISH)generate$(ARROW)\n$(END)"
+
 $(OBJS_DIR)/%.o:$(SRCS_DIR)/%.cpp	$(INC)
 				$(MKDIR) $(dir $@)
 				@printf "$(ERASE)$(ARROW)└─[$(ACTION)$<$(ARROW)]"
 				$(CXXC) $(CXXFLAGS) -o $@ -c $<
 
-print:
-				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n$(END)"
+$(OBJS_DIR)/%.o:bot/$(SRCS_DIR)/%.cpp	$(INC_BOT)
+				$(MKDIR) $(dir $@)
+				@printf "$(ERASE)$(ARROW)└─[$(ACTION)$<$(ARROW)]"
+				$(CXXC) $(CXXFLAGS_BOT) -o $@ -c $<
 
-clean:		print
+print:
+				@printf "$(ERASE)$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME)$(ARROW)>\n$(END)"
+
+print_bot:
+				@printf "$(ERASE)$(BOLD)$(ARROW)┌──<$(TITLE)$(NAME_BOT)$(ARROW)>\n$(END)"
+
+clean:
+				@printf "$(BOLD)$(ARROW)┌──<$(TITLE)ft_irc$(ARROW)>\n$(END)"
 				$(RM) $(OBJS_DIR)
 				@printf "$(ERASE)$(ARROW)└─> $(FINISH)clean$(ARROW)\n$(END)"
 
@@ -47,8 +65,8 @@ fclean:		clean
 
 re:				fclean all
 
-.PHONY: 		clean fclean all re
-.SILENT:		clean fclean all re $(OBJS) $(NAME) $(OBJS_DIR) print client
+.PHONY: 		clean fclean all re print print_bot
+.SILENT:		clean fclean all re $(OBJS) $(OBJS_BOT) $(NAME) $(NAME_BOT) $(OBJS_DIR)
 
 ERASE		= \033[2K\r
 GREY		= \033[30m
