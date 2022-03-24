@@ -108,11 +108,29 @@ void Server::names_cmd(User &user, vector<string> cmds)
 			send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[i] + " :No such channel");
 	}
 }
-void Server::mode_cmd(User &user, std::vector<string> cmds){
 
+void pars_mode(std::string param, char sign, std::list<std::string> *mode){
+	if ((sign == '+' && param[0] == '-') || (sign == '-' && param[0] == '+'))
+		return pars_mode(param.substr(1), param[0], mode);
+	else if (sign == param[0])
+		return pars_mode(param.substr(1), sign, mode);
+	if (param[0] == '\0')
+		return;
+	mode->push_back(std::string() + sign + param[0]);
+	pars_mode(param.substr(1), sign, mode);
+}
+
+void Server::mode_cmd(User &user, std::vector<string> cmds){
 	if (cmds.size() < 2)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " MODE :Not enough parameters"));
-
+	std::list<Channel>::iterator chan_it;
+	if ((chan_it = is_channel(cmds[1])) == channels.end())
+		return (send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[1] + " :No such channel"));
+	std::list<std::string> mode;
+	pars_mode(cmds[2], '+', &mode);
+	if (!chan_it->verif_mode(mode, user))
+		return;
+	
 }
 
 // void Server::names_cmd(User &user, std::vector<string> cmds) {}

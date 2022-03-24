@@ -19,6 +19,7 @@ Server::Server(int port, string password)
     cmds.push_back(pair("ping", &Server::ping_cmd));
     cmds.push_back(pair("kick", &Server::kick_cmd));
     cmds.push_back(pair("names", &Server::names_cmd));
+    cmds.push_back(pair("mode", &Server::mode_cmd));
 }
 
 Server::~Server() {}
@@ -208,4 +209,11 @@ User *Server::user_exist(std::string userName) {
 		if (it->get_nickname() == userName)
 			return &(*it);
 	return NULL;
+}
+
+std::list<Channel>::iterator Server::is_channel(std::string chan){
+    for (std::list<Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
+		if ((*it).getName() == chan)
+            return it;
+    return channels.end();
 }

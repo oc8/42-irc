@@ -218,6 +218,21 @@ bool Channel::good_pswd(std::vector<std::string> cmds, size_t i){
 	return false;
 }
 
+bool Channel::verif_mode(std::list<std::string> mode, User &user){
+	mode.unique();
+	for (std::list<std::string>::iterator it = mode.begin(); it != mode.end(); ++it)
+	{
+		if (*it != "+i" && *it != "+o" && *it != "+p" && *it != "+s" && *it != "+t" && *it != "+n" && *it != "+m"
+		&& *it != "+l" && *it != "+b" && *it != "+v" && *it != "+k" && *it != "-i" && *it != "-o" && *it != "-p"
+		&& *it != "-s" && *it != "-t" && *it != "-n" && *it != "-m" && *it != "-l" && *it != "-b" && *it != "-v" && *it != "-k")
+		{
+			send_msg(user, ":localhost 472 " + user.get_nickname() + " " + (*it)[1] + " :No such channel");
+			return false;
+		}
+	}	
+	return true;
+}
+
 
 //		--> OPERATORS <--
 

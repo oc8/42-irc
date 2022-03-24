@@ -68,6 +68,7 @@ class Channel {
 		void ban_user(std::string nick);
 		void deban_user(std::string nick);
 		bool good_pswd(std::vector<std::string> cmds, size_t i);
+		bool verif_mode(std::list<std::string> mode, User &user);
 		// bool setTopic(User us, std::string topic);
 
 

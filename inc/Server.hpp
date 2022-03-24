@@ -58,6 +58,7 @@ class Server {
 		chan_it chan_exist(std::string chanName);
 		usr_ptr user_exist(std::string userName);
 		void erase_user_in_chans(User &user);
+		std::list<Channel>::iterator is_channel(std::string chan);
 
 
 		//		--> COMMANDS <--
