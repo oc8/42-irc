@@ -233,6 +233,72 @@ bool Channel::verif_mode(std::list<std::string> mode, User &user){
 	return true;
 }
 
+void Channel::invite_mode(char sign, std::list<std::string> *ret){
+	if (avail_invit == false && sign == '+')
+	{
+		ret->push_back(std::string() + sign + 'i');
+		avail_invit = true;
+	}
+	else if (avail_invit == true && sign == '-')
+	{
+		ret->push_back(std::string() + sign + 'i');
+		avail_invit = false;
+	}
+}
+
+void Channel::op_mode(char sign, std::string user, std::list<std::string> *ret){
+	for (user_ptr_it it = operators.begin(); it != operators.end(); ++it)
+	{
+		if ((*it)->get_nickname() == user && sign == '+')
+		{
+			ret->push_back("+o");
+			return;
+		}
+		else if ((*it)->get_nickname() == user && sign == '-')
+		{
+			users.push_back(*it);
+			it = operators.erase(it);
+			ret->push_back("-o");
+			return;
+		}
+	}
+	if (sign == '+')
+	{
+		for (user_ptr_it it = users.begin(); it != users.end(); ++it)
+		{
+			operators.push_back(*it);
+			it = users.erase(it);
+			ret->push_back("+o");
+			return;
+		}
+	}
+}
+
+void Channel::exec_mode(std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret){
+	for (std::list<std::string>::iterator it = mode.begin(); it != mode.end(); ++it)
+	{
+		if (*it == "+i" || *it == "-i")
+			invite_mode((*it)[0], ret);
+		else if (*it == "+o" || *it == "-o")
+			op_mode((*it)[0], cmds[2], ret);		
+	}	
+}
+
+std::string Channel::display_mode(std::list<std::string> ret){
+	char sign;
+	std::string display;
+
+	for (std::list<std::string>::iterator it = ret.begin(); it != ret.end(); ++it)
+	{
+			if (sign == (*it)[0] && it != ret.begin())
+				display += (*it)[1];
+			else
+				display += *it;
+		sign = (*it)[0];
+	}
+	return display;
+}
+
 
 //		--> OPERATORS <--
 

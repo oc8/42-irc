@@ -69,6 +69,8 @@ class Channel {
 		void deban_user(std::string nick);
 		bool good_pswd(std::vector<std::string> cmds, size_t i);
 		bool verif_mode(std::list<std::string> mode, User &user);
+		void exec_mode(std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret);
+		std::string display_mode(std::list<std::string> ret);
 		// bool setTopic(User us, std::string topic);
 
 
@@ -88,6 +90,10 @@ class Channel {
 		bool			avail_invit;
 		bool			exterior_msg;
 		ban_list		banned;
+
+	private:
+		void invite_mode(char sign, std::list<std::string> *ret);
+		void op_mode(char sign, std::string user, std::list<std::string> *ret);
 };
 
 

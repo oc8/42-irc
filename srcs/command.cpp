@@ -120,6 +120,8 @@ void pars_mode(std::string param, char sign, std::list<std::string> *mode){
 	pars_mode(param.substr(1), sign, mode);
 }
 
+
+
 void Server::mode_cmd(User &user, std::vector<string> cmds){
 	if (cmds.size() < 2)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " MODE :Not enough parameters"));
@@ -130,7 +132,11 @@ void Server::mode_cmd(User &user, std::vector<string> cmds){
 	pars_mode(cmds[2], '+', &mode);
 	if (!chan_it->verif_mode(mode, user))
 		return;
-	
+	std::list<std::string> ret;
+	chan_it->exec_mode(mode, cmds, &ret);
+	if (ret.size() >= 1)
+		send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@"
+			+ user.get_host() + " MODE " + chan_it->getName() + " " + chan_it->display_mode(ret));
 }
 
 // void Server::names_cmd(User &user, std::vector<string> cmds) {}
