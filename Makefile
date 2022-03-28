@@ -9,7 +9,8 @@ commands2.cpp \
 command.cpp \
 utils.cpp
 LST_SRCS_BOT	= main_bot.cpp \
-Bot.cpp
+Bot.cpp \
+utils_bot.cpp
 SRCS_DIR			= srcs
 OBJS_DIR			= objs
 SRCS				= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))

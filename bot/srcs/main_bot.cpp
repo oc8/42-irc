@@ -1,4 +1,5 @@
 #include "Bot.hpp"
+#include "utils_bot.cpp"
 
 int main(int argc, char const *argv[])
 {
@@ -7,7 +8,7 @@ int main(int argc, char const *argv[])
         cerr << "<ip> <port> <password>" << endl;
         return argc;
     }
-    int port = atoi(argv[2]);
+    int port = ft_atoi(argv[2]);
     if (port < 1)
     {
         cerr << "Invalid port" << endl;

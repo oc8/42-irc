@@ -1,4 +1,5 @@
 #include "Bot.hpp"
+#include <math.h>
 
 Bot::Bot(std::string name) : name(name), sock(0)
 {
@@ -14,7 +15,7 @@ void Bot::socket()
 	if ((sock = ::socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		cerr << "Socket creation error" << endl;
-		exit(EXIT_FAILURE);
+		exit(-1);
 	}
 }
 
@@ -25,12 +26,12 @@ void Bot::connect(string ip, int port)
 	if (inet_pton(AF_INET, ip.c_str(), &serv_addr.sin_addr) <= 0)
 	{
 		cerr << "Invalid address or address not supported" << endl;
-		exit(EXIT_FAILURE);
+		exit(-1);
 	}
 	if (::connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
 	{
 		cerr << "Connection error" << endl;
-		exit(EXIT_FAILURE);
+		exit(-1);
 	}
 }
 
@@ -40,7 +41,7 @@ void Bot::send(string msg)
 	if (::send(sock, msg.c_str(), msg.length(), 0) < 0)
 	{
 		cerr << "Send error" << endl;
-		exit(EXIT_FAILURE);
+		exit(-1);
 	}
 }
 
@@ -50,7 +51,7 @@ void Bot::read()
 	if ((valread = ::read(sock, buffer, 1024)) < 0)
 	{
 		cerr << "Read error" << endl;
-		exit(EXIT_FAILURE);
+		exit(-1);
 	}
 	cout << buffer << endl;
 }

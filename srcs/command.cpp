@@ -77,18 +77,18 @@ void Server::kick_cmd(User &user, vector<string> cmds)
 
 void Server::names_cmd(User &user, vector<string> cmds)
 {
-	if (cmds.size() < 2) {
-		for (chan_it it = channels.begin(); it != channels.end(); it++)
-		{
-			string msg = ":localhost 353 " + user.get_nickname() + " = #" + it->getName() + " :";
-			for (list<usr_ptr>::iterator it_user = it->getUsers().begin(); it_user != it->getUsers().end(); it_user++)
-				msg += (*it_user)->get_nickname() + " ";
-			for (list<usr_ptr>::iterator it_user = it->getOpe().begin(); it_user != it->getOpe().end(); it_user++)
-				msg += (*it_user)->get_nickname() + " ";
-			send_msg(user, msg);
-		}
-		return (send_msg(user, ":localhost 366 " + user.get_nickname() + " :End of /NAMES list."));
-	}
+	// if (cmds.size() < 2) {
+	// 	for (chan_it it = channels.begin(); it != channels.end(); it++)
+	// 	{
+	// 		string msg = ":localhost 353 " + user.get_nickname() + " = #" + it->getName() + " :";
+	// 		for (list<usr_ptr>::iterator it_user = it->getUsers().begin(); it_user != it->getUsers().end(); it_user++)
+	// 			msg += (*it_user)->get_nickname() + " ";
+	// 		for (list<usr_ptr>::iterator it_user = it->getOpe().begin(); it_user != it->getOpe().end(); it_user++)
+	// 			msg += (*it_user)->get_nickname() + " ";
+	// 		send_msg(user, msg);
+	// 	}
+	// 	return (send_msg(user, ":localhost 366 " + user.get_nickname() + " :End of /NAMES list."));
+	// }
 	for (size_t i = 1; i < cmds.size(); i++)
 	{
 		chan_it it = chan_exist(cmds[i]);
