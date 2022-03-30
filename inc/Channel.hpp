@@ -88,7 +88,7 @@ class Channel {
 		std::string		psw;
 		std::string		mode;
 		std::string		topic;
-		bool			topic_modif_ope;
+		bool			topic_editable;
 		bool			avail_invit;
 		bool			exterior_msg;
 		ban_list		banned;
@@ -97,6 +97,8 @@ class Channel {
 		void invite_mode(char sign, std::list<std::string> *ret);
 		void op_mode(User &user, char sign, std::vector<std::string> cmds, std::list<std::string> *ret);
 		void limit_mode(User &user, char sign, std::vector<std::string> cmds, std::list<std::string> *ret);
+		void psw_mode(char sign, std::vector<std::string> cmds, std::list<std::string> *ret);
+		void topic_mode(char sign, std::list<std::string> *ret);
 		void add_ret_mode(std::list<std::string> *ret, std::string mode, std::string target);
 };
 

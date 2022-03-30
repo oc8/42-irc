@@ -62,7 +62,7 @@ bool Channel::setMode(usr_ptr usr, std::string newMode)
 }
 bool Channel::setTopic(usr_ptr usr, std::string newTopic)
 {
-	if (!topic_modif_ope || (topic_modif_ope && is_operator(usr)))
+	if (!topic_editable || (topic_editable && is_operator(usr)))
 	{
 		topic = newTopic;
 		return true;
@@ -83,7 +83,7 @@ bool Channel::setAvailability(usr_ptr usr, bool availability)
 //		--> MEMBER FUCNTIONS <--
 
 void Channel::init_chan() {
-	topic_modif_ope = true;
+	topic_editable = true;
 	avail_invit = false;
 	exterior_msg = false;
 }
@@ -280,7 +280,6 @@ void Channel::op_mode(User &user, char sign, std::vector<std::string> cmds, std:
 	}
 	send_msg(user, ":localhost 401 " + user.get_nickname() " :No such nick/channel")
 	cmds.erase(cmds.begin() + 3);
-
 }
 
 void Channel::limit_mode(User &user, char sign, std::vector<std::string> cmds, std::list<std::string> *ret){
@@ -301,6 +300,33 @@ void Channel::limit_mode(User &user, char sign, std::vector<std::string> cmds, s
 	}
 }
 
+void Channel::psw_mode(char sign, std::vector<std::string> cmds, std::list<std::string> *ret){
+	if (cmds.size() < 3)
+		return;
+	if (sign == '-')
+	{
+		if (psw.empty())
+			return;
+		psw.clear();
+		add_ret_mode(ret, std::string() + sign + "k", "*");
+		cmds.erase(cmds.begin() + 3);
+	}
+	else
+	{
+		psw = cmds[3];
+		add_ret_mode(ret, std::string() + sign + "k", "*");
+		cmds.erase(cmds.begin() + 3);
+	}
+}
+
+void Channel::topic_mode(char sign, std::list<std::string> *ret){
+	if ((sign == '+' && !topic_editable) || (sign == '-' && topic_editable))
+	{
+		topic_editable = !topic_editable;
+		add_ret_mode(ret, std::string() + sign + "t", "");
+	}
+}
+
 void Channel::exec_mode(User &user, std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret){
 	for (std::list<std::string>::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
@@ -310,9 +336,11 @@ void Channel::exec_mode(User &user, std::list<std::string> mode, std::vector<std
 			op_mode(user, (*it)[0], cmds, ret);
 		else if (*it == "+l" || *it == "-l")
 			limit_mode(user, (*it)[0], cmds, ret);
+		else if (*it == "+k" || *it == "-k")
+			psw_mode((*it)[0], cmds, ret);
+		else if (*it == "+t" || *it == "-t")
+			topic_mode((*it)[0], ret);
 	}
-	for (std::list<std::string>::iterator it = ret->begin(); it != ret->end(); ++it)
-		std::cout << "[" << *it << "]" << std::endl;
 }
 
 void Channel::add_ret_mode(std::list<std::string> *ret, std::string mode, std::string target){
@@ -347,7 +375,7 @@ Channel &Channel::operator=(const Channel & src) {
 	psw = src.psw;
 	mode = src.mode;
 	topic = src.topic;
-	topic_modif_ope = src.topic_modif_ope;
+	topic_editable = src.topic_editable;
 	avail_invit = src.avail_invit;
 	exterior_msg = src.exterior_msg;
 	banned = src.banned;
