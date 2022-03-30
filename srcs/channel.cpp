@@ -94,11 +94,11 @@ void Channel::chan_msg(usr_ref user, std::string message) {
 	// std::cout << "chan_msg = \"" << message << "\"" << std::endl;
 	for (user_ptr_it it = users.begin(); it != users.end(); it++)
 		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
-		if (*it != &user)
+		// if (*it != &user)
 			send_msg(*(*it), message);
 	for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
 		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
-		if (*it != &user)
+		// if (*it != &user)
 			send_msg(*(*it), message);
 }
 
@@ -278,7 +278,7 @@ void Channel::op_mode(User &user, char sign, std::vector<std::string> cmds, std:
 			return;
 		}
 	}
-	send_msg(user, ":localhost 401 " + user.get_nickname() " :No such nick/channel")
+	send_msg(user, ":localhost 401 " + user.get_nickname() + " :No such nick/channel");
 	cmds.erase(cmds.begin() + 3);
 }
 

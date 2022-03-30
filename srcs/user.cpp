@@ -73,8 +73,14 @@ void User::check_if_connected() {
 	// ", user = " << connexion.user << std::endl;
 	if (connection.pass && connection.nick && connection.user) {
 		connection.connected = true;
-		char str[] = ":localhost 001 ircserv :Welcome to ircserv! \r\n";
-		send(get_sd(), str, strlen(str), 0);
+		std::string str = ":localhost 001 " + get_nickname() + " :Welcome to ircserv! \r\n";
+		std::string str1 = ":localhost 002 " + get_nickname() + " :Your host is ircserver[localhost/8888], running version solanum-1.0-dev \r\n";
+		std::string str2 = ":localhost 003 " + get_nickname() + " :This server was created Sat Jan 22 2022 at 18:49:55 UTC \r\n";
+		std::string str3 = ":localhost 004 " + get_nickname() + " zinc.libera.chat solanum-1.0-dev DGQRSZaghilopsuwz CFILMPQSTbcefgijklmnopqrstuvz bkloveqjfI \r\n";
+		send(get_sd(), str.c_str(), strlen(str.c_str()), 0);
+		send(get_sd(), str1.c_str(), strlen(str1.c_str()), 0);
+		send(get_sd(), str2.c_str(), strlen(str2.c_str()), 0);
+		send(get_sd(), str3.c_str(), strlen(str3.c_str()), 0);
 	}
 }
 

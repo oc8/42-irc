@@ -4,9 +4,9 @@ vector<string> split(string str, string delimiter);
 
 
 void join_msg(User &user, Channel &chan, Server &serv) {
-	serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
-		+ "@" + user.get_host() + " JOIN " + chan.getName());
-	serv.send_msg(user, ":localhost 331 " + chan.getName() + " :No topic is set");
+	// serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
+	// 	+ "@" + user.get_host() + " JOIN " + chan.getName());
+	serv.send_msg(user, ":localhost 331 " + user.get_nickname() + " " + chan.getName() + " :No topic is set");
 	// serv.send_msg(user, ":localhost 332 " + chan.getName() + " +Cnst");
 	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
 	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
@@ -41,7 +41,7 @@ void Server::join_cmd(User &user, vector<string> cmds)
 						send_msg(user, ":localhost 475 " + user.get_nickname() + " " + *chan_name_it + " :Cannot join channel (+k)");
 						break;
 					}
-					if (it->getNbTot() == it->getMaxUser())
+					if (it->getMaxUser() > 0 && it->getNbTot() == (size_t)it->getMaxUser())
 					{
 						send_msg(user, ":localhost 471 " + user.get_nickname() + " " + *chan_name_it + " :Cannot join channel (+l)");
 						break;
@@ -49,8 +49,8 @@ void Server::join_cmd(User &user, vector<string> cmds)
 					if (it->getAvail_invit() == false)
 					{
 						it->add_user(&user);
-						join_msg(user, *it, *this);
 						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host() + " JOIN " + it->getName());
+						join_msg(user, *it, *this);
 					}
 					else
 						send_msg(user, ":localhost 473 " + user.get_nickname() + " " + *chan_name_it + " :Cannot join channel (+i)");
@@ -60,6 +60,7 @@ void Server::join_cmd(User &user, vector<string> cmds)
 			{
 				channels.push_back(Channel(*chan_name_it));
 				channels.back().add_ope(&user);
+				channels.back().chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host() + " JOIN " + channels.back().getName());
 				join_msg(user, channels.back(), *this);
 			}
 		}
