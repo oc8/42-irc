@@ -27,6 +27,7 @@ std::list<User*> Channel::getOpe() {return operators;}
 size_t Channel::getNbUser() { return users.size(); }
 size_t Channel::getNbOper() { return operators.size(); }
 size_t Channel::getNbTot() { return users.size() + operators.size(); }
+int Channel::getMaxUser() {return max_user;}
 bool Channel::getAvail_invit() {return avail_invit;}
 
 
@@ -236,29 +237,33 @@ bool Channel::verif_mode(std::list<std::string> mode, User &user){
 void Channel::invite_mode(char sign, std::list<std::string> *ret){
 	if (avail_invit == false && sign == '+')
 	{
-		ret->push_back(std::string() + sign + 'i');
+		add_ret_mode(ret, std::string() + sign + 'i', "");
 		avail_invit = true;
 	}
 	else if (avail_invit == true && sign == '-')
 	{
-		ret->push_back(std::string() + sign + 'i');
+		add_ret_mode(ret, std::string() + sign + 'i', "");
 		avail_invit = false;
 	}
 }
 
-void Channel::op_mode(char sign, std::string user, std::list<std::string> *ret){
+void Channel::op_mode(User &user, char sign, std::vector<std::string> cmds, std::list<std::string> *ret){
+	if (cmds.size() < 4)
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " MODE :Not enough parameters"));
 	for (user_ptr_it it = operators.begin(); it != operators.end(); ++it)
 	{
-		if ((*it)->get_nickname() == user && sign == '+')
+		if ((*it)->get_nickname() == cmds[3] && sign == '+')
 		{
-			ret->push_back("+o");
+			add_ret_mode(ret, std::string() + sign + 'o', cmds[3]);
+			cmds.erase(cmds.begin() + 3);
 			return;
 		}
-		else if ((*it)->get_nickname() == user && sign == '-')
+		else if ((*it)->get_nickname() == cmds[3] && sign == '-')
 		{
 			users.push_back(*it);
 			it = operators.erase(it);
-			ret->push_back("-o");
+			add_ret_mode(ret, std::string() + sign + 'o', cmds[3]);
+			cmds.erase(cmds.begin() + 3);
 			return;
 		}
 	}
@@ -268,34 +273,66 @@ void Channel::op_mode(char sign, std::string user, std::list<std::string> *ret){
 		{
 			operators.push_back(*it);
 			it = users.erase(it);
-			ret->push_back("+o");
+			add_ret_mode(ret, std::string() + sign + 'o', cmds[3]);
+			cmds.erase(cmds.begin() + 3);
 			return;
 		}
 	}
+	send_msg(user, ":localhost 401 " + user.get_nickname() " :No such nick/channel")
+	cmds.erase(cmds.begin() + 3);
+
 }
 
-void Channel::exec_mode(std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret){
+void Channel::limit_mode(User &user, char sign, std::vector<std::string> cmds, std::list<std::string> *ret){
+	if (sign == '+')
+	{
+		if (cmds.size() < 4)
+			return (send_msg(user, ":localhost 461 " + user.get_nickname() + " MODE :Not enough parameters"));
+		std::istringstream(cmds[3]) >> max_user;
+		if (max_user <= 0)
+			return;
+		add_ret_mode(ret, std::string() + sign + "l", std::to_string(max_user));
+		cmds.erase(cmds.begin() + 3);
+ 	}
+	else
+	{
+		max_user = 0;
+		add_ret_mode(ret, std::string() + sign + "l", "");
+	}
+}
+
+void Channel::exec_mode(User &user, std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret){
 	for (std::list<std::string>::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
 		if (*it == "+i" || *it == "-i")
 			invite_mode((*it)[0], ret);
 		else if (*it == "+o" || *it == "-o")
-			op_mode((*it)[0], cmds[2], ret);		
-	}	
+			op_mode(user, (*it)[0], cmds, ret);
+		else if (*it == "+l" || *it == "-l")
+			limit_mode(user, (*it)[0], cmds, ret);
+	}
+	for (std::list<std::string>::iterator it = ret->begin(); it != ret->end(); ++it)
+		std::cout << "[" << *it << "]" << std::endl;
+}
+
+void Channel::add_ret_mode(std::list<std::string> *ret, std::string mode, std::string target){
+	if (ret->empty())
+		ret->push_back(mode);
+	else
+	{
+		if (ret->front().empty() || ret->front()[ret->front().size() - 2] != mode[0])
+			ret->front().push_back(mode[0]);
+		ret->front().push_back(mode[1]);
+	}
+	if (!target.empty())
+		ret->push_back(target);
 }
 
 std::string Channel::display_mode(std::list<std::string> ret){
-	char sign;
 	std::string display;
 
 	for (std::list<std::string>::iterator it = ret.begin(); it != ret.end(); ++it)
-	{
-			if (sign == (*it)[0] && it != ret.begin())
-				display += (*it)[1];
-			else
-				display += *it;
-		sign = (*it)[0];
-	}
+		display += *it + " ";
 	return display;
 }
 

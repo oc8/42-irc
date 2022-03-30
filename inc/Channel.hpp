@@ -2,6 +2,7 @@
 # define CHANNEL_HPP
 
 #include <iostream>
+#include <sstream>
 #include <map>
 #include <vector>
 #include <list>
@@ -39,6 +40,7 @@ class Channel {
 		size_t getNbUser();
 		size_t getNbOper();
 		size_t getNbTot();
+		int getMaxUser();
 		bool getAvail_invit();
 
 		bool setName(usr_ptr usr, std::string newName);
@@ -69,7 +71,7 @@ class Channel {
 		void deban_user(std::string nick);
 		bool good_pswd(std::vector<std::string> cmds, size_t i);
 		bool verif_mode(std::list<std::string> mode, User &user);
-		void exec_mode(std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret);
+		void exec_mode(User &user, std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret);
 		std::string display_mode(std::list<std::string> ret);
 		// bool setTopic(User us, std::string topic);
 
@@ -93,7 +95,9 @@ class Channel {
 
 	private:
 		void invite_mode(char sign, std::list<std::string> *ret);
-		void op_mode(char sign, std::string user, std::list<std::string> *ret);
+		void op_mode(User &user, char sign, std::vector<std::string> cmds, std::list<std::string> *ret);
+		void limit_mode(User &user, char sign, std::vector<std::string> cmds, std::list<std::string> *ret);
+		void add_ret_mode(std::list<std::string> *ret, std::string mode, std::string target);
 };
 
 
