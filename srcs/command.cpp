@@ -122,8 +122,6 @@ void pars_mode(std::string param, char sign, std::list<std::string> *mode){
 	pars_mode(param.substr(1), sign, mode);
 }
 
-
-
 void Server::mode_cmd(User &user, std::vector<string> cmds){
 	if (cmds.size() < 2)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " MODE :Not enough parameters"));
@@ -141,4 +139,21 @@ void Server::mode_cmd(User &user, std::vector<string> cmds){
 			+ user.get_host() + " MODE " + chan_it->getName() + " " + chan_it->display_mode(ret));
 }
 
-// void Server::names_cmd(User &user, std::vector<string> cmds) {}
+void Server::topic_cmd(User &user, std::vector<std::string> cmds){
+	if (cmds.size() < 2)
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " TOPIC :Not enough parameters"));
+	chan_it it_chan = chan_exist(cmds[1]);
+	if (it_chan == channels.end())
+		return (send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[1] + " :No such channel"));
+	if (cmds.size() == 2)
+	{
+		if (it_chan->getTopic().empty())
+			return(send_msg(user, ":localhost 331 " + user.get_nickname() + " " + it_chan->getName() + " :No topic is set"));
+		return (send_msg(user, ":localhost 332 " + user.get_nickname() + " " + it_chan->getName() + " :" + it_chan->getTopic()));
+	}
+	if (it_chan->setTopic(&user, cmds[2]))
+		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
+			+ " TOPIC " + it_chan->getName() + " :" + cmds[2]);
+	else
+		send_msg(user, ":localhost 482 " + user.get_nickname() + " " + it_chan->getName() + " :You're not channel operator");
+}

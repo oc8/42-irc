@@ -62,7 +62,7 @@ bool Channel::setMode(usr_ptr usr, std::string newMode)
 }
 bool Channel::setTopic(usr_ptr usr, std::string newTopic)
 {
-	if (!topic_editable || (topic_editable && is_operator(usr)))
+	if (topic_editable || (!topic_editable && is_operator(usr)))
 	{
 		topic = newTopic;
 		return true;

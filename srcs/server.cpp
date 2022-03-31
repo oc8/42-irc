@@ -20,6 +20,7 @@ Server::Server(int port, string password)
     cmds.push_back(pair("kick", &Server::kick_cmd));
     cmds.push_back(pair("names", &Server::names_cmd));
     cmds.push_back(pair("mode", &Server::mode_cmd));
+    cmds.push_back(pair("topic", &Server::topic_cmd));
 }
 
 Server::~Server() {}

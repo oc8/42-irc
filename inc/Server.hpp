@@ -73,6 +73,7 @@ class Server {
 		void kick_cmd(User &user, std::vector<string> cmds);
 		void names_cmd(User &user, std::vector<string> cmds);
 		void part_cmd(User &user, std::vector<string> cmds);
+		void topic_cmd(User &user, std::vector<string> cmds);
 
 	private:
 		int port;
