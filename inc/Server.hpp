@@ -57,6 +57,7 @@ class Server {
 		void send_msg(User &user, std::string message);
 		chan_it chan_exist(std::string chanName);
 		usr_ptr user_exist(std::string userName);
+		bool is_user(std::string userName);
 		void erase_user_in_chans(User &user);
 		std::list<Channel>::iterator is_channel(std::string chan);
 
@@ -74,6 +75,7 @@ class Server {
 		void names_cmd(User &user, std::vector<string> cmds);
 		void part_cmd(User &user, std::vector<string> cmds);
 		void topic_cmd(User &user, std::vector<string> cmds);
+		void invite_cmd(User &user, std::vector<string> cmds);
 
 	private:
 		int port;

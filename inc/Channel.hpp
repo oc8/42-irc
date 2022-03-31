@@ -37,6 +37,7 @@ class Channel {
 		std::string getTopic();
 		list getUsers();
 		list getOpe();
+		std::list<std::string> getInvit();
 		size_t getNbUser();
 		size_t getNbOper();
 		size_t getNbTot();
@@ -67,6 +68,7 @@ class Channel {
 		std::string nameOpe();
 		bool is_in_channel(User &user);
 		bool is_banned(User &user);
+		bool is_invit(User &user);
 		void ban_user(std::string nick);
 		void deban_user(std::string nick);
 		bool good_pswd(std::vector<std::string> cmds, size_t i);
@@ -84,6 +86,7 @@ class Channel {
 		std::string		name;
 		list			users;
 		list			operators;
+		std::list<std::string>			invit;
 		int				max_user;
 		std::string		psw;
 		std::string		mode;

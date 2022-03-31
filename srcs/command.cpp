@@ -46,7 +46,7 @@ void Server::join_cmd(User &user, vector<string> cmds)
 						send_msg(user, ":localhost 471 " + user.get_nickname() + " " + *chan_name_it + " :Cannot join channel (+l)");
 						break;
 					}
-					if (it->getAvail_invit() == false)
+					if (!it->getAvail_invit() || it->is_invit(user))
 					{
 						it->add_user(&user);
 						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host() + " JOIN " + it->getName());
@@ -156,4 +156,24 @@ void Server::topic_cmd(User &user, std::vector<std::string> cmds){
 			+ " TOPIC " + it_chan->getName() + " :" + cmds[2]);
 	else
 		send_msg(user, ":localhost 482 " + user.get_nickname() + " " + it_chan->getName() + " :You're not channel operator");
+}
+
+void Server::invite_cmd(User &user, std::vector<std::string> cmds){
+	if (cmds.size() < 3)
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " INVITE :Not enough parameters"));
+	if (!is_user(cmds[1]))
+		return (send_msg(user, ":localhost 401 " + user.get_nickname() + " " + cmds[1] + " :No such nick/channel"));
+	chan_it it_chan = chan_exist(cmds[2]);
+	if (it_chan == channels.end())
+		return (send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[2] + " :No such channel"));
+	if (!it_chan->is_in_channel(user))
+		return (send_msg(user, ":localhost 442 " + user.get_nickname() + " " + cmds[2] + " :You're not on that channel"));
+	if (it_chan->is_in_channel(*user_exist(cmds[1])))
+		return (send_msg(user, ":localhost 443 " + user.get_nickname() + " " + cmds[1] + " " + cmds[2] + " :is already on channel"));
+	if (!it_chan->is_operator(&user))
+		return (send_msg(user, ":localhost 482 " + user.get_nickname() + " " + cmds[2] + " :You're not channel operator"));
+	it_chan->getInvit().push_back(cmds[1]);
+	send_msg(user, ":localhost 341 " + user.get_nickname() + " " + cmds[1] + " " + cmds[2]);
+	send_msg(*user_exist(cmds[1]), ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
+		+ " INVITE " + cmds[1] + " :" + cmds[2]);
 }

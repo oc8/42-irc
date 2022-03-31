@@ -21,6 +21,7 @@ Server::Server(int port, string password)
     cmds.push_back(pair("names", &Server::names_cmd));
     cmds.push_back(pair("mode", &Server::mode_cmd));
     cmds.push_back(pair("topic", &Server::topic_cmd));
+    cmds.push_back(pair("invite", &Server::invite_cmd));
 }
 
 Server::~Server() {}
@@ -210,6 +211,13 @@ User *Server::user_exist(std::string userName) {
 		if (it->get_nickname() == userName)
 			return &(*it);
 	return NULL;
+}
+
+bool Server::is_user(std::string userName){
+    for (usr_it it = users.begin(); it != users.end(); it++)
+		if (it->get_nickname() == userName)
+            return true;
+    return false;
 }
 
 std::list<Channel>::iterator Server::is_channel(std::string chan){

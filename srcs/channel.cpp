@@ -24,6 +24,7 @@ std::string Channel::getName() { return name; }
 std::string Channel::getTopic() { return topic; }
 std::list<User*> Channel::getUsers() {return users;}
 std::list<User*> Channel::getOpe() {return operators;}
+std::list<std::string> Channel::getInvit() {return invit;}
 size_t Channel::getNbUser() { return users.size(); }
 size_t Channel::getNbOper() { return operators.size(); }
 size_t Channel::getNbTot() { return users.size() + operators.size(); }
@@ -143,6 +144,14 @@ bool Channel::is_operator(usr_ptr usr)
 			return true;
 	return false;
 }
+
+bool Channel::is_invit(User &usr){
+	for (std::list<std::string>::iterator it = invit.begin(); it != invit.end(); ++it)
+		if (*it == usr.get_nickname())
+			return true;
+	return false;	
+}
+
 bool Channel::is_empty()
 {
 	if (getNbUser() == 0 && getNbOper() == 0)
