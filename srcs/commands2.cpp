@@ -72,7 +72,3 @@ void Server::ping_cmd(User &user, std::vector<string> cmds) {
 		return send_msg(user, ":localhost 461 " + user.get_nickname() + " PING :Not enougt parameters");
 	send_msg(user, ":localhost PONG localhost :" + cmds[1] + "\n");
 }
-
-// void Server::bot(User &user, std::vector<string> cmds) {
-// 	if
-// }

@@ -69,13 +69,6 @@ void Server::join_cmd(User &user, vector<string> cmds)
 	}
 }
 
-void Server::kick_cmd(User &user, vector<string> cmds)
-{
-	if (cmds.size() < 3)
-		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " KICK :Not enough parameters\n"));
-
-}
-
 void Server::names_cmd(User &user, vector<string> cmds)
 {
 	// if (cmds.size() < 2) {
@@ -200,4 +193,24 @@ void Server::part_cmd(User &user, std::vector<std::string> cmds){
 			it_chan->del_member(&user);
 		}
 	}
+}
+
+void Server::kick_cmd(User &user, vector<string> cmds)
+{
+	if (cmds.size() < 3)
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " KICK :Not enough parameters\n"));
+	chan_it it_chan = chan_exist(cmds[1]);
+	if (it_chan == channels.end())
+		return (send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[1] + " :No such channel"));
+	if (!it_chan->is_in_channel(user))
+		return (send_msg(user, ":localhost 442 " + user.get_nickname() + " " + cmds[1] + " :You're not on that channel"));
+	if (!it_chan->is_operator(&user))
+		return (send_msg(user, ":localhost 482 " + user.get_nickname() + " " + cmds[1] + " :You're not channel operator"));
+	if (cmds.size() == 3)
+		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
+			+ " KICK " + it_chan->getName() + " " + cmds[2] + " :" + cmds[2]);
+	else
+		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
+			+ " KICK " + it_chan->getName() + " " + cmds[2] + " :" + cmds[3]);
+	it_chan->del_member(user_exist(cmds[2]));
 }
