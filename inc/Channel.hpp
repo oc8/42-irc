@@ -54,11 +54,13 @@ class Channel {
 		//		--> MEMBER FUCNTIONS <--
 
 		void init_chan();
+		void del_member(usr_ptr member);
 		void add_user(usr_ptr newUser);
 		void del_user(usr_ptr kicked);
 		void add_ope(usr_ptr newOpe);
 		void del_ope(usr_ptr kickedOpe);
 		void chan_msg(usr_ref user, std::string message);
+		void chan_msg_prv(usr_ref user, std::string message);
 		void send_msg(User &user, std::string message);
 		bool is_user(usr_ptr usr);
 		bool is_operator(usr_ptr usr);

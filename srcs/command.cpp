@@ -7,7 +7,6 @@ void join_msg(User &user, Channel &chan, Server &serv) {
 	// serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
 	// 	+ "@" + user.get_host() + " JOIN " + chan.getName());
 	serv.send_msg(user, ":localhost 331 " + user.get_nickname() + " " + chan.getName() + " :No topic is set");
-	// serv.send_msg(user, ":localhost 332 " + chan.getName() + " +Cnst");
 	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
 	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
 }
@@ -135,7 +134,7 @@ void Server::mode_cmd(User &user, std::vector<string> cmds){
 	std::list<std::string> ret;
 	chan_it->exec_mode(user, mode, cmds, &ret);
 	if (ret.size() >= 1)
-		send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@"
+		chan_it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@"
 			+ user.get_host() + " MODE " + chan_it->getName() + " " + chan_it->display_mode(ret));
 }
 
@@ -176,4 +175,29 @@ void Server::invite_cmd(User &user, std::vector<std::string> cmds){
 	send_msg(user, ":localhost 341 " + user.get_nickname() + " " + cmds[1] + " " + cmds[2]);
 	send_msg(*user_exist(cmds[1]), ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
 		+ " INVITE " + cmds[1] + " :" + cmds[2]);
+}
+
+void Server::part_cmd(User &user, std::vector<std::string> cmds){
+	if (cmds.size() < 2)
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " PART :Not enough parameters"));
+	vector<string> chan_name = split(cmds[1], ",");
+	chan_it it_chan;
+	for (vector<string>::iterator it = chan_name.begin(); it != chan_name.end(); ++it)
+	{
+		it_chan = chan_exist(*it);
+		if (it_chan == channels.end())
+			send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[1] + " :No such channel");
+		else if (!it_chan->is_in_channel(user))
+			send_msg(user, ":localhost 442 " + user.get_nickname() + " " + cmds[1] + " :You're not on that channel");
+		else
+		{
+			if (cmds.size() == 2)
+				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
+					+ " PART " + it_chan->getName());
+			else
+				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
+					+ " PART " + it_chan->getName() + " :" + cmds[2]);
+			it_chan->del_member(&user);
+		}
+	}
 }

@@ -103,6 +103,20 @@ void Channel::chan_msg(usr_ref user, std::string message) {
 			send_msg(*(*it), message);
 }
 
+void Channel::chan_msg_prv(usr_ref user, std::string message) {
+	if (!is_user(&user) && !is_operator(&user) && !exterior_msg && user.get_nickname() != "Botch") // "&&" or "||" ???
+		return send_msg(user, ":localhost 404 " + user.get_nickname() + " " + name + " :Cannot send to nick/channel");
+	// std::cout << "chan_msg = \"" << message << "\"" << std::endl;
+	for (user_ptr_it it = users.begin(); it != users.end(); it++)
+		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
+		if (*it != &user)
+			send_msg(*(*it), message);
+	for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
+		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
+		if (*it != &user)
+			send_msg(*(*it), message);
+}
+
 void Channel::send_msg(User &user, std::string message) {
     send(user.get_sd(), (message + "\n").c_str(), message.size() + 1, 0);
 }
@@ -130,6 +144,14 @@ void Channel::del_ope(usr_ptr kicked)
 			break;
 		}
 }
+
+void Channel::del_member(usr_ptr member){
+	if (is_user(member))
+		del_user(member);
+	else
+		del_ope(member);
+}
+
 bool Channel::is_user(usr_ptr usr)
 {
 	for (user_ptr_it it = users.begin(); it != users.end(); it++)

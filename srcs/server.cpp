@@ -22,6 +22,7 @@ Server::Server(int port, string password)
     cmds.push_back(pair("mode", &Server::mode_cmd));
     cmds.push_back(pair("topic", &Server::topic_cmd));
     cmds.push_back(pair("invite", &Server::invite_cmd));
+    cmds.push_back(pair("part", &Server::part_cmd));
 }
 
 Server::~Server() {}
