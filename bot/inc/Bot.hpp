@@ -5,7 +5,9 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <vector>
 
+using std::vector;
 using std::string;
 using std::cout;
 using std::endl;
@@ -18,12 +20,13 @@ public:
 	~Bot();
 
 	string get_nickname();
+	string get_msg();
 
 	void socket();
 	void connect(string ip, int port);
 	void send(string msg);
 	void read();
-	void pars();
+	void pars(string line);
 	void reply();
 
 	// void hello(Channel &chan);
@@ -34,7 +37,6 @@ private:
 	string name;
 	struct sockaddr_in serv_addr;
 	int sock;
-	char buffer[1024];
 	string msg;
 	string nickname_user;
 };

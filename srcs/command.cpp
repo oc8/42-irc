@@ -71,6 +71,8 @@ void Server::join_cmd(User &user, vector<string> cmds)
 
 void Server::names_cmd(User &user, vector<string> cmds)
 {
+	if (cmds.size() < 2)
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " NAMES :Not enough parameters\n"));
 	// if (cmds.size() < 2) {
 	// 	for (chan_it it = channels.begin(); it != channels.end(); it++)
 	// 	{
@@ -90,8 +92,9 @@ void Server::names_cmd(User &user, vector<string> cmds)
 		{
 			string msg = ":localhost 353 " + user.get_nickname() + " = " + it->getName() + " :" + user.get_nickname() + " ";
 			list<User *> users = it->getUsers();
-			for (list<User *>::iterator it = users.begin(); it != users.end(); it++)
+			for (list<User *>::iterator it = users.begin(); it != users.end(); it++) {
 				msg += (*it)->get_nickname() + " ";
+			}
 			users = it->getOpe();
 			for (list<User *>::iterator it = users.begin(); it != users.end(); it++)
 				msg += (*it)->get_nickname() + " ";

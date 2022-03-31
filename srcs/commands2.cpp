@@ -51,7 +51,7 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 			{
 				(*chan).chan_msg_prv(user, ":" + user.get_nickname() + "!~" + user.get_username()
 					+ "@" + user.get_host() + " PRIVMSG " + chan->getName() + " " + message);
-					
+
 			}
 		}
 		else {
@@ -70,5 +70,5 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 void Server::ping_cmd(User &user, std::vector<string> cmds) {
 	if (cmds.size() < 2)
 		return send_msg(user, ":localhost 461 " + user.get_nickname() + " PING :Not enougt parameters");
-	send_msg(user, ":localhost PONG localhost :" + cmds[1] + "\n");
+	send_msg(user, ":localhost PING localhost :" + cmds[1] + "\n");
 }
