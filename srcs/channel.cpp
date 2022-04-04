@@ -30,6 +30,7 @@ size_t Channel::getNbOper() { return operators.size(); }
 size_t Channel::getNbTot() { return users.size() + operators.size(); }
 int Channel::getMaxUser() {return max_user;}
 bool Channel::getAvail_invit() {return avail_invit;}
+std::list<std::string> Channel::getMode() {return mode;}
 
 
 //		--> SETTERS <--
@@ -48,15 +49,6 @@ bool Channel::setPsw(usr_ptr usr, std::string newPsw)
 	if (is_operator(usr))
 	{
 		psw = newPsw;
-		return true;
-	}
-	return false;
-}
-bool Channel::setMode(usr_ptr usr, std::string newMode)
-{
-	if (is_operator(usr))
-	{
-		mode = newMode;
 		return true;
 	}
 	return false;
@@ -87,6 +79,7 @@ void Channel::init_chan() {
 	topic_editable = true;
 	avail_invit = false;
 	exterior_msg = false;
+	mode.push_back("st");
 }
 
 void Channel::chan_msg(usr_ref user, std::string message) {
@@ -258,7 +251,7 @@ bool Channel::verif_mode(std::list<std::string> mode, User &user){
 		&& *it != "+l" && *it != "+b" && *it != "+v" && *it != "+k" && *it != "-i" && *it != "-o" && *it != "-p"
 		&& *it != "-s" && *it != "-t" && *it != "-n" && *it != "-m" && *it != "-l" && *it != "-b" && *it != "-v" && *it != "-k")
 		{
-			send_msg(user, ":localhost 472 " + user.get_nickname() + " " + (*it)[1] + " :No such channel");
+			send_msg(user, ":localhost 472 " + user.get_nickname() + " " + (*it)[1] + " :is an unknow mode char to me");
 			return false;
 		}
 	}	
@@ -270,10 +263,12 @@ void Channel::invite_mode(char sign, std::list<std::string> *ret){
 	{
 		add_ret_mode(ret, std::string() + sign + 'i', "");
 		avail_invit = true;
+		this->mode.front().push_back('i');
 	}
 	else if (avail_invit == true && sign == '-')
 	{
 		add_ret_mode(ret, std::string() + sign + 'i', "");
+		this->mode.front().erase(remove(mode.front().begin(), mode.front().end(), 'i'), mode.front().end());
 		avail_invit = false;
 	}
 }
@@ -321,11 +316,24 @@ void Channel::limit_mode(User &user, char sign, std::vector<std::string> cmds, s
 		std::istringstream(cmds[3]) >> max_user;
 		if (max_user <= 0)
 			return;
+		if (mode.front().find("l") == std::string::npos)
+		{
+			mode.push_back(std::to_string(max_user));
+			mode.front().push_back('l');
+		}
+		else
+		{
+			std::list<std::string>::iterator it = std::find(mode.begin(), mode.end(), std::to_string(max_user));
+			*it = std::to_string(max_user);
+		}
 		add_ret_mode(ret, std::string() + sign + "l", std::to_string(max_user));
 		cmds.erase(cmds.begin() + 3);
  	}
 	else
 	{
+		this->mode.front().erase(remove(mode.front().begin(), mode.front().end(), 'l'), mode.front().end());
+		std::list<std::string>::iterator it = std::find(mode.begin(), mode.end(), std::to_string(max_user));
+		mode.erase(it);
 		max_user = 0;
 		add_ret_mode(ret, std::string() + sign + "l", "");
 	}
@@ -338,6 +346,9 @@ void Channel::psw_mode(char sign, std::vector<std::string> cmds, std::list<std::
 	{
 		if (psw.empty())
 			return;
+		this->mode.front().erase(remove(mode.front().begin(), mode.front().end(), 'k'), mode.front().end());
+		std::list<std::string>::iterator it = std::find(mode.begin(), mode.end(), psw);
+		mode.erase(it);
 		psw.clear();
 		add_ret_mode(ret, std::string() + sign + "k", "*");
 		cmds.erase(cmds.begin() + 3);
@@ -345,6 +356,16 @@ void Channel::psw_mode(char sign, std::vector<std::string> cmds, std::list<std::
 	else
 	{
 		psw = cmds[3];
+		if (mode.front().find("k") == std::string::npos)
+		{
+			mode.push_back(psw);
+			mode.front().push_back('k');
+		}
+		else
+		{
+			std::list<std::string>::iterator it = std::find(mode.begin(), mode.end(), psw);
+			*it = psw;
+		}
 		add_ret_mode(ret, std::string() + sign + "k", "*");
 		cmds.erase(cmds.begin() + 3);
 	}
@@ -355,6 +376,10 @@ void Channel::topic_mode(char sign, std::list<std::string> *ret){
 	{
 		topic_editable = !topic_editable;
 		add_ret_mode(ret, std::string() + sign + "t", "");
+		if (sign == '+' && !mode.front().find("t"))
+			mode.front().push_back('t');
+		else if (sign == '-')
+			this->mode.front().erase(remove(mode.front().begin(), mode.front().end(), 't'), mode.front().end());
 	}
 }
 
@@ -387,12 +412,24 @@ void Channel::add_ret_mode(std::list<std::string> *ret, std::string mode, std::s
 		ret->push_back(target);
 }
 
-std::string Channel::display_mode(std::list<std::string> ret){
+std::string Channel::display_ret(std::list<std::string> ret){
 	std::string display;
 
 	for (std::list<std::string>::iterator it = ret.begin(); it != ret.end(); ++it)
 		display += *it + " ";
 	return display;
+}
+
+std::string Channel::display_mode(){
+	std::string ret;
+
+	if (!mode.empty())
+	{
+		ret += "+";
+		for (std::list<std::string>::iterator it = mode.begin(); it != mode.end(); ++it)
+			ret += *it + " ";
+	}
+	return ret;
 }
 
 

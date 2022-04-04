@@ -43,6 +43,7 @@ class Channel {
 		size_t getNbTot();
 		int getMaxUser();
 		bool getAvail_invit();
+		std::list<std::string> getMode();
 
 		bool setName(usr_ptr usr, std::string newName);
 		bool setPsw(usr_ptr usr, std::string newName);
@@ -76,7 +77,8 @@ class Channel {
 		bool good_pswd(std::vector<std::string> cmds, size_t i);
 		bool verif_mode(std::list<std::string> mode, User &user);
 		void exec_mode(User &user, std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret);
-		std::string display_mode(std::list<std::string> ret);
+		std::string display_ret(std::list<std::string> ret);
+		std::string display_mode();
 		// bool setTopic(User us, std::string topic);
 
 
@@ -91,7 +93,7 @@ class Channel {
 		std::list<std::string>			invit;
 		int				max_user;
 		std::string		psw;
-		std::string		mode;
+		std::list<std::string>		mode;
 		std::string		topic;
 		bool			topic_editable;
 		bool			avail_invit;
