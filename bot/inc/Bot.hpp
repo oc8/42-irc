@@ -13,6 +13,8 @@ using std::cout;
 using std::endl;
 using std::cerr;
 
+#include "color.hpp"
+
 class Bot
 {
 public:

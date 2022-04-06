@@ -67,7 +67,6 @@ void Bot::read()
 
 void Bot::pars(string line)
 {
-	cout << "'" << line << "'" << endl;
 	nickname_user = "";
 	msg = "";
 	if (line.find(":localhost") != string::npos)
@@ -88,22 +87,24 @@ void Bot::reply()
 {
 	if (msg.empty() || nickname_user == get_nickname())
 		return;
-	else if (msg.find("salut") != string::npos || msg.find("bonjour") != string::npos || msg.find("hello") != string::npos || msg.find("hey") != string::npos || msg.find("coucou") != string::npos)
-		send("PRIVMSG #bot :Salut " + nickname_user + " !");
+	string reply = "PRIVMSG #bot :";
+	if (msg.find("salut") != string::npos || msg.find("bonjour") != string::npos || msg.find("hello") != string::npos || msg.find("hey") != string::npos || msg.find("coucou") != string::npos)
+		reply += "Salut " + nickname_user + " !";
 	else if (msg.find("au revoir") != string::npos || msg.find("aurevoir") != string::npos)
-		send("PRIVMSG #bot :Au revoir " + nickname_user + " !");
+		reply += "Au revoir " + nickname_user + " !";
 	else if (msg.find("aide") != string::npos || msg.find("help") != string::npos)
-		send("PRIVMSG #bot :Je suis un bot qui ne sait rien faire, mais je suis toujours en train de faire des choses.");
+		reply += "Je suis un bot qui ne sait rien faire, mais je suis toujours en train de faire des choses.";
 	else if (msg.find("qui es tu") != string::npos)
-		send("PRIVMSG #bot :Je suis le bot " + name + " !");
+		reply += "Je suis le bot " + name + " !";
 	else if (msg.find("qui est ton createur") != string::npos)
-		send("PRIVMSG #bot :Les plus fort, les plus beau, les plus intelligents... odroz-ba tsimon tdayde !");
+		reply += "Les plus fort, les plus beau, les plus intelligents... odroz-ba tsimon tdayde !";
 	else if (msg.find("que fais tu") != string::npos || msg.find("tu fais quoi") != string::npos)
-		send("PRIVMSG #bot :Rien comme tsimon");
+		reply += "Rien comme tsimon";
 	else if (msg.find("qui est ton meilleur ami") != string::npos)
-		send("PRIVMSG #bot :" + nickname_user + " !");
+		reply += "" + nickname_user + " !";
 	else if (msg.find("ca va"))
-		send("PRIVMSG #bot :Tout va bien !");
+		reply += "Tout va bien !";
+	send(reply);
 	if (rand() % 10 == 0)
 	{
 		std::string chan = "";

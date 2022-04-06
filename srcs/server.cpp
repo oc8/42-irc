@@ -10,7 +10,6 @@ Server::Server(int port, string password)
     this->address.sin_port = htons(this->port);
     this->addrlen = sizeof(address);
     this->opt = 1;
-    // botch = Bot("botch");
     cmds.push_back(pair("pass", &Server::pass_cmd));
     cmds.push_back(pair("nick", &Server::nick_cmd));
     cmds.push_back(pair("user", &Server::user_cmd));
@@ -91,7 +90,6 @@ void Server::read()
     int activity, valread, sd, max_sd;
     // unsigned long i;
     fd_set readfds;
-    // char message[] = ":localhost 001 ircserv :Welcome! \r\n";
     char buffer[1025];
     while (42) {
         // clear the socket set
@@ -102,11 +100,9 @@ void Server::read()
         max_sd = master_socket;
 
         // add child sockets to set
-        // for (i = 0; i < users.size(); i++)
         for (usr_it it = users.begin(); it != users.end(); it++)
         {
             // socket descriptor
-            // sd = users[i].get_sd();
             sd = it->get_sd();
 
             // if valid socket descriptor then add to read list
@@ -139,7 +135,7 @@ void Server::read()
             }
 
             // inform user of socket number - used in send and receive commands
-            cout << "New connection, socket fd is: " << new_socket << ", ip is: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
+            cout << BOLDGREEN << "New connection, socket fd is: " << new_socket << ", ip is: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << RESET << endl;
 
             // send new connection greeting message
             char message[] = ":localhost 300 * :To connect ircserv, please enter the password, your nickname and username\n";
@@ -151,13 +147,9 @@ void Server::read()
             cout << "Hello message sent successfully" << endl;
             // add new socket to array of sockets
             users.push_back(User(new_socket));
-            // std::cout << "user.size = " << users.size() << std::endl;
-            // for (i = 0; i < users.size(); i++)
-            //     cout << "sd " << i << ": " << users[i].get_sd() << endl;
         }
 
         // else its some IO operation on some other socket
-        // for (i = 0; i < users.size(); i++)
         for (usr_it it = users.begin(); it != users.end(); it++)
         {
             // sd = users[i].get_sd();
@@ -171,24 +163,26 @@ void Server::read()
                     // Somebody disconnected , get his details and print
                     getpeername(sd, (struct sockaddr *)&address,
                                 (socklen_t *)&addrlen);
-                    cout << "Host disconnected, ip: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << endl;
+                    cout << BOLDYELLOW << "Host disconnected, ip: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << RESET << endl;
 
                     // Close the socket and mark as 0 in list for reuse
                     erase_user_in_chans(*it);
                     close(sd);
                     it = users.erase(it);
                 }
+                else if (valread < 0)
+                    continue ;
                 // Echo back the message that came in
                 else
                 {
                     // set the string terminating NULL byte on the end
                     // of the data read
+                    if (valread > 1024)
+                        continue ;
                     buffer[valread] = '\0';
-                    // send(sd, buffer, strlen(buffer), 0);
                     string buf = erase_str_in_str(buffer, "\r");
                     std::vector<string> lines = ::split(buf, "\n");
                     for (size_t j = 0; j < lines.size(); ++j)
-                        // this->parsing(lines[j], users[i]);
                         parsing(lines[j], *it);
                 }
             }

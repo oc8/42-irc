@@ -25,7 +25,7 @@ using std::pair;
 
 #include "User.hpp"
 #include "Channel.hpp"
-// #include "Bot.hpp"
+#include "code_error.hpp"
 
 class Server;
 typedef void (Server::*pf)(User &user, std::vector<string> cmds);
