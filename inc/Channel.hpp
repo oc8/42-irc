@@ -107,6 +107,7 @@ class Channel {
 		void psw_mode(char sign, std::vector<std::string> cmds, std::list<std::string> *ret);
 		void topic_mode(char sign, std::list<std::string> *ret);
 		void add_ret_mode(std::list<std::string> *ret, std::string mode, std::string target);
+		void ext_msg_mode(char sign, std::list<std::string> *ret);
 };
 
 
