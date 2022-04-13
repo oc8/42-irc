@@ -29,6 +29,8 @@ void Server::user_cmd(User &user, std::vector<string> cmds) {
 }
 
 void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
+	if (cmds.size() == 1)
+		 return send_msg(user, ":localhost 411 " + user.get_nickname() + " :No recipient given (PRIVMSG)");
 	std::vector<std::string> targets = split(cmds[1], ",");
 	std::string message;
 	for (std::vector<std::string>::iterator it = cmds.begin() + 2; it != cmds.end(); it++) {
@@ -63,6 +65,37 @@ void Server::privmsg_cmd(User &user, std::vector<string> cmds) {
 				send_msg(*usr, ":" + user.get_nickname() + "!~" + user.get_username()
 					+ "@" + user.get_host() + " PRIVMSG " + (*usr).get_nickname() + " " + message);
 			}
+		}
+	}
+}
+
+void Server::notice_cmd(User &user, std::vector<string> cmds) {
+	if (cmds.size() == 1)
+		return;
+	std::vector<std::string> targets = split(cmds[1], ",");
+	std::string message;
+	for (std::vector<std::string>::iterator it = cmds.begin() + 2; it != cmds.end(); it++) {
+		message += *it;
+		if (it + 1 != cmds.end())
+			message += " ";
+	}
+	if (message.empty())
+		 return;
+	if (message[0] != ':')
+		message = (":" + message);
+	for (size_t i = 0; i < targets.size(); i++) {
+		if (targets[i][0] == '#' || targets[i][0] == '&') {
+			chan_it chan = chan_exist(targets[i]);
+			if (chan != channels.end())
+				(*chan).chan_msg_prv(user, ":" + user.get_nickname() + "!~" + user.get_username()
+					+ "@" + user.get_host() + " NOTICE " + chan->getName() + " " + message);
+
+		}
+		else {
+			usr_ptr usr = user_exist(targets[i]);
+			if (usr != NULL)
+				send_msg(*usr, ":" + user.get_nickname() + "!~" + user.get_username()
+					+ "@" + user.get_host() + " NOTICE " + (*usr).get_nickname() + " " + message);
 		}
 	}
 }
