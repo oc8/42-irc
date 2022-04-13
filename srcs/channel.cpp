@@ -79,7 +79,7 @@ void Channel::init_chan() {
 	topic_editable = true;
 	avail_invit = false;
 	exterior_msg = false;
-	mode.push_back("st");
+	mode.push_back("Cnst");
 }
 
 void Channel::chan_msg(usr_ref user, std::string message) {
@@ -383,6 +383,18 @@ void Channel::topic_mode(char sign, std::list<std::string> *ret){
 	}
 }
 
+void Channel::ext_msg_mode(char sign, std::list<std::string> *ret){
+	if ((sign == '+' && exterior_msg) || (sign == '-' && !exterior_msg))
+	{
+		exterior_msg = !exterior_msg;
+		add_ret_mode(ret, std::string() + sign + "n", "");
+		if (sign == '+' && !mode.front().find("n"))
+			mode.front().push_back('n');
+		else if (sign == '-')
+			this->mode.front().erase(remove(mode.front().begin(), mode.front().end(), 'n'), mode.front().end());
+	}
+}
+
 void Channel::exec_mode(User &user, std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret){
 	for (std::list<std::string>::iterator it = mode.begin(); it != mode.end(); ++it)
 	{
@@ -396,6 +408,8 @@ void Channel::exec_mode(User &user, std::list<std::string> mode, std::vector<std
 			psw_mode((*it)[0], cmds, ret);
 		else if (*it == "+t" || *it == "-t")
 			topic_mode((*it)[0], ret);
+		else if (*it == "+n" || *it == "-n")
+			ext_msg_mode((*it)[0], ret);
 	}
 }
 
