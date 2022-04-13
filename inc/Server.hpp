@@ -70,6 +70,7 @@ class Server {
 		void join_cmd(User &user, std::vector<string> cmds);
 		void mode_cmd(User &user, std::vector<string> cmds);
 		void privmsg_cmd(User &user, std::vector<string> cmds);
+		void notice_cmd(User &user, std::vector<string> cmds);
 		void ping_cmd(User &user, std::vector<string> cmds);
 		void kick_cmd(User &user, std::vector<string> cmds);
 		void names_cmd(User &user, std::vector<string> cmds);
