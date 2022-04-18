@@ -198,6 +198,8 @@ void Server::part_cmd(User &user, std::vector<std::string> cmds){
 				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
 					+ " PART " + it_chan->getName() + " :" + cmds[2]);
 			it_chan->del_member(&user);
+			if (it_chan->getNbTot() == 0)
+				channels.erase(it_chan);
 		}
 	}
 }
