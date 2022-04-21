@@ -46,7 +46,8 @@ void Bot::send(string msg)
 string erase_str_in_str(string str, string erase)
 {
 	size_t pos = 0;
-	while ((pos = str.find(erase, pos)) != std::string::npos) {
+	while ((pos = str.find(erase, pos)) != std::string::npos)
+	{
 		str.erase(pos, erase.length());
 	}
 	return str;
@@ -70,7 +71,7 @@ void Bot::pars(string line)
 	nickname_user = "";
 	msg = "";
 	if (line.find(":localhost") != string::npos)
-		return ;
+		return;
 	if (line.find('~') != string::npos)
 		nickname_user = line.substr(1, line.find("!") - 1);
 	if (line.find("JOIN #bot") != string::npos && nickname_user != get_nickname() && nickname_user != "")
@@ -104,7 +105,7 @@ void Bot::reply()
 		reply += "" + nickname_user + " !";
 	else if (msg.find("ca va") != string::npos)
 		reply += "Tout va bien !";
-	else if (msg.find("tg") != string::npos)
+	else if (msg.find("tg") != string::npos || msg.find("connard") != string::npos || msg.find("salope") != string::npos || msg.find("pute") != string::npos)
 		return send("KICK #bot " + nickname_user);
 	if (reply != "PRIVMSG #bot :")
 		send(reply);
@@ -120,4 +121,3 @@ void Bot::reply()
 string Bot::get_nickname() { return name; }
 
 string Bot::get_msg() { return msg; }
-
