@@ -18,7 +18,7 @@ OBJS				= $(LST_SRCS:%.cpp=$(OBJS_DIR)/%.o)
 OBJS_BOT			= $(LST_SRCS_BOT:%.cpp=$(OBJS_DIR)/%.o)
 CXXC				= clang++
 FLAGS				= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
-FLAGS				= -fsanitize=address -fsanitize=undefined -Wall -Wextra -Werror -std=c++98 -pedantic-errors -g3
+# FLAGS				= -fsanitize=address -fsanitize=undefined -Wall -Wextra -Werror -std=c++98 -pedantic-errors -g3
 CXXFLAGS			= $(FLAGS) -Iinc
 CXXFLAGS_BOT	= $(FLAGS) -Ibot/inc
 RM					= rm -rf

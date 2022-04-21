@@ -97,15 +97,18 @@ void Bot::reply()
 	else if (msg.find("qui es tu") != string::npos)
 		reply += "Je suis le bot " + name + " !";
 	else if (msg.find("qui est ton createur") != string::npos)
-		reply += "Les plus fort, les plus beau, les plus intelligents... odroz-ba tsimon tdayde !";
+		reply += "Les plus forts, les plus beaux, les plus intelligents... odroz-ba tsimon tdayde !";
 	else if (msg.find("que fais tu") != string::npos || msg.find("tu fais quoi") != string::npos)
 		reply += "Rien comme tsimon";
 	else if (msg.find("qui est ton meilleur ami") != string::npos)
 		reply += "" + nickname_user + " !";
-	else if (msg.find("ca va"))
+	else if (msg.find("ca va") != string::npos)
 		reply += "Tout va bien !";
-	send(reply);
-	if (rand() % 10 == 0)
+	else if (msg.find("tg") != string::npos)
+		return send("KICK #bot " + nickname_user);
+	if (reply != "PRIVMSG #bot :")
+		send(reply);
+	else if (rand() % 10 == 0)
 	{
 		std::string chan = "";
 		for (int i = 0; i < rand() % 15; i++)

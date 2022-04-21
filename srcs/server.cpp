@@ -23,6 +23,7 @@ Server::Server(int port, string password)
     cmds.push_back(pair("topic", &Server::topic_cmd));
     cmds.push_back(pair("invite", &Server::invite_cmd));
     cmds.push_back(pair("part", &Server::part_cmd));
+    cmds.push_back(pair("quit", &Server::quit_cmd));
 }
 
 Server::~Server() {}
@@ -90,7 +91,7 @@ void Server::read()
 {
     int activity, valread, sd, max_sd;
     // unsigned long i;
-    fd_set readfds;
+    
     char buffer[1025];
     while (42) {
         // clear the socket set

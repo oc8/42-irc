@@ -2,10 +2,10 @@
 
 vector<string> split(string str, string delimiter);
 
-
-void join_msg(User &user, Channel &chan, Server &serv) {
+void join_msg(User &user, Channel &chan, Server &serv)
+{
 	// serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
-	// 	+ "@" + user.get_host() + " JOIN " + chan.getName());
+	// 	+ "@127.0.0.1 JOIN " + chan.getName());
 	serv.send_msg(user, ":localhost 331 " + user.get_nickname() + " " + chan.getName() + " :No topic is set");
 	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
 	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
@@ -48,7 +48,7 @@ void Server::join_cmd(User &user, vector<string> cmds)
 					if (!it->getAvail_invit() || it->is_invit(user))
 					{
 						it->add_user(&user);
-						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host() + " JOIN " + it->getName());
+						it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 JOIN " + it->getName());
 						join_msg(user, *it, *this);
 					}
 					else
@@ -59,7 +59,7 @@ void Server::join_cmd(User &user, vector<string> cmds)
 			{
 				channels.push_back(Channel(*chan_name_it));
 				channels.back().add_ope(&user);
-				channels.back().chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host() + " JOIN " + channels.back().getName());
+				channels.back().chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 JOIN " + channels.back().getName());
 				join_msg(user, channels.back(), *this);
 			}
 		}
@@ -92,7 +92,8 @@ void Server::names_cmd(User &user, vector<string> cmds)
 		{
 			string msg = ":localhost 353 " + user.get_nickname() + " = " + it->getName() + " :" + user.get_nickname() + " ";
 			list<User *> users = it->getUsers();
-			for (list<User *>::iterator it = users.begin(); it != users.end(); it++) {
+			for (list<User *>::iterator it = users.begin(); it != users.end(); it++)
+			{
 				msg += (*it)->get_nickname() + " ";
 			}
 			users = it->getOpe();
@@ -106,7 +107,8 @@ void Server::names_cmd(User &user, vector<string> cmds)
 	}
 }
 
-void pars_mode(std::string param, char sign, std::list<std::string> *mode){
+void pars_mode(std::string param, char sign, std::list<std::string> *mode)
+{
 	if ((sign == '+' && param[0] == '-') || (sign == '-' && param[0] == '+'))
 		return pars_mode(param.substr(1), param[0], mode);
 	else if (sign == param[0])
@@ -117,7 +119,8 @@ void pars_mode(std::string param, char sign, std::list<std::string> *mode){
 	pars_mode(param.substr(1), sign, mode);
 }
 
-void Server::mode_cmd(User &user, std::vector<string> cmds){
+void Server::mode_cmd(User &user, std::vector<string> cmds)
+{
 	if (cmds.size() < 2)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " MODE :Not enough parameters"));
 	std::list<Channel>::iterator chan_it;
@@ -134,11 +137,11 @@ void Server::mode_cmd(User &user, std::vector<string> cmds){
 	std::list<std::string> ret;
 	chan_it->exec_mode(user, mode, cmds, &ret);
 	if (ret.size() >= 1)
-		chan_it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@"
-			+ user.get_host() + " MODE " + chan_it->getName() + " " + chan_it->display_ret(ret));
+		chan_it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 MODE " + chan_it->getName() + " " + chan_it->display_ret(ret));
 }
 
-void Server::topic_cmd(User &user, std::vector<std::string> cmds){
+void Server::topic_cmd(User &user, std::vector<std::string> cmds)
+{
 	if (cmds.size() < 2)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " TOPIC :Not enough parameters"));
 	chan_it it_chan = chan_exist(cmds[1]);
@@ -147,17 +150,17 @@ void Server::topic_cmd(User &user, std::vector<std::string> cmds){
 	if (cmds.size() == 2)
 	{
 		if (it_chan->getTopic().empty())
-			return(send_msg(user, ":localhost 331 " + user.get_nickname() + " " + it_chan->getName() + " :No topic is set"));
+			return (send_msg(user, ":localhost 331 " + user.get_nickname() + " " + it_chan->getName() + " :No topic is set"));
 		return (send_msg(user, ":localhost 332 " + user.get_nickname() + " " + it_chan->getName() + " :" + it_chan->getTopic()));
 	}
 	if (it_chan->setTopic(&user, cmds[2]))
-		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
-			+ " TOPIC " + it_chan->getName() + " :" + cmds[2]);
+		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 TOPIC " + it_chan->getName() + " :" + cmds[2]);
 	else
 		send_msg(user, ":localhost 482 " + user.get_nickname() + " " + it_chan->getName() + " :You're not channel operator");
 }
 
-void Server::invite_cmd(User &user, std::vector<std::string> cmds){
+void Server::invite_cmd(User &user, std::vector<std::string> cmds)
+{
 	if (cmds.size() < 3)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " INVITE :Not enough parameters"));
 	if (!is_user(cmds[1]))
@@ -173,11 +176,11 @@ void Server::invite_cmd(User &user, std::vector<std::string> cmds){
 		return (send_msg(user, ":localhost 482 " + user.get_nickname() + " " + cmds[2] + " :You're not channel operator"));
 	it_chan->getInvit().push_back(cmds[1]);
 	send_msg(user, ":localhost 341 " + user.get_nickname() + " " + cmds[1] + " " + cmds[2]);
-	send_msg(*user_exist(cmds[1]), ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
-		+ " INVITE " + cmds[1] + " :" + cmds[2]);
+	send_msg(*user_exist(cmds[1]), ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 INVITE " + cmds[1] + " :" + cmds[2]);
 }
 
-void Server::part_cmd(User &user, std::vector<std::string> cmds){
+void Server::part_cmd(User &user, std::vector<std::string> cmds)
+{
 	if (cmds.size() < 2)
 		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " PART :Not enough parameters"));
 	vector<string> chan_name = split(cmds[1], ",");
@@ -192,11 +195,9 @@ void Server::part_cmd(User &user, std::vector<std::string> cmds){
 		else
 		{
 			if (cmds.size() == 2)
-				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
-					+ " PART " + it_chan->getName());
+				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 PART " + it_chan->getName());
 			else
-				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
-					+ " PART " + it_chan->getName() + " :" + cmds[2]);
+				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 PART " + it_chan->getName() + " :" + cmds[2]);
 			it_chan->del_member(&user);
 			if (it_chan->getNbTot() == 0)
 				channels.erase(it_chan);
@@ -207,7 +208,7 @@ void Server::part_cmd(User &user, std::vector<std::string> cmds){
 void Server::kick_cmd(User &user, vector<string> cmds)
 {
 	if (cmds.size() < 3)
-		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " KICK :Not enough parameters\n"));
+		return (send_msg(user, ":localhost 461 " + user.get_nickname() + " KICK :Not enough parameters"));
 	chan_it it_chan = chan_exist(cmds[1]);
 	if (it_chan == channels.end())
 		return (send_msg(user, ":localhost 403 " + user.get_nickname() + " " + cmds[1] + " :No such channel"));
@@ -216,10 +217,18 @@ void Server::kick_cmd(User &user, vector<string> cmds)
 	if (!it_chan->is_operator(&user))
 		return (send_msg(user, ":localhost 482 " + user.get_nickname() + " " + cmds[1] + " :You're not channel operator"));
 	if (cmds.size() == 3)
-		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
-			+ " KICK " + it_chan->getName() + " " + cmds[2] + " :" + cmds[2]);
+		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 KICK " + it_chan->getName() + " " + cmds[2] + " :" + cmds[2]);
 	else
-		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
-			+ " KICK " + it_chan->getName() + " " + cmds[2] + " :" + cmds[3]);
+		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 KICK " + it_chan->getName() + " " + cmds[2] + " :" + cmds[3]);
 	it_chan->del_member(user_exist(cmds[2]));
+}
+
+void Server::quit_cmd(User &user, vector<string> cmds)
+{
+	(void)cmds;
+	// erase_user_in_chans(user);
+	FD_CLR(user.get_sd(), &readfds);
+	close(user.get_sd());
+	// users.erase(std::find(users.begin(), users.end(), &user));
+	send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 QUIT :Client Quit");
 }
