@@ -13,6 +13,7 @@ Server::Server(int port, string password)
     cmds.push_back(pair("pass", &Server::pass_cmd));
     cmds.push_back(pair("nick", &Server::nick_cmd));
     cmds.push_back(pair("user", &Server::user_cmd));
+    cmds.push_back(pair("quit", &Server::quit_cmd));
     cmds.push_back(pair("join", &Server::join_cmd));
     cmds.push_back(pair("privmsg", &Server::privmsg_cmd));
     cmds.push_back(pair("notice", &Server::notice_cmd));
@@ -23,7 +24,6 @@ Server::Server(int port, string password)
     cmds.push_back(pair("topic", &Server::topic_cmd));
     cmds.push_back(pair("invite", &Server::invite_cmd));
     cmds.push_back(pair("part", &Server::part_cmd));
-    cmds.push_back(pair("quit", &Server::quit_cmd));
 }
 
 Server::~Server() {}
@@ -91,7 +91,7 @@ void Server::read()
 {
     int activity, valread, sd, max_sd;
     // unsigned long i;
-    
+
     char buffer[1025];
     while (42) {
         // clear the socket set
@@ -152,10 +152,11 @@ void Server::read()
         }
 
         // else its some IO operation on some other socket
-        for (usr_it it = users.begin(); it != users.end(); it++)
+        user_it = users.begin();
+        for (; user_it != users.end(); user_it++)
         {
             // sd = users[i].get_sd();
-            sd = it->get_sd();
+            sd = user_it->get_sd();
             if (FD_ISSET(sd, &readfds))
             {
                 // Check if it was for closing , and also read the
@@ -168,9 +169,9 @@ void Server::read()
                     cout << BOLDYELLOW << "Host disconnected, ip: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << RESET << endl;
 
                     // Close the socket and mark as 0 in list for reuse
-                    erase_user_in_chans(*it);
+                    erase_user_in_chans(*user_it);
                     close(sd);
-                    it = users.erase(it);
+                    user_it = users.erase(user_it);
                 }
                 else if (valread < 0)
                     continue ;
@@ -185,7 +186,7 @@ void Server::read()
                     string buf = erase_str_in_str(buffer, "\r");
                     std::vector<string> lines = ::split(buf, "\n");
                     for (size_t j = 0; j < lines.size(); ++j)
-                        parsing(lines[j], *it);
+                        parsing(lines[j], *user_it);
                 }
             }
         }

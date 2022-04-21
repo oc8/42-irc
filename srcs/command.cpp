@@ -226,9 +226,15 @@ void Server::kick_cmd(User &user, vector<string> cmds)
 void Server::quit_cmd(User &user, vector<string> cmds)
 {
 	(void)cmds;
-	// erase_user_in_chans(user);
-	FD_CLR(user.get_sd(), &readfds);
-	close(user.get_sd());
-	// users.erase(std::find(users.begin(), users.end(), &user));
 	send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 QUIT :Client Quit");
+	for (chan_it it = channels.begin(); it != channels.end(); it++) {
+	     it->del_user(&user);
+	     it->del_ope(&user);
+		  it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 QUIT :Client Quit");
+	     if (it->is_empty())
+	         it = channels.erase(it);
+	 }
+	close(user.get_sd());
+	FD_CLR(user.get_sd(), &readfds);
+	user_it = users.erase(user_it);
 }

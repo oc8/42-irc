@@ -90,5 +90,5 @@ private:
 	std::list<User> users;
 	std::list<Channel> channels;
 	fd_set readfds;
-	// Bot botch;
+	usr_it user_it;
 };
