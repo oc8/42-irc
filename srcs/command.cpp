@@ -153,8 +153,16 @@ void Server::topic_cmd(User &user, std::vector<std::string> cmds)
 			return (send_msg(user, ":localhost 331 " + user.get_nickname() + " " + it_chan->getName() + " :No topic is set"));
 		return (send_msg(user, ":localhost 332 " + user.get_nickname() + " " + it_chan->getName() + " :" + it_chan->getTopic()));
 	}
-	if (it_chan->setTopic(&user, cmds[2]))
-		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 TOPIC " + it_chan->getName() + " :" + cmds[2]);
+	std::string newtopic;
+	for (std::vector<std::string>::iterator it = cmds.begin() + 2; it != cmds.end(); it++) {
+		newtopic += *it;
+		if (it + 1 != cmds.end())
+			newtopic += " ";
+	}
+	if (newtopic[0] == ':')
+		newtopic.erase(0,1);
+	if (it_chan->setTopic(&user, newtopic))
+		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 TOPIC " + it_chan->getName() + " :" + newtopic);
 	else
 		send_msg(user, ":localhost 482 " + user.get_nickname() + " " + it_chan->getName() + " :You're not channel operator");
 }
@@ -228,12 +236,12 @@ void Server::quit_cmd(User &user, vector<string> cmds)
 	(void)cmds;
 	send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 QUIT :Client Quit");
 	for (chan_it it = channels.begin(); it != channels.end(); it++) {
-	     it->del_user(&user);
-	     it->del_ope(&user);
-		  it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 QUIT :Client Quit");
-	     if (it->is_empty())
-	         it = channels.erase(it);
-	 }
+		it->del_user(&user);
+		it->del_ope(&user);
+		it->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 QUIT :Client Quit");
+		if (it->is_empty())
+			it = channels.erase(it);
+	}
 	close(user.get_sd());
 	FD_CLR(user.get_sd(), &readfds);
 	user_it = users.erase(user_it);

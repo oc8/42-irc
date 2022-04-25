@@ -1,15 +1,15 @@
 NAME				= ircserv
 NAME_BOT			= ircbot
 LST_SRCS			= main.cpp \
-Server.cpp \
-pars.cpp \
-Channel.cpp \
-User.cpp \
-commands2.cpp \
-command.cpp \
-utils.cpp
+						Server.cpp \
+						pars.cpp \
+						Channel.cpp \
+						User.cpp \
+						commands2.cpp \
+						command.cpp \
+						utils.cpp
 LST_SRCS_BOT	= main_bot.cpp \
-Bot.cpp
+						Bot.cpp
 SRCS_DIR			= srcs
 OBJS_DIR			= objs
 SRCS				= $(addprefix $(SRCS_DIR)/,$(LST_SRCS))
@@ -18,7 +18,7 @@ OBJS				= $(LST_SRCS:%.cpp=$(OBJS_DIR)/%.o)
 OBJS_BOT			= $(LST_SRCS_BOT:%.cpp=$(OBJS_DIR)/%.o)
 CXXC				= clang++
 FLAGS				= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
-FLAGS				= -fsanitize=address -fsanitize=undefined -Wall -Wextra -Werror -std=c++98 -pedantic-errors -g3
+# FLAGS				= -fsanitize=address -fsanitize=undefined -Wall -Wextra -Werror -std=c++98 -pedantic-errors -g3
 CXXFLAGS			= $(FLAGS) -Iinc
 CXXFLAGS_BOT	= $(FLAGS) -Ibot/inc
 RM					= rm -rf
@@ -61,7 +61,7 @@ clean:
 				@printf "$(ERASE)$(ARROW)└─> $(FINISH)clean$(ARROW)\n$(END)"
 
 fclean:		clean
-				$(RM) $(NAME)
+				$(RM) $(NAME) $(NAME_BOT)
 
 re:				fclean all
 

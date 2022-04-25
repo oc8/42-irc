@@ -83,17 +83,11 @@ void Channel::init_chan() {
 }
 
 void Channel::chan_msg(usr_ref user, std::string message) {
-	if (!is_user(&user) && !is_operator(&user) && !exterior_msg && user.get_nickname() != "Botch") // "&&" or "||" ???
-		return send_msg(user, ":localhost 404 " + user.get_nickname() + " " + name + " :Cannot send to nick/channel");
-	// std::cout << "chan_msg = \"" << message << "\"" << std::endl;
+	(void)user;
 	for (user_ptr_it it = users.begin(); it != users.end(); it++)
-		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
-		// if (*it != &user)
-			send_msg(*(*it), message);
+		send_msg(*(*it), message);
 	for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
-		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
-		// if (*it != &user)
-			send_msg(*(*it), message);
+		send_msg(*(*it), message);
 }
 
 void Channel::chan_msg_prv(usr_ref user, std::string message) {
