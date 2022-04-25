@@ -19,7 +19,7 @@ int ft_atoi(const char *str)
 	}
 	return (nb * sign);
 }
-vector<string> split(string str, string delimiter)
+vector<string> ft_split(string str, string delimiter)
 {
 	if (delimiter == "")
 		return vector<string>(1, str);
@@ -61,7 +61,7 @@ int main(int argc, char const *argv[])
 	while (42)
 	{
 		botch.read();
-		std::vector<string> tokens = ::split(botch.get_msg(), "\n");
+		std::vector<string> tokens = ::ft_split(botch.get_msg(), "\n");
 		for (size_t i = 0; i < tokens.size(); ++i) {
 			botch.pars(tokens[i]);
 			botch.reply();
