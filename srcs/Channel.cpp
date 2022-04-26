@@ -91,7 +91,7 @@ void Channel::chan_msg(usr_ref user, std::string message) {
 }
 
 void Channel::chan_msg_prv(usr_ref user, std::string message) {
-	if (!is_user(&user) && !is_operator(&user) && !exterior_msg && user.get_nickname() != "Botch") // "&&" or "||" ???
+	if (!is_user(&user) && !is_operator(&user) && !exterior_msg && user.get_nickname() != "Botch")
 		return send_msg(user, ":localhost 404 " + user.get_nickname() + " " + name + " :Cannot send to nick/channel");
 	for (user_ptr_it it = users.begin(); it != users.end(); it++)
 		if (*it != &user)

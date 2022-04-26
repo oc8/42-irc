@@ -15,6 +15,10 @@
 #include <vector>
 #include <list>
 
+#define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
+#define BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */
+#define RESET   "\033[0m"
+
 using std::cerr;
 using std::cout;
 using std::endl;
@@ -25,7 +29,6 @@ using std::vector;
 
 #include "User.hpp"
 #include "Channel.hpp"
-#include "code_error.hpp"
 
 class Server;
 typedef void (Server::*pf)(User &user, std::vector<string> cmds);

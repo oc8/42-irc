@@ -5,7 +5,6 @@ LST_SRCS			= main.cpp \
 						pars.cpp \
 						Channel.cpp \
 						User.cpp \
-						commands2.cpp \
 						command.cpp \
 						utils.cpp
 LST_SRCS_BOT	= main_bot.cpp \
