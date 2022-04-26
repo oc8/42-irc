@@ -6,7 +6,7 @@ void join_msg(User &user, Channel &chan, Server &serv)
 {
 	if (chan.getTopic().empty())
 		serv.send_msg(user, ":localhost 331 " + user.get_nickname() + " " + chan.getName() + " :No topic is set");
-	else 
+	else
 		serv.send_msg(user, ":localhost 332 " + user.get_nickname() + " " + chan.getName() + " :" + chan.getTopic());
 	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
 	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
@@ -72,7 +72,9 @@ void Server::join_cmd(User &user, vector<string> cmds)
 
 void Server::names_cmd(User &user, vector<string> cmds)
 {
+	
 	if (cmds.size() < 2)
+		return ;
 	for (size_t i = 1; i < cmds.size(); i++)
 	{
 		chan_it it = chan_exist(cmds[i]);
