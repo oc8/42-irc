@@ -201,7 +201,12 @@ void Server::part_cmd(User &user, std::vector<std::string> cmds)
 			if (cmds.size() == 2)
 				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 PART " + it_chan->getName());
 			else
-				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 PART " + it_chan->getName() + " :" + cmds[2]);
+			{
+				std::string message = cmds[2];
+				if (message[0] == ':')
+					message.erase(0,1);
+				it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 PART " + it_chan->getName() + " :" + message);
+			}
 			it_chan->del_member(&user);
 			if (it_chan->getNbTot() == 0)
 				channels.erase(it_chan);
