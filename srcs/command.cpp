@@ -4,9 +4,10 @@ vector<string> split(string str, string delimiter);
 
 void join_msg(User &user, Channel &chan, Server &serv)
 {
-	// serv.send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username()
-	// 	+ "@127.0.0.1 JOIN " + chan.getName());
-	serv.send_msg(user, ":localhost 331 " + user.get_nickname() + " " + chan.getName() + " :No topic is set");
+	if (chan.getTopic().empty())
+		serv.send_msg(user, ":localhost 331 " + user.get_nickname() + " " + chan.getName() + " :No topic is set");
+	else 
+		serv.send_msg(user, ":localhost 332 " + user.get_nickname() + " " + chan.getName() + " :" + chan.getTopic());
 	serv.send_msg(user, ":localhost 353 " + user.get_nickname() + " @ " + chan.getName() + " :" + chan.nameOpe() + " " + chan.nameUsers());
 	serv.send_msg(user, ":localhost 366 " + user.get_nickname() + " " + chan.getName() + " :End of /NAMES list.");
 }
@@ -156,7 +157,7 @@ void Server::topic_cmd(User &user, std::vector<std::string> cmds)
 	std::string message = cmds[2];
 	if (message[0] == ':')
 		message.erase(0,1);
-	if (it_chan->setTopic(&user, message))
+	if (!it_chan->setTopic(&user, message) || it_chan->is_operator(&user))
 		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
 			+ " TOPIC " + it_chan->getName() + " :" + message);
 	else
