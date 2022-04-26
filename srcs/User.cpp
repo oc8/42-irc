@@ -30,7 +30,6 @@ bool User::is_logged() const { return connection.connected; }
 //		--> SETTERS <--
 
 void User::set_pass(std::string usr_pass, std::string serv_pass) {
-	// std::cout << "usr_pass = \"" << usr_pass << "\", serv_pass = \"" << serv_pass << "\"" << std::endl;
 	if (usr_pass == serv_pass) {
 		connection.pass = true;
 		check_if_connected();
@@ -40,7 +39,6 @@ void User::set_pass(std::string usr_pass, std::string serv_pass) {
 }
 void User::set_nickname(std::string new_nickname) {
 	nickname = new_nickname;
-	// std::cout << "set_nickname user_sd " << sd << " : nickname = " << nickname << std::endl;
 	connection.nick = true;
 	check_if_connected();
 }
@@ -68,9 +66,6 @@ void User::init_user() {
 	wallops = true;
 }
 void User::check_if_connected() {
-	// std::cout << "pass = " << connexion.pass <<
-	// ", nick = " << connexion.nick <<
-	// ", user = " << connexion.user << std::endl;
 	if (connection.pass && connection.nick && connection.user) {
 		connection.connected = true;
 		std::string str = ":localhost 001 " + get_nickname() + " :Welcome to ircserv! \r\n";

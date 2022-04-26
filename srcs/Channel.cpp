@@ -93,13 +93,10 @@ void Channel::chan_msg(usr_ref user, std::string message) {
 void Channel::chan_msg_prv(usr_ref user, std::string message) {
 	if (!is_user(&user) && !is_operator(&user) && !exterior_msg && user.get_nickname() != "Botch") // "&&" or "||" ???
 		return send_msg(user, ":localhost 404 " + user.get_nickname() + " " + name + " :Cannot send to nick/channel");
-	// std::cout << "chan_msg = \"" << message << "\"" << std::endl;
 	for (user_ptr_it it = users.begin(); it != users.end(); it++)
-		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
 		if (*it != &user)
 			send_msg(*(*it), message);
 	for (user_ptr_it it = operators.begin(); it != operators.end(); it++)
-		// send((*it)->get_sd(), message.c_str(), strlen(message.c_str()), 0);
 		if (*it != &user)
 			send_msg(*(*it), message);
 }
@@ -158,7 +155,7 @@ bool Channel::is_invit(User &usr){
 	for (std::list<std::string>::iterator it = invit.begin(); it != invit.end(); ++it)
 		if (*it == usr.get_nickname())
 			return true;
-	return false;	
+	return false;
 }
 
 bool Channel::is_empty()
@@ -248,7 +245,7 @@ bool Channel::verif_mode(std::list<std::string> mode, User &user){
 			send_msg(user, ":localhost 472 " + user.get_nickname() + " " + (*it)[1] + " :is an unknow mode char to me");
 			return false;
 		}
-	}	
+	}
 	return true;
 }
 

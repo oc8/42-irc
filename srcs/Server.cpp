@@ -90,7 +90,6 @@ std::vector<string> split(string str, string delimiter);
 void Server::read()
 {
     int activity, valread, sd, max_sd;
-    // unsigned long i;
 
     char buffer[1025];
     while (42) {

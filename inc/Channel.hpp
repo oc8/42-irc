@@ -14,8 +14,6 @@ class Channel {
 	public:
 		typedef User*								usr_ptr;
 		typedef User&								usr_ref;
-		// typedef User*								usr_ptr;
-		// typedef User&								usr_ref;
 		typedef std::list<usr_ptr>				list;
 		typedef list::iterator						user_ptr_it;
 		typedef std::list<std::string>				ban_list;
@@ -79,11 +77,10 @@ class Channel {
 		void exec_mode(User &user, std::list<std::string> mode, std::vector<std::string> cmds, std::list<std::string> *ret);
 		std::string display_ret(std::list<std::string> ret);
 		std::string display_mode();
-		// bool setTopic(User us, std::string topic);
 
 
 		//		--> OPERATORS <--
-		
+
 		Channel &operator=(const Channel & src);
 
 	protected:

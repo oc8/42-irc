@@ -6,9 +6,6 @@ void Server::parsing(string buffer, User &user)
 {
 	std::cout << buffer << std::endl;
 	std::vector<string> split = ::split(buffer, " ");
-	// for (size_t i = 0; i < split.size(); i++)
-	// 	std::cout << "split[" << i << "] = " << split[i] << std::endl;
-	// std::cout << "split.size = " << split.size() << std::endl;
 	string cmd = split[0];
 	for (size_t i = 0; i < cmd.length(); i++)
 		cmd[i] = std::tolower(cmd[i]);

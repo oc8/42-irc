@@ -3,15 +3,15 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
-#include <string.h> //strlen
+#include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <unistd.h>	  //close
-#include <arpa/inet.h> //close
+#include <unistd.h>
+#include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
+#include <sys/time.h>
 #include <vector>
 #include <list>
 
