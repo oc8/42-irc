@@ -102,7 +102,7 @@ void Bot::reply()
 	else if (msg.find("que fais tu") != string::npos || msg.find("tu fais quoi") != string::npos)
 		reply += "Rien comme tsimon";
 	else if (msg.find("qui est ton meilleur ami") != string::npos)
-		reply += "" + nickname_user + " !";
+		reply += nickname_user + " !";
 	else if (msg.find("ca va") != string::npos)
 		reply += "Tout va bien !";
 	else if (msg.find("tg") != string::npos || msg.find("connard") != string::npos || msg.find("salope") != string::npos || msg.find("pute") != string::npos)
