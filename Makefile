@@ -1,10 +1,10 @@
 NAME				= ircserv
 NAME_BOT			= ircbot
 LST_SRCS			= main.cpp \
-						Server.cpp \
+						server.cpp \
 						pars.cpp \
-						Channel.cpp \
-						User.cpp \
+						channel.cpp \
+						user.cpp \
 						commands2.cpp \
 						command.cpp \
 						utils.cpp
