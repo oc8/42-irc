@@ -223,6 +223,8 @@ void Server::kick_cmd(User &user, vector<string> cmds)
 void Server::quit_cmd(User &user, vector<string> cmds)
 {
 	(void)cmds;
+	getpeername(user.get_sd(), (struct sockaddr *)&address, (socklen_t *)&addrlen);
+    cout << BOLDYELLOW << "Host disconnected, ip: " << inet_ntoa(address.sin_addr) << ", port: " << ntohs(address.sin_port) << RESET << endl;
 	send_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 QUIT :Client Quit");
 	for (chan_it it = channels.begin(); it != channels.end(); it++) {
 		it->del_user(&user);
