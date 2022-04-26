@@ -153,16 +153,12 @@ void Server::topic_cmd(User &user, std::vector<std::string> cmds)
 			return (send_msg(user, ":localhost 331 " + user.get_nickname() + " " + it_chan->getName() + " :No topic is set"));
 		return (send_msg(user, ":localhost 332 " + user.get_nickname() + " " + it_chan->getName() + " :" + it_chan->getTopic()));
 	}
-	std::string newtopic;
-	for (std::vector<std::string>::iterator it = cmds.begin() + 2; it != cmds.end(); it++) {
-		newtopic += *it;
-		if (it + 1 != cmds.end())
-			newtopic += " ";
-	}
-	if (newtopic[0] == ':')
-		newtopic.erase(0,1);
-	if (it_chan->setTopic(&user, newtopic))
-		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@127.0.0.1 TOPIC " + it_chan->getName() + " :" + newtopic);
+	std::string message = cmds[2];
+	if (message[0] == ':')
+		message.erase(0,1);
+	if (it_chan->setTopic(&user, message))
+		it_chan->chan_msg(user, ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_host()
+			+ " TOPIC " + it_chan->getName() + " :" + message);
 	else
 		send_msg(user, ":localhost 482 " + user.get_nickname() + " " + it_chan->getName() + " :You're not channel operator");
 }
